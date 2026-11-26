@@ -1,8 +1,8 @@
 # KEYFORM — Creative Direction & Visual Identity
 
-> **Status:** Preliminary Creative Brief (KF-001)  
+> **Status:** Active Art Direction — KF-003B Unified Charcoal Default Policy Applied  
 > **Direction:** `FORM / FUNCTION × AFTER HOURS`  
-> **Note:** Palette, typography, and motion parameters are strong candidates, not irreversibly locked decisions.
+> **Note:** Default hardware finish configuration (Forest aluminium + unified Charcoal PBT across all 81 keys including `Esc`) is locked by owner direction; UI typography pairing remains reversible until `KF-004`.
 
 ## 1. Brand Positioning
 
@@ -22,8 +22,12 @@ All hex values below are candidates subject to contrast and Cycles material cali
 | `--kf-carbon` | **Carbon** | `#25292D` | Elevated bento tiles, structural panels, dark hardware anodizing |
 | `--kf-titanium` | **Titanium** | `#ADB7C1` | Secondary text, hairline dividers (`10%–16%` opacity), machined metal accents |
 | `--kf-porcelain` | **Porcelain** | `#E9E7E0` | Primary high-contrast typography, light keycap colorway, spec callouts |
-| `--kf-signal` | **Signal** | `#F0793B` | Single functional accent: active selection, Esc/Enter accent cap, primary CTA, tactile stem |
-| `--kf-forest` | **Forest** | `#657C75` | Secondary hardware colorway (case & sub-modifiers), calm technical badge accent |
+| `--kf-signal` | **Signal** | `#F0793B` | Single functional accent: active selection, optional Build Studio accent cap, primary CTA, tactile stem |
+| `--kf-forest` | **Forest** | `#657C75` | Flagship default enclosure colorway (bead-blasted Forest anodized aluminium), calm technical badge accent |
+
+### Default Product Colorway Policy (KF-003B)
+- **Flagship default renders & default Build Studio state:** Forest anodized aluminium enclosure, **unified Charcoal PBT across all 81 keycaps (including `Esc`)**, consistent subtle off-white legends, approved knurled encoder finish, and brushed brass internal weight.
+- **No default accent keycaps:** Contrasting Ivory, Signal, or Forest accent keycaps are excluded from default hero, engineering, exploded, macro, and website-facing renders. Optional accent variations remain available solely inside the interactive Build Studio.
 
 ### Contrast & Surface Discipline
 - Primary body text (`#E9E7E0` on `#151719` ≈ `14.1:1`; on `#25292D` ≈ `11.1:1`) comfortably exceeds WCAG AA (`4.5:1`).
@@ -55,13 +59,15 @@ Swiss-inspired neo-grotesque clarity paired with technical monospace precision:
 
 ## 5. Photographic Lighting & Material Character (Blender Cycles)
 
-- **Mood:** *After Hours* — low-key architectural studio lighting. The keyboard emerges from `#151719` Obsidian shadow with deliberate rim light revealing CNC chamfers, keycap scoops, and knurling.
-- **Lighting rig:** Soft overhead rectangular diffused key light (cool-neutral `5600K`) + subtle warm side accent (`3800K`) skimming metallic edges + controlled dark negative fill so aluminium reads dense and anodized rather than chrome-mirrored.
-- **Material fidelity:**
-  - *Anodized Aluminium:* Micro-bead-blasted metallic roughness (`~0.28–0.36`), subtle anisotropic edge highlights on chamfers.
-  - *PBT Keycaps:* Fine matte micro-grain (`roughness ~0.55–0.65`), soft specular roll-off, crisp legends (never glossy ABS shine).
-  - *Knurled Rotary Knob:* Distinct directional metallic glints that reward slight camera movement.
-  - *Poron Foam & Silicone Gaskets:* Deep light-absorbing matte elastomer (`roughness ~0.85–0.92`) contrasting against machined metal and FR4 PCB traces.
+- **Mood:** *After Hours* — low-key architectural studio lighting. The keyboard emerges from `#050606`–`#151719` Obsidian shadow with deliberate rim light revealing CNC chamfers, keycap scoops, and knurling, paired with *Form / Function* neutral light studio photography for engineering macros, exploded anatomy, and material cards, plus a dedicated dark *After Hours Switch* macro rig matching the Switch Lab stage.
+- **Lighting rig:** Soft overhead rectangular diffused key light (cool-neutral `5600K`) + controlled warm grazing strip (`3800K`) skimming metallic edges + disciplined dark negative fill so Forest aluminium reads dense and anodized rather than chrome-mirrored or washed out.
+- **Material fidelity (clean, newly finished — zero artificial wear, scratches, dust, or fingerprints):**
+  - *Forest Anodized Aluminium:* Fine bead-blasted metallic roughness (`~0.33–0.40`), controlled clearcoat (`0.08`), `7.5 µm` microrelief, recognizable dark Forest hue under both studios.
+  - *Unified Charcoal PBT Keycaps:* Identical matte charcoal (`#171C1B–#1C2220`) across all 81 caps including `Esc`, fine tactile micro-grain (`roughness ~0.56–0.64`, `7.0 µm` relief), controlled crown highlights, crisp subtle off-white legends (`#C4CAC1–#D1D7CE`).
+  - *Knurled Rotary Knob:* Distinct separation between machined 48-tooth diamond-knurled side barrel (`roughness 0.24–0.32`) and directional brushed top face (`roughness 0.35–0.43`, anisotropic).
+  - *Brushed Brass Weight:* Directional brushed metallic response (`roughness 0.31–0.40`, anisotropy `0.42`) with high-contrast dark engraving, avoiding mirror-like or overly orange glare.
+  - *Switch Archetypes:* Smoked translucent polycarbonate upper housing (`transmission 0.72`), Porcelain POM cross stem, polished steel variable-pitch spring, and stamped copper contact leaves (with dedicated Tactile 58 and Silent 50 material slots prepared for the full batch).
+  - *Poron Foam & Silicone Gaskets:* Deep light-absorbing matte elastomer (`roughness ~0.66–0.92`) contrasting against machined metal and FR4 PCB traces.
 
 ## 6. Motion Principles
 

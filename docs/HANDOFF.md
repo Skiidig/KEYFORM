@@ -1,5 +1,28 @@
 # KEYFORM — Phase Handoff
 
+## KF-003B geometry freeze & production assets (Complete)
+
+Approved **KF-003A-R3** geometry remains frozen on `main` at `4af6fdd` and verified untouched in `D:\Assets\KEYFORM\blender\kf01_kf003a_r3.blend` + `backups\kf003a-r3-approved\` (SHA-256 `23033d09a8f7f994a7a36bc62fa25ae794c8157efc4a693eae2e7af6679e7e3e`). Following owner approval of the lookdev draft contact sheet, **KF-003B** applied the ~7% zoom-out adjustment to `A02` mobile hero framing, executed the full **18-shot Cycles OptiX production batch** (15 core shots + 3 Build Studio fallback enclosure colorways: Obsidian, Carbon, Titanium, all with uniform Charcoal PBT across all 81 keycaps including `Esc`), visually verified all 18 PNG masters, encoded **74 responsive AVIF + WebP derivatives** with zero budget exceptions, and recorded the `KF-003C` WebGL handoff architecture.
+
+| Deliverable | Path under `D:\Assets\KEYFORM\` |
+| --- | --- |
+| Frozen approved R3 geometry master *(verified untouched)* | `blender\kf01_kf003a_r3.blend` and `backups\kf003a-r3-approved\` |
+| Versioned KF-003B production lookdev master | `blender\kf01_kf003b_prod.blend` |
+| Production scripts & README | `kf003b\README.md` and `kf003b\scripts\` |
+| 18 full-resolution PNG masters + 18-shot contact sheet | `renders\cycles-raw\kf003b-prod\` (`kf003b-production-contact-sheet.png`) |
+| 74 responsive web derivatives (`37` AVIF + `37` WebP) | `renders\web-export\kf003b\avif\` and `renders\web-export\kf003b\webp\` |
+| Asset manifest (dimensions, sizes, placements, configs, SHA-256) | `kf003b\validation\production-asset-manifest.json` |
+| Production render telemetry & package integrity (`108` files) | `kf003b\validation\production-render-telemetry.json` and `kf003b\validation\SHA256SUMS.txt` |
+
+- **Unified Charcoal PBT color policy:** Verified programmatically across all 81 keycaps (including `Esc`, modifiers, and mounts) with consistent subtle off-white legends (`MAT_Legend_Light`) across all default renders and all four enclosure colorways (Forest, Obsidian, Carbon, Titanium). `MAT_Keycap_Accent` remains stored (`use_fake_user=True`) strictly as an optional future Build Studio slot.
+- **Final minor adjustment (`A02`):** Zoomed `PROD_Cam_A02_MobileHero` out by `7.0%` (`pos=(194.5, -398.3, 317.4)`), verified clean horizontal breathing room on both edges with the complete keyboard, encoder, and separated R3 arrows visible.
+- **18-shot Cycles OptiX production batch (RTX 4060 8 GB, Blender 5.3.0):**
+  - Core `15` shots: `A01` (`2880×1620`), `A02` (`1600×1600`), `A03` (`2400×1600` Forest reference), `A04a` (`2000×1500` macro), `A04b` (`2400×1350` `6.5°` side profile), `A04c` (`2000×1500` rear USB-C), `A05` (`2000×1800` 9-group exploded stack), `A06a/b/c` (`2000×2000` Linear 45 / Tactile 58 / Silent 50 dark Switch Lab), `A07a–d` (`1920×1200` Aluminium/Knurl, unobstructed Brushed Brass Weight, Charcoal PBT, Acoustic Stack), `A08` (`2400×1600` closing rear silhouette).
+  - Build Studio static fallbacks (`3` shots, pixel-aligned to `A03` camera/lighting with uniform Charcoal PBT): `B01` Obsidian, `B02` Carbon, `B03` Titanium (`2400×1600` each).
+  - **Actual telemetry:** `167.35 s` combined pure render (`194.73 s` batch wall time), peak board-wide VRAM `5,598 MiB / 8,188 MiB` (`A06b`). *Concurrent GPU flag:* Board-wide VRAM and per-frame wall times include concurrent desktop apps, an interactive Blender window, and `DeepSeek Harness.exe` (`KF-WEBLAB-001` in isolated `webgl-lab`); baseline VRAM was `3,422–4,047 MiB` vs. `~3,049–3,337 MiB` during isolated benchmarks.
+- **Responsive web export & QA:** Encoded `37` AVIF (`Q74–76`, min PSNR `41.98 dB`) and `37` WebP (`Q86–88`, min PSNR `41.68 dB`) derivatives via Pillow `13.0.0`. All 18 primary web variants beat `ARCHITECTURE.md` targets with **zero budget exceptions** (`A01` `1600w` `38.1 KB` / `2560w` `68.0 KB` vs. `180 KB` target; `A02` `800w` `21.1 KB` / `1280w` `37.0 KB` vs. `90 KB` target). Visual inspection confirmed crisp legends, clean silhouettes, zero clipping, zero shading artifacts, and accurate materials across all 18 masters and representative web derivatives.
+- **Next phase (`KF-003C`):** Do not start `KF-003C` real-time WebGL GLB staging/optimization or `KF-004` frontend integration until owner approval. See [ASSET_PIPELINE.md](ASSET_PIPELINE.md) §6.2 for the documented `KF-003C` partitioned WebGL 2 handoff architecture.
+
 ## KF-003A-R3 canonical layout integration (Approved — Geometry Freeze)
 
 The owner has approved **KF-003A-R3** (**KF-LAYOUT-001 Alternative A**) as the canonical digital product geometry. Implements Alternative A on the clean flat-deck KF-003A-R1 top enclosure baseline, removing the R2 raised local shoulders and forming physically independent apertures for the main typing block, navigation column (`Delete`, `PgUp`, `PgDn`, `End`), inverted-T arrow cluster (`Up`, `Left`, `Down`, `Right`), and four function groups. The 81-switch architecture, encoder datum `(138.1125, 50.00625) mm`, `327 × 138 mm` desk footprint, `6.5°` typing incline, keycap unit widths, nine assembly groups, approved KF-003A procedural materials, and both studio rigs carry over unchanged.

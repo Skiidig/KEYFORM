@@ -1,6 +1,6 @@
 # KF—01 Product Specification
 
-> **Document Status:** KF-003A-R3 Alternative A canonical geometry frozen and approved; KF-003A finishes provisionally approved; entering KF-003B production rendering
+> **Document Status:** KF-003A-R3 Alternative A canonical geometry frozen and approved (`4af6fdd`); KF-003B production assets complete (18 masters + 74 responsive AVIF/WebP derivatives) with unified Charcoal PBT default policy
 >
 > **Scope Rule:** Verified industry engineering standards are explicitly separated from fictional KF—01 product specifications. No certifications, laboratory test data, or measured acoustic figures are claimed.
 
@@ -87,8 +87,10 @@ KF—01 uses an **exploded 75% ANSI layout** (`16.25u` wide × `6.25u` deep incl
   - `2.0 mm` bottom-case Poron acoustic sheet (above internal weight pocket)
 - **Rotary Encoder Knob:**
   - CNC-machined `Ø 20.0 mm × 15.5 mm` cylindrical aluminium/brass candidate with diamond knurling, chamfered top face and flat-shaft bore. The model uses `12°` detent steps and `0.5 mm` push.
-- **Keycaps:**
-  - Approximately `1.5 mm` wall thickness, sculpted Cherry-inspired PBT, and dye-sublimated legends as a finish target. The review colorway uses charcoal shells with one ivory Esc accent.
+- **Keycaps (KF-003B Canonical Color Policy):**
+  - Approximately `1.5 mm` wall thickness, sculpted Cherry-inspired PBT, and dye-sublimated legends as a finish target.
+  - **Default canonical visual configuration:** Forest anodized aluminium enclosure paired with **unified Charcoal PBT across all 81 keycaps (including `Esc`)** and consistent subtle off-white legends. The earlier contrasting Ivory `Esc` accent is removed from all default hero, engineering, exploded, macro, and website-facing imagery.
+  - **Build Studio default & optional accents:** The default Build Studio state matches this unified Charcoal PBT treatment; optional accent key variations (Signal, Ivory, Forest) remain available only as user-selected Build Studio options.
   - The KF-003A candidate extends the hollow skirt `0.56 mm` below the installed KF-002 cap datum. Profile crown heights and the cap-to-stem mounting datum refer to that original datum. The skirt extends around the switch lid while the mount retains its original full-stroke clearance.
 
 ### 3.4 Switch Lab Lineup (Fictional KEYFORM Editions)

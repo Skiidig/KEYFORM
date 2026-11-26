@@ -1,6 +1,6 @@
 # KEYFORM — Mechanical Component Architecture & Asset Pipeline
 
-> **Status:** KF-003A-R3 canonical geometry frozen and approved; entering KF-003B production lookdev and rendering
+> **Status:** KF-003A-R3 canonical geometry frozen (`4af6fdd`); KF-003B production assets complete (18 OptiX PNG masters + 74 responsive AVIF/WebP web derivatives); KF-003C WebGL handoff architecture documented
 
 ## 1. Workspace Separation
 
@@ -13,8 +13,9 @@ D:\Assets\KEYFORM\                 # External local production workspace (NOT in
 │   ├── kf01_kf003a.blend          # Editable lookdev derivative
 │   ├── kf01_kf003a_r1.blend       # Integrated top frame review
 │   ├── kf01_kf003a_r2.blend       # Tightened right-cluster review
-│   ├── kf01_kf003a_r3.blend       # Alternative A layout & separated-cluster review
-│   └── kf01_studio_export.blend   # Linked/baked GLB export staging file (optional)
+│   ├── kf01_kf003a_r3.blend       # Frozen & approved canonical digital product geometry (DO NOT OVERWRITE)
+│   ├── kf01_kf003b_prod.blend     # Versioned KF-003B production lookdev & camera rig master
+│   └── kf01_studio_export.blend   # Separate KF-003C real-time WebGL GLB staging master (planned)
 ├── backups/kf002-approved/        # Verified KF-002 recovery package
 ├── backups/kf003a-before-r1/      # Verified KF-003A recovery package
 ├── backups/kf003a-r1-before-r2/   # Verified R1 recovery package
@@ -24,8 +25,9 @@ D:\Assets\KEYFORM\                 # External local production workspace (NOT in
 ├── kf003a-r1/                    # Top-frame source, measurements and QA
 ├── kf003a-r2/                    # Right-cluster source, measurements and QA
 ├── kf003a-r3/                    # Alternative A integration source, measurements and QA
+├── kf003b/                       # Production lookdev builder, draft/benchmark runner, telemetry & README
 ├── layout-lab/kf-layout-001/     # Canonical layout feasibility study and blueprints
-├── reference/                     # Canonical JSON layout (Alternative A candidate) and dimension audit
+├── reference/                     # Canonical JSON layout (Alternative A) and dimension audit
 ├── scripts/                       # Master generation, geometry validation and review rendering
 ├── validation/                    # Geometry, swept clearances and render timing
 ├── textures/                      # Raw PBR maps, keycap legend SVGs/PNGs, HDRIs
@@ -35,10 +37,12 @@ D:\Assets\KEYFORM\                 # External local production workspace (NOT in
 │   ├── kf003a-r1/                 # Five top-frame reviews
 │   ├── kf003a-r2/                 # Four right-cluster reviews
 │   ├── kf003a-r3/                 # Six Alternative A integration reviews
-│   ├── cycles-raw/                # 16-bit PNG / EXR masters
-│   └── web-export/                # Staging for AVIF/WebP conversion
+│   ├── kf003b-draft/              # Six economical OptiX lookdev drafts + 3x2 approval contact sheet
+│   ├── kf003b-benchmark/          # Three representative full-res RTX 4060 OptiX benchmark frames
+│   ├── cycles-raw/kf003b-prod/    # 18 full-resolution production PNG masters + 18-shot contact sheet
+│   └── web-export/kf003b/         # 37 responsive AVIF + 37 WebP production web derivatives
 └── glb/
-    └── kf01_studio.glb            # Exported & compressed GLB before copying to repo
+    └── kf01_studio*.glb           # Partitioned & compressed KF-003C WebGL assets (planned)
 ```
 
 Verified, budget-compliant web derivatives (`.glb`, `.avif`, `.webp`) may enter `public/` during `KF-003B` or `KF-004`.
@@ -67,7 +71,7 @@ Use strict, deterministic names so Blender collections, GLB scene-graph nodes, a
 
 | Group | Parent | Full explode offset | Contents |
 | --- | --- | --- | --- |
-| `GRP_01_Keycaps` | Tilt pivot | Z +108 mm | Hollow R1–R4 caps, convex Space, ivory Esc, surface-conformed legends, mounts |
+| `GRP_01_Keycaps` | Tilt pivot | Z +108 mm | Hollow R1–R4 caps, convex Space, unified Charcoal PBT across all 81 keys (incl. `Esc`), surface-conformed off-white legends, mounts |
 | `GRP_02_TopEnclosure` | Tilt pivot | Z +84 mm | Chamfered bezel, case screw bosses, geometric knurled knob |
 | `GRP_03_Switches` | Tilt pivot | Z +64 mm | 81 linked copies of a base, lid, cross stem, spring and pin set |
 | `GRP_04_SwitchPlate` | Tilt pivot | Z +42 mm | 81 MX openings plus stabilizer and encoder reliefs, 12 mounting tabs |
@@ -94,21 +98,33 @@ Keeping material slots minimal allows instant zero-reload customization in Three
 | `MAT_Case_Anodized` | `KF01_Case_TopFrame`, `KF01_Case_BottomFrame` | Obsidian (`#151719`), Carbon (`#25292D`), Titanium (`#ADB7C1`), Forest (`#657C75`) |
 | `MAT_Weight_Metal` | `KF01_Weight_Main` | Brushed Brass, PVD Obsidian Stainless, Raw Titanium |
 | `MAT_Knob_Metal` | `KF01_Knob_Rotary` | Independent master slot for review |
-| `MAT_Keycap_Alpha` | `KF01_Caps_Alphas` | Obsidian Dark, Porcelain Light, Two-Tone Slate |
-| `MAT_Keycap_Mod` | `KF01_Caps_Modifiers` | Matched or contrasting modifier tone |
-| `MAT_Keycap_Accent` | `KF01_Cap_Esc` in the review master | Ivory in KF-002. Signal, Forest, and Matched remain Build Studio candidates. |
+| `MAT_Keycap_Alpha` | `KF01_Caps_Alphas` | Unified Charcoal PBT (default), Porcelain Light, Two-Tone Slate |
+| `MAT_Keycap_Mod` | `KF01_Caps_Modifiers` + `KF01_Cap_Esc` (default) | Unified Charcoal PBT (default, matching alphas across all 81 keys) or contrasting modifier tone |
+| `MAT_Keycap_Accent` | Unused in default master (`use_fake_user=True`); dynamically assigned to `KF01_Cap_Esc` only when selected in Build Studio | Matched Charcoal PBT (default), optional Signal, Ivory, or Forest accent in Build Studio only |
 | `MAT_Plate_Active` | `KF01_Plate_Main` | Brushed Aluminium, Matte FR4, Frosted Polycarbonate, Sandblasted Brass |
 | `MAT_Switch_Housing` | `KF01_Switch_Housings` | Smoked Translucent (Linear), Matte Carbon (Tactile), Frosted Smoke (Silent) |
 | `MAT_Switch_Stem` | `KF01_Switch_Stems` | Porcelain (`#E9E7E0`), Signal (`#F0793B`), Forest (`#657C75`) |
 
-## 6. Instancing & Optimization Strategy
+## 6. Production Rendering & KF-003C WebGL Handoff Strategy
 
-To meet the `≤ 2.5 MB` GLB and `≤ 40` draw call targets without losing visual fidelity:
+### 6.1 KF-003B Cycles Production Stills
+- **Master separation:** Keep frozen `kf01_kf003a_r3.blend` untouched as the canonical geometry master; author all material refinements, website cameras (`PROD_Cam_A01`–`A08`), and the dark *After Hours Switch* scene inside `kf01_kf003b_prod.blend`.
+- **Lighting scenes:** *After Hours* (`A01` desktop hero, `A02` mobile hero, `A08` closing), *Product Studio / Form / Function* (`A03` beauty, `A04a–c` engineering macros/profile/USB-C, `A05` exploded anatomy, `A07a–d` material library), and *After Hours Switch* (`A06` Linear 45 / Tactile 58 / Silent 50).
+- **Completed RTX 4060 OptiX production batch:** All `18` full-resolution PNG masters (`15` core shots `A01`–`A08` + `3` Build Studio static fallback enclosures `B01` Obsidian, `B02` Carbon, `B03` Titanium with uniform Charcoal PBT keycaps) rendered locally in `167.35 s` pure render (`194.73 s` wall time, peak board-wide VRAM `5,598 MiB` with concurrent desktop/WebGL-lab GPU activity flagged). All `74` responsive `AVIF` (`37`) + `WebP` (`37`) derivatives encoded via Pillow `13.0.0` (`Q74–76` AVIF / `Q86–88` WebP, minimum PSNR `41.98 dB` / `41.68 dB`, `0` budget exceptions) and inventoried with SHA-256 checksums in `kf003b\validation\production-asset-manifest.json`.
 
-- **Cycles:** Use the KF-003A master for static photography. The *After Hours* and *Form / Function* scenes share one product collection. The isolated *Switch Review* scene holds the high-detail switch. Procedural finishes use object-space meters and AgX.
-- **GLB:** Create a separate staging file. Preserve semantic groups, finish slots, per-key pivot/ID metadata and encoder pivot. Simplify spring, sockets, hardware, and fine chamfers according to camera visibility. Bake geometric knurling and cap legends for the web branch.
-- **GPU instances:** Blender mesh sharing reduces duplicate data in the master. It can export as multiple glTF nodes referring to one mesh. Verify the shipped representation and actual draw calls. Use `EXT_mesh_gpu_instancing` where the assembler and viewer preserve group ownership, or batch shared geometry and material via Three.js `InstancedMesh`. Keep stable key-to-instance indexes so travel and picking remain individual. Prototype legend atlas sampling per instance before locking the cap export. [Khronos instancing specification](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_mesh_gpu_instancing)
-- **Verification:** Check decoded axis, scale, material groups, exploded poses, instanced picking, and 4 mm press against the source manifest. Profile on target devices and measure `≤ 2.5 MB` and `≤ 40` draw calls. Benchmark mesh compression and texture formats on the staging file.
+### 6.2 KF-003C Real-Time WebGL 2 Architecture (Planned Handoff)
+To meet the `≤ 2.5 MB` (stretch `≤ 1.5 MB`) GLB and `≤ 40` draw-call budgets on integrated-GPU laptops and mid-range mobile devices while preserving mechanical accuracy:
+
+- **Runtime target:** WebGL 2 via `three` + `@react-three/fiber` with `frameloop="demand"`, lazy dynamic import on viewport/user intent, and accessible static Cycles fallback imagery whenever WebGL is unavailable or Lite Mode is active.
+- **Separate staging master (`kf01_studio_export.blend`):** Derived from frozen `kf01_kf003a_r3.blend` geometry and `kf01_kf003b_prod.blend` unified Charcoal PBT default finish calibration—never export the ~1.04M-triangle Cycles master directly.
+- **Partitioned asset delivery:**
+  1. *Exterior Build Studio GLB* — Top/bottom CNC enclosure, unified Charcoal PBT keycaps (plus optional accent slot), knurled encoder, desk feet (fast initial interactive load).
+  2. *Internal Mechanical Stack GLB* — Switch plate, PCB + hot-swap sockets, Poron/IXPE + 12 silicone gaskets, rear USB-C daughterboard, brushed brass weight (loaded lazily for Exploded mode or Mechanical Anatomy).
+  3. *Hero Switch GLB (optional)* — Standalone cutaway switch with Linear 45 / Tactile 58 / Silent 50 slots if live 3D Switch Lab is activated alongside static Cycles renders.
+- **Canonical structure & deterministic motion:** Preserve exact Alternative A canonical key IDs (`kf01_layout.json`), all nine semantic groups (`GRP_01`–`GRP_09`), `4.0 mm` local `-Z` keypress travel, `12°` detent / `0.5 mm` push encoder controls, and staged daughterboard withdrawal (`frames 12→24`) driven procedurally from assembly metadata.
+- **Measured GPU instancing:** Batch all 81 switches, repeated keycap profiles, fasteners, and gaskets via `EXT_mesh_gpu_instancing` or Three.js `InstancedMesh` while keeping stable key-to-instance indexes for individual raycast picking and press animation. Verify actual draw calls (`≤ 40`). [Khronos instancing specification](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_mesh_gpu_instancing)
+- **Baked surface detail & compression candidates:** Replace high-poly geometric knurling and extruded legend meshes with baked tangent-space normal/roughness maps and a crisp legend texture atlas. Benchmark `EXT_meshopt_compression` (Meshopt) + `KHR_texture_basisu` (KTX2) alongside Draco on the staged GLBs before locking the export pipeline.
+- **Verification gate:** Audit decoded glTF axis/scale, material slots, default unified Charcoal PBT state, exploded clearance, instanced key picking, `4.0 mm` travel, file weight, and frame pacing (`60 fps` desktop, `≥ 30 fps` iGPU/mobile).
 
 ## 7. Keypress & Mechanical Animation Requirements
 
