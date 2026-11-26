@@ -1,6 +1,7 @@
 # KF—01 Product Specification
 
-> **Document Status:** Preliminary Foundation (KF-001)  
+> **Document Status:** KF-002 geometry candidate for owner review
+>
 > **Scope Rule:** Verified industry engineering standards are explicitly separated from fictional KF—01 product specifications. No certifications, laboratory test data, or measured acoustic figures are claimed.
 
 ## 1. Product Identity
@@ -10,27 +11,26 @@
 - **Category:** 75% ANSI Custom Gasket-Mount Mechanical Keyboard
 - **Tagline:** *Precision in every press.*
 
-## 2. Verified Engineering Standards
+## 2. Component References & Modeling Datums
 
-The following dimensions and mechanical interfaces follow documented industry standards and govern KF—01 CAD/Blender geometry so all parts mate coherently:
+The referenced parts and the nominal KF—01 modeling datums define the geometry used for review.
 
-| Standard Parameter | Verified Value | Reference Basis |
+| Parameter | KF—01 Model | Reference Basis |
 | :--- | :--- | :--- |
-| Key pitch (1u center-to-center) | `19.05 mm` (`0.75 in`) | Cherry MX / ANSI typewriter grid standard |
-| Switch plate cutout | `14.00 × 14.00 mm` (`13.995 ± 0.05 mm`, max `R0.3 mm`) | Cherry MX datasheet snap-in retention spec |
-| Rigid switch plate thickness | `1.50 mm` (`1.52 ± 0.10 mm`) | Cherry MX upper retention clip engagement |
-| Standard PCB thickness | `1.60 mm` (FR4) | Standard mechanical keyboard PCB thickness |
-| Plate top to PCB top distance | `5.00 mm` | Cherry MX datasheet standoff spacing |
-| Standard MX switch total travel | `4.00 mm` (typical actuation ~`2.00 mm`) | Traditional Cherry MX travel envelope |
-| 1u Cherry-profile keycap base | `~18.0–18.5 mm` square (~`12 × 13 mm` top), `~1.5 mm` wall | Standard Cherry-profile PBT/ABS geometry |
-| Cherry-profile row heights (top-down) | `R1 ≈ 9.4 mm`, `R2 ≈ 9.0 mm`, `R3 ≈ 8.75 mm`, `R4 ≈ 8.1 mm` | Standard sculpted Cherry profile (GMK/ePBT convention) |
-| PCB-mount stabilizer wire spacing | `2u = 23.8 mm`, `6.25u = 100.0 mm` | Cherry MX PCB-mount screw-in stabilizer spec |
-| Rotary encoder body & shaft | `~11 × 11 mm` body, `Ø 6.0 mm` D-shaft (`4.5 mm` flat) | Alps EC11E series mechanical encoder spec |
-| USB-C receptacle mating face | `8.94 × 3.26 mm` (`R1.2–1.3 mm` corners; `+0.3–0.5 mm` case clearance) | USB-C receptacle / Unified Daughterboard (UDB) convention |
+| Key pitch (1u center-to-center) | `19.05 mm` (`0.75 in`) | Conventional keyboard grid used for the KF—01 layout |
+| Switch plate cutout | `14.00 × 14.00 mm` with `R0.27 mm` corners | [CHERRY MX drawing](https://media.digikey.com/pdf/Data%20Sheets/Cherry%20PDFs/MX%20Series.pdf) shows `0.551 ± 0.002 in`, max `R0.012 in` |
+| Rigid switch plate thickness | `1.50 mm` | CHERRY MX drawing shows `0.060 ± 0.006 in` |
+| PCB thickness and plate stack | `1.60 mm` FR4 and `5.00 mm` plate top to PCB top | Nominal KF—01 stack based on the MX mounting drawing |
+| MX downstroke | `4.00 mm` | [CHERRY MX2A Red](https://www.cherry.de/fileadmin/media/Industrial/Switch/MX_RED/Data_sheet_MX2A_Red.pdf) specifies 4 mm total travel and 2 mm pretravel |
+| Keycap shells | 1u base `18.00 × 18.00 mm`, `1.05 mm` minimum base gap | KF—01 Cherry-inspired profile candidate |
+| Keycap crown heights | `R1 9.40`, `R2 9.00`, `R3 8.75`, `R4 8.10 mm` at center, measured from base | KF—01 sculpted rows, with a dedicated convex Space profile |
+| PCB-mount stabilizer wire span | `23.8 mm` for 2u and 2.25u positions, `100.0 mm` for 6.25u | CHERRY drawing and [KiCad 6.25u PCB footprint](https://github.com/KiCad/kicad-footprints/blob/master/Button_Switch_Keyboard.pretty/SW_Cherry_MX_6.25u_PCB.kicad_mod) |
+| Rotary encoder | `~11 × 11 mm` body, flat `Ø6 mm` shaft, `30` detents, `0.5 mm` push | [ALPS Alpine EC11E15244G1](https://tech.alpsalpine.com/e/products/detail/EC11E15244G1/) motion reference |
+| USB-C receptacle and throat | `8.94 × 3.46 mm` represented shell and `9.70 × 4.22 mm` case throat | [GCT USB4085](https://gct.co/connector/usb4085) and [Unified Daughterboard case guidance](https://github.com/Unified-Daughterboard/Unified-Daughterboard.github.io/blob/main/info-designer-case.md) |
 
 ## 3. Fictional KF—01 Product Specifications
 
-These specifications define the fictional KF—01 industrial design and are built directly on top of the verified standards above:
+These specifications define the fictional KF—01 industrial design.
 
 ### 3.1 Layout & Key Count (Exploded 75% ANSI)
 
@@ -46,15 +46,16 @@ KF—01 uses an **exploded 75% ANSI layout** (`16.25u` wide × `6.25u` deep incl
 | Row 5 (Shift) | R4 | `LShift` (2.25u), `Z–/` (10u), `RShift` (1.75u), `0.25u` blocker, `Up` (1u), `End` (1u) | `16.25u` | 14 |
 | Row 6 (Bottom) | R4 | `LCtrl` (1.25u), `Cmd/Win` (1.25u), `LAlt` (1.25u), `Space` (6.25u), `RAlt` (1u), `Fn` (1u), `RCtrl` (1u), `0.25u` blocker, `Left` (1u), `Down` (1u), `Right` (1u) | `16.25u` | 10 |
 
-- **Stabilizers required (4 total):** `3× 2u` (`Backspace`, `Enter`, `LShift`) + `1× 6.25u` (`Space`).
+- **Stabilizers required (4 total):** Backspace (2u), Enter and left Shift (2.25u) use the `23.8 mm` short span. Space (6.25u) uses `100.0 mm`.
 - **Arrow cluster alignment:** `Up` (`14.25u–15.25u`) sits directly above `Down` (`14.25u–15.25u`); `End` (`15.25u–16.25u`) aligns cleanly under the right-hand nav column (`Del`, `PgUp`, `PgDn`) and above `Right`.
+- **Canonical coordinates:** `D:\Assets\KEYFORM\reference\kf01_layout.json` records every key, blocker, encoder, nominal unit width and center relative to the keybed. The same manifest is embedded in the Blender master.
 
 ### 3.2 Exterior Dimensions & Ergonomics (Fictional)
 
 - **Keybed footprint:** `309.56 mm` (`16.25u`) × `119.06 mm` (`6.25u`)
 - **Exterior width:** `327.0 mm` (`~8.72 mm` side bezels, subtle `1.2 mm` 45° top chamfer)
-- **Exterior depth:** `138.0 mm` (`10.5 mm` rear bezel, `8.44 mm` front bezel)
-- **Typing angle:** `6.5°`
+- **Exterior depth:** `138.0 mm` in desk-plane projection. The tilted 119.06 mm key field is centered on the case datum.
+- **Typing angle:** `6.5°` rear rise with the case feet on the desk plane.
 - **Front chin height:** `18.5 mm` (enclosure), `19.5 mm` (including `1.0 mm` proud recessed silicone feet)
 - **Rear height:** `34.2 mm` (enclosure, excluding rotary knob protrusion)
 - **Target assembled mass (fictional):** `~1,680 g` (CNC aluminium case + internal metal weight)
@@ -76,15 +77,15 @@ KF—01 uses an **exploded 75% ANSI layout** (`16.25u` wide × `6.25u` deep incl
   - Sandblasted Brass (firm, high-mass option)
 - **PCB & Connectivity:**
   - `1.6 mm` matte-black hot-swap PCB with south-facing MX hot-swap sockets and per-key SMD cutouts (no RGB rainbow marketing; optional understated warm-white indicator LED on Caps Lock).
-  - Recessed rear-center **USB-C Unified Daughterboard** connected via internal JST ribbon harness so the gasket-mounted PCB flexes independently of the port cutout.
+  - Recessed rear-center **USB-C daughterboard** with a UDB-style harness so the gasket-mounted PCB can move independently of the port. KF-002 uses an editorial carrier and a split, stepped port aperture.
 - **Internal Acoustic Stack (Fictional Layering):**
-  - `3.5 mm` open-cell Poron plate foam (between switch plate and PCB)
+  - `3.5 mm` nominal open-cell Poron plate foam, modeled at `3.0 mm` installed thickness above the IXPE within the `3.5 mm` free stack
   - `0.5 mm` IXPE switch pad (atop PCB)
   - `2.0 mm` bottom-case Poron acoustic sheet (above internal weight pocket)
 - **Rotary Encoder Knob:**
-  - CNC-machined `Ø 20.0 mm × 15.5 mm` cylindrical aluminium/brass knob with fine diamond/straight knurling and chamfered top face, press-fit onto an EC11 D-shaft with tactile detents and push-to-mute action.
+  - CNC-machined `Ø 20.0 mm × 15.5 mm` cylindrical aluminium/brass candidate with diamond knurling, chamfered top face and flat-shaft bore. The model uses `12°` detent steps and `0.5 mm` push.
 - **Keycaps:**
-  - `1.5 mm` thick sculpted Cherry-profile dye-sublimated PBT with crisp, minimal Swiss-grotesque legends.
+  - Approximately `1.5 mm` wall thickness, sculpted Cherry-inspired PBT, and dye-sublimated legends as a finish target. The KF-002 draft uses charcoal shells with one ivory Esc accent.
 
 ### 3.4 Switch Lab Lineup (Fictional KEYFORM Editions)
 

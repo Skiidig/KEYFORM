@@ -1,7 +1,6 @@
 # KEYFORM — Mechanical Component Architecture & Asset Pipeline
 
-> **Status:** Planning Blueprint (KF-001)  
-> **Rule:** Do not create Blender models or render images during KF-001. This document governs `KF-002` (Blender Master) and `KF-003` (Cycles & GLB Export).
+> **Status:** KF-002 editable master and proposed KF-003 export workflow
 
 ## 1. Workspace Separation
 
@@ -12,8 +11,12 @@ D:\Assets\KEYFORM\                 # External local production workspace (NOT in
 ├── blender/
 │   ├── kf01_master.blend          # Editable non-destructive master scene
 │   └── kf01_studio_export.blend   # Linked/baked GLB export staging file (optional)
+├── reference/                     # Canonical JSON layout and component dimension audit
+├── scripts/                       # Master generation, geometry validation and review rendering
+├── validation/                    # Geometry, swept clearances and render timing
 ├── textures/                      # Raw PBR maps, keycap legend SVGs/PNGs, HDRIs
 ├── renders/
+│   ├── kf002/                     # Eight neutral Cycles geometry reviews
 │   ├── cycles-raw/                # 16-bit PNG / EXR masters
 │   └── web-export/                # Staging for AVIF/WebP conversion
 └── glb/
@@ -36,51 +39,27 @@ Only verified, budget-compliant web derivatives (`.glb`, `.avif`, `.webp`) will 
 Use strict, deterministic names so Blender collections, GLB scene-graph nodes, and React Three Fiber queries stay 1:1 synchronized:
 
 - **Prefix:** `KF01_`
-- **Assemblies / Empties (Exploded Groups):** `GRP_<nn>_<PascalName>` (e.g., `GRP_01_Keycaps`, `GRP_05_SwitchPlate`)
+- **Assemblies / Empties (Exploded Groups):** `GRP_<nn>_<PascalName>` (e.g., `GRP_01_Keycaps`, `GRP_04_SwitchPlate`)
 - **Meshes:** `KF01_<SubAssembly>_<PartName>` (e.g., `KF01_Case_TopFrame`, `KF01_Knob_Body`)
 - **Materials:** `MAT_<Group>_<Variant>` (e.g., `MAT_Case_Anodized`, `MAT_Keycap_Alpha`, `MAT_Keycap_Mod`, `MAT_Keycap_Accent`, `MAT_Plate_Active`, `MAT_Switch_Stem`)
 
 ## 4. Mechanical Component Hierarchy & Parent-Child Relationships
 
-```text
-KF01_Root (Origin: X=0, Y=0, Z=0, Desk Resting Plane)
-├── GRP_09_BottomChassis            [Explode Z: -28 mm]
-│   ├── KF01_Case_BottomFrame       (CNC 6063 Aluminium lower housing + USB-C rear pocket)
-│   ├── KF01_Feet_Silicone          (4× recessed silicone feet, instanced)
-│   └── KF01_Fasteners_Case         (8× M2.5 Torx bottom fasteners, instanced)
-├── GRP_08_InternalWeight           [Explode Z: -14 mm]
-│   ├── KF01_Weight_Main            (CNC Brushed Brass / PVD Stainless weight block)
-│   ├── KF01_Fasteners_Weight       (4× M3 countersunk screws, instanced)
-│   └── KF01_Foam_CaseBottom        (2.0 mm Poron bottom acoustic sheet)
-├── GRP_07_USB_Daughterboard        [Explode Z: -6 mm, Y: +12 mm rear]
-│   ├── KF01_UDB_PCB                (Unified Daughterboard carrier PCB)
-│   ├── KF01_UDB_USBC_Port          (8.94 × 3.26 mm metallic USB-C receptacle)
-│   └── KF01_UDB_JST_Harness        (Internal flexible ribbon connector)
-└── KF01_TiltPivot_6p5deg           (Local X-rotation = -6.5°; aligns keybed stack)
-    ├── GRP_06_PCB_Assembly         [Explode Local Z: 0 mm (Datum Anchor)]
-    │   ├── KF01_PCB_Main           (1.6 mm matte-black FR4 PCB + copper trace texture)
-    │   ├── KF01_PCB_HotswapSockets (81× Kailh-style sockets underside, instanced)
-    │   ├── KF01_Encoder_EC11       (11×11 mm Alps EC11 body + Ø6 mm D-shaft)
-    │   └── KF01_Foam_IXPE          (0.5 mm IXPE switch pad on PCB top)
-    ├── GRP_05_AcousticAndGaskets   [Explode Local Z: +14 mm]
-    │   ├── KF01_Foam_PlatePoron    (3.5 mm perforated Poron plate foam)
-    │   └── KF01_Gaskets_Silicone   (12× perimeter silicone gasket socks, instanced)
-    ├── GRP_04_SwitchPlate          [Explode Local Z: +28 mm]
-    │   ├── KF01_Plate_Main         (1.5 mm replaceable plate, 81× 14×14 mm cutouts)
-    │   └── KF01_Stabilizers        (3× 2u @ 23.8 mm + 1× 6.25u @ 100 mm PCB-mount stabs)
-    ├── GRP_03_Switches             [Explode Local Z: +46 mm]
-    │   ├── KF01_Switch_Housings    (81× MX housings, instanced)
-    │   └── KF01_Switch_Stems       (81× MX cross stems, instanced; animatable Z travel)
-    ├── GRP_02_TopEnclosure         [Explode Local Z: +68 mm]
-    │   ├── KF01_Case_TopFrame      (CNC 6063 Aluminium bezel + 1.2 mm top chamfer)
-    │   └── KF01_Knob_Rotary        (Ø20 × 15.5 mm knurled CNC knob, animatable Z-spin & press)
-    └── GRP_01_Keycaps              [Explode Local Z: +92 mm]
-        ├── KF01_Caps_Alphas        (Sculpted Cherry PBT R1–R4 alpha keys)
-        ├── KF01_Caps_Modifiers     (Sculpted Cherry PBT R1–R4 modifier & nav keys)
-        └── KF01_Caps_Accents       (Esc 1u R1 + Enter 2.25u R3 — independent accent slot)
-```
+`KF01_Root` is at the desk plane. Its child `KF01_TiltPivot_6p5deg` rotates **+6.5°** around X so the rear rises with +Y. The nine layer empties use zero local offset assembled.
 
-> **Note on Assembled Transforms:** In the assembled state, all `GRP_*` local explode offsets are `(0, 0, 0)`. Internal clearances follow verified standards: PCB top to Plate top = `5.0 mm`, Plate thickness = `1.5 mm`, PCB thickness = `1.6 mm`, Switch bottom flush on PCB top, Keycap base clearing top frame by `~1.0 mm`.
+| Group | Parent | Full explode offset | Contents |
+| --- | --- | --- | --- |
+| `GRP_01_Keycaps` | Tilt pivot | Z +108 mm | Hollow R1–R4 caps, convex Space, ivory Esc, surface-conformed legends, mounts |
+| `GRP_02_TopEnclosure` | Tilt pivot | Z +84 mm | Chamfered bezel, case screw bosses, geometric knurled knob |
+| `GRP_03_Switches` | Tilt pivot | Z +64 mm | 81 linked copies of a base, lid, cross stem, spring and pin set |
+| `GRP_04_SwitchPlate` | Tilt pivot | Z +42 mm | 81 MX openings plus stabilizer and encoder reliefs, 12 mounting tabs |
+| `GRP_05_AcousticAndGaskets` | Tilt pivot | Z +20 mm | Perforated Poron and 12 silicone gaskets. Gaskets follow the plate via an extra +22 mm local offset. |
+| `GRP_06_PCB_Assembly` | Tilt pivot | Datum | Drilled FR4, hot-swap sockets, IXPE, four PCB-mounted stabilizers and rotary encoder |
+| `GRP_07_USB_Daughterboard` | Root | Y +20 mm, Z −18 mm | Carrier, USB-C shell and tongue, harness and mounting hardware |
+| `GRP_08_InternalWeight` | Root | Z −33 mm | Recessed brass weight, countersunk fasteners, bottom foam |
+| `GRP_09_BottomChassis` | Root | Z −50 mm | Lower cavity, case screws, silicone feet, gasket seats and carrier mounts |
+
+The assembled keybed rests `2.2 mm` below the deck at the plate top. Plate top to PCB top is `5.0 mm`, including `1.5 mm` of plate and an installed `3.5 mm` foam stack. The cap skirt starts `2.8 mm` above the deck and travels inside the bezel openings on press. Live Boolean tools preserve editable enclosure and plate features.
 
 ## 5. Customizable Material Groups (Build Studio Slots)
 
@@ -89,10 +68,11 @@ Keeping material slots minimal allows instant zero-reload customization in Three
 | Material Slot | Assigned Meshes | Build Studio Options |
 | :--- | :--- | :--- |
 | `MAT_Case_Anodized` | `KF01_Case_TopFrame`, `KF01_Case_BottomFrame` | Obsidian (`#151719`), Carbon (`#25292D`), Titanium (`#ADB7C1`), Forest (`#657C75`) |
-| `MAT_Weight_Metal` | `KF01_Weight_Main`, `KF01_Knob_Rotary` *(or matched to case)* | Brushed Brass, PVD Obsidian Stainless, Raw Titanium |
+| `MAT_Weight_Metal` | `KF01_Weight_Main` | Brushed Brass, PVD Obsidian Stainless, Raw Titanium |
+| `MAT_Knob_Metal` | `KF01_Knob_Rotary` | Independent master slot for review |
 | `MAT_Keycap_Alpha` | `KF01_Caps_Alphas` | Obsidian Dark, Porcelain Light, Two-Tone Slate |
 | `MAT_Keycap_Mod` | `KF01_Caps_Modifiers` | Matched or contrasting modifier tone |
-| `MAT_Keycap_Accent` | `KF01_Caps_Accents` (`Esc`, `Enter`) | Signal (`#F0793B`), Forest (`#657C75`), Matched |
+| `MAT_Keycap_Accent` | `KF01_Cap_Esc` in the review master | Ivory in KF-002. Signal, Forest, and Matched remain Build Studio candidates. |
 | `MAT_Plate_Active` | `KF01_Plate_Main` | Brushed Aluminium, Matte FR4, Frosted Polycarbonate, Sandblasted Brass |
 | `MAT_Switch_Housing` | `KF01_Switch_Housings` | Smoked Translucent (Linear), Matte Carbon (Tactile), Frosted Smoke (Silent) |
 | `MAT_Switch_Stem` | `KF01_Switch_Stems` | Porcelain (`#E9E7E0`), Signal (`#F0793B`), Forest (`#657C75`) |
@@ -101,16 +81,10 @@ Keeping material slots minimal allows instant zero-reload customization in Three
 
 To meet the `≤ 2.5 MB` GLB and `≤ 40` draw call targets without losing visual fidelity:
 
-- **Instanced in Blender (`Alt+D` Linked Data) & Exported as GPU Instances / `InstancedMesh`:**
-  - `81×` switch housings (1 shared low-poly master mesh, ~250–350 tris)
-  - `81×` switch stems (1 shared master mesh, ~120 tris)
-  - `81×` hot-swap sockets (simple underside silhouette, ~40 tris — or baked into PCB underside normal map if unseen)
-  - `12×` silicone gaskets, `8×` M2.5 Torx screws, `4×` M3 weight screws, `4×` silicone feet
-  - `1u` keycap base geometry per row (`R1`, `R2`, `R3`, `R4`) with legend atlas UV offsets so 60+ 1u caps share 4 base meshes + 1 crisp `2K` alpha/legend texture atlas.
-- **Dual-Detail Workflow (Cycles vs. GLB):**
-  - Keep bevels, knurling, and subdivision modifiers **non-destructive** in `kf01_master.blend`.
-  - **Cycles Render Profile:** High subdivision, geometric micro-knurling on the rotary knob, full chamfer fillets, procedural micro-anodizing roughness.
-  - **GLB Export Profile:** Applied moderate bevels (`2–3` segments on hero chamfers), normal-mapped knob knurling, vertex-count target `60k–90k` total rendered triangles (before instancing compression), `Draco` + `Meshopt` compression, and `KTX2` / `WebP` embedded textures (`≤ 1024px` for roughness/normal, `2048px` monochrome legend atlas).
+- **Cycles:** Use the editable master and linked meshes for static photography. Maintain camera-friendly machined edges, knurling, keycap curvature, and visible switch internals. The KF-002 studio uses provisional finishes.
+- **GLB:** Create a separate staging file. Preserve semantic groups, finish slots, per-key pivot/ID metadata and encoder pivot. Simplify spring, sockets, hardware, and fine chamfers according to camera visibility. Bake geometric knurling and cap legends for the web branch.
+- **GPU instances:** Blender mesh sharing reduces duplicate data in the master. It can export as multiple glTF nodes referring to one mesh. Verify the shipped representation and actual draw calls. Use `EXT_mesh_gpu_instancing` where the assembler and viewer preserve group ownership, or batch shared geometry and material via Three.js `InstancedMesh`. Keep stable key-to-instance indexes so travel and picking remain individual. Prototype legend atlas sampling per instance before locking the cap export. [Khronos instancing specification](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_mesh_gpu_instancing)
+- **Verification:** Check decoded axis, scale, material groups, exploded poses, instanced picking, and 4 mm press against the source manifest. Profile on target devices and measure `≤ 2.5 MB` and `≤ 40` draw calls. Benchmark mesh compression and texture formats on the staging file.
 
 ## 7. Keypress & Mechanical Animation Requirements
 
@@ -118,6 +92,6 @@ To meet the `≤ 2.5 MB` GLB and `≤ 40` draw call targets without losing visua
   - Individual test keys (e.g., `Esc`, `Enter`, `Space`, plus any clicked key if raycast-enabled) depress `-4.0 mm` along the local `-Z` axis of `KF01_TiltPivot_6p5deg`, moving both the target keycap and its paired switch stem together.
   - Timing: `~45 ms` downstroke, `~90 ms` damped return (adjustable per switch archetype in Switch Lab).
 - **Rotary Encoder Knob:**
-  - Supports discrete rotational detent steps (`15°` per step, 24 detents/rev) around local `Z` and a `-1.0 mm` push-switch depression.
+  - The `KF01_Encoder_Input` control drives both shaft and knob. The reference encoder uses `12°` per detent and a `0.5 mm` push.
 - **Exploded Assembly Transition:**
-  - Driven procedurally in code (not baked keyframe tracks) by interpolating each `GRP_01`–`GRP_09` container's local Z offset from `0` to its exploded target vector. This keeps the GLB tiny and lets users inspect any layer or combine Exploded Mode with live material/switch swapping.
+  - For Blender review, use timeline frames `1 / 26 / 51 / 76 / 101` for assembled, 25%, 50%, 75%, and full. The daughterboard stays fixed through frame 12, withdraws through the opened seam by frame 24, then lowers. Preserve the staged motion if representing the daughterboard in the viewer. Drive viewer state procedurally from the assembly metadata.

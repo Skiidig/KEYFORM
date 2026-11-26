@@ -53,7 +53,7 @@ Every dependency must justify its bundle cost. Do not install unused libraries.
 | :--- | :--- | :--- |
 | Initial JS bundle (gzipped, excl. 3D chunk) | `≤ 90 KB` | Hero + Bento + Editorial must load cleanly before WebGL chunk. |
 | Lazy-loaded 3D chunk (Three + R3F + selective Drei, gzipped) | `≤ 220 KB` | Dynamically imported on demand. |
-| `kf01_studio.glb` (Draco + Meshopt compressed) | `≤ 2.5 MB` (stretch goal `≤ 1.5 MB`) | Instanced switches/keycaps, shared material slots, `≤ 1K` normal/roughness maps. |
+| `kf01_studio.glb` | `≤ 2.5 MB` (stretch goal `≤ 1.5 MB`) | Benchmark Meshopt and Draco on the staged asset. Use instanced switches/keycaps, shared material slots, and `≤ 1K` normal/roughness maps. |
 | Studio Environment Map (`.hdr` / `.ktx2` PMREM) | `≤ 350 KB` | Low-res `256×128` or `512×256` blurred studio lighting map. |
 | Hero image (`AVIF` desktop / mobile) | `≤ 180 KB` / `≤ 90 KB` | Preloaded `<link rel="preload" as="image">`, `fetchpriority="high"`. |
 | LCP / CLS / INP | `LCP < 2.2s`, `CLS < 0.05`, `INP < 100ms` | Measured on throttled desktop & mobile profiles. |
