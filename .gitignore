@@ -1,0 +1,50 @@
+# Dependencies & package manager artifacts
+node_modules/
+.pnpm-store/
+*.tsbuildinfo
+
+# Build & preview outputs
+dist/
+dist-ssr/
+build/
+.vite/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+
+# Local environment & secrets
+.env
+.env.local
+.env.*.local
+
+# OS & editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Large 3D masters, raw renders, and binary media
+# Keep source .blend files, EXRs, and uncompressed renders in the external asset workspace.
+*.blend
+*.blend1
+*.blend2
+*.exr
+*.hdr
+*.psd
+*.tif
+*.tiff
+*.mp4
+*.mov
+*.wav
+*.flac
+raw-renders/
+renders-wip/
