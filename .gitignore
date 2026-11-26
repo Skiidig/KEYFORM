@@ -48,3 +48,6 @@ Desktop.ini
 *.flac
 raw-renders/
 renders-wip/
+
+# Workspace-local build and browser verification
+.tmp/

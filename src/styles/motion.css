@@ -1,0 +1,111 @@
+/* ==========================================================================
+   KEYFORM — Motion Design Foundation (KF-004A)
+   Direction: Cinematic industrial precision · Zero bounce/elastic easing
+   ========================================================================== */
+
+:root {
+  /* --- Canonical Motion Duration Tokens --- */
+  --kf-dur-instant: 80ms;
+  --kf-dur-fast: 150ms;
+  --kf-dur-standard: 240ms;
+  --kf-dur-panel: 360ms;
+  --kf-dur-camera: 800ms; /* Reserved for future WebGL camera preset transitions */
+  --kf-dur-cinematic: 1200ms; /* Hard upper bound across KEYFORM */
+
+  /* --- Canonical Motion Easing Tokens (No bounce/elastic) --- */
+  --kf-ease-precision: cubic-bezier(0.2, 0.75, 0.25, 1);
+  --kf-ease-mechanical: cubic-bezier(0.4, 0, 0.2, 1);
+  --kf-ease-cinematic: cubic-bezier(0.65, 0, 0.25, 1);
+  --kf-ease-linear: linear;
+
+  /* --- Semantic Aliases for Existing Component Styles --- */
+  --kf-ease-mech: var(--kf-ease-precision);
+  --kf-dur-button: var(--kf-dur-fast);
+  --kf-dur-material: var(--kf-dur-standard);
+  --kf-dur-reveal: var(--kf-dur-panel);
+}
+
+/* --- Restrained Below-the-Fold Content Reveal (Never applied to Hero LCP) --- */
+.kf-reveal {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--kf-dur-panel) var(--kf-ease-precision),
+    transform var(--kf-dur-panel) var(--kf-ease-precision);
+}
+
+.kf-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Subtle precision crossfade for static image swaps (Build Studio / Switch Lab) */
+@keyframes kf-media-settle {
+  from {
+    opacity: 0.72;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.kf-viewport-host {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.kf-viewport-host__canvas-slot {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.kf-viewport-host[data-kf-viewport-mode='interactive-3d'] .kf-viewport-host__canvas-slot {
+  pointer-events: auto;
+}
+
+.kf-viewport-host__img {
+  animation: kf-media-settle var(--kf-dur-standard) var(--kf-ease-precision);
+}
+
+.kf-viewport-host__status-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 18, 17, 0.56);
+  color: var(--kf-chalk);
+  backdrop-filter: blur(6px);
+  z-index: 3;
+}
+
+.kf-viewport-host__error-bar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 4;
+  padding: 8px 12px;
+  background: rgba(16, 18, 17, 0.86);
+  border: 1px solid rgba(180, 154, 112, 0.45);
+  color: var(--kf-chalk);
+  font-family: var(--kf-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* --- Strict Reduced-Motion Compliance --- */
+@media (prefers-reduced-motion: reduce) {
+  .kf-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .kf-viewport-host__img {
+    animation: none;
+  }
+}

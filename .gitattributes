@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Production JSON digests must be stable across checkouts.
+public/assets/kf01/**/*.json text eol=lf

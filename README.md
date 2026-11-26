@@ -1,43 +1,27 @@
 # KEYFORM — Mechanical Precision
 
-**Product:** `KF—01`  
-**Tagline:** *Precision in every press.*  
-**Creative Direction:** `FORM / FUNCTION × AFTER HOURS`
+KEYFORM is a fictional premium mechanical keyboard brand and a product experience for **KF—01**. The production foundation uses the approved KF-004A-R2 frontend and packages the approved KF-003C-B3 WebGL assets for the next integration phase.
 
-KEYFORM is an experimental, fictional premium mechanical keyboard brand and interactive product website. It combines photorealistic Blender CGI, Swiss-inspired editorial typography, disciplined Bento Grid architecture, selective glassmorphism, interactive mechanical anatomy, and a real-time 3D **Build Studio** configurator.
+## Local build and preview
 
-> **Project Status:** `KF-003B` Complete — Approved `KF-003A-R3` canonical geometry frozen (`4af6fdd`); all 18 Cycles OptiX production PNG masters (15 core + 3 Build Studio fallback enclosures) and 74 responsive AVIF/WebP web derivatives verified and manifested. Ready for `KF-003C` upon owner approval.
+Use Node.js 22.x and npm 10.5.1 or newer compatible with that Node release. P0 was built locally with Node 26.13.1 and npm 11.20.0. Run the same commands on Node 22 with the checked-in lockfile to validate that preferred environment before release.
 
-## Repository Structure
-
-```text
-KEYFORM/
-├── .gitattributes
-├── .gitignore
-├── AGENTS.md                   # Operating rules and scope guardrails for AI agents
-├── README.md                   # Project overview and quick navigation
-└── docs/
-    ├── PRODUCT_SPEC.md         # KF—01 specifications (verified standards vs. fictional specs)
-    ├── CREATIVE_DIRECTION.md   # Visual identity, palette candidates, typography, lighting, motion
-    ├── ARCHITECTURE.md         # Website IA, minimal frontend stack, performance budgets
-    ├── ASSET_PIPELINE.md       # Mechanical hierarchy, Blender master rules, GLB & static export
-    ├── ROADMAP.md              # Phased execution plan (KF-001 through KF-007)
-    └── HANDOFF.md              # Current state, review assets, and next-phase entry criteria
+```powershell
+npm ci
+npm run typecheck
+npm run build
+npm run preview
 ```
 
-## External Asset Workspace
+Open [the production preview](http://127.0.0.1:4185/). It serves only the built `dist/` directory on loopback and fails if port 4185 is occupied. Vite development mode uses the same port, so run one at a time. If Windows blocks esbuild scratch operations, set `TEMP` and `TMP` to the ignored repository-local `.tmp/` directory for the command session.
 
-Large binary production files (`.blend` masters, Cycles `.exr`/`.png` renders, HDRIs, and raw texture sources) are intentionally excluded from Git and live in a dedicated local workspace outside this repository:
+With the preview running, use `npm run verify:assets` and `npm run verify:browser`. The browser smoke uses Edge and allows an `EDGE_PATH` override. Both use `BASE_URL` when supplied and write local review evidence to `.tmp/p0-evidence/` by default.
 
-- Asset workspace: `D:\Assets\KEYFORM\`. The frozen approved geometry master is at `blender\kf01_kf003a_r3.blend` (verified recovery copy under `backups\kf003a-r3-approved\`) with canonical Alternative A layout in `reference\kf01_layout.json`. The versioned production lookdev master is at `blender\kf01_kf003b_prod.blend`, with all 18 full-resolution PNG masters and contact sheet in `renders\cycles-raw\kf003b-prod\`, 74 responsive AVIF/WebP web derivatives in `renders\web-export\kf003b\`, and full asset manifest in `kf003b\validation\production-asset-manifest.json`. See [docs/ASSET_PIPELINE.md](docs/ASSET_PIPELINE.md).
+## Application and assets
 
-Only optimized, web-ready derivatives (`.glb`, `.avif`, `.webp`, `.woff2`) will enter the repository once asset budgets are verified in later phases.
+- `src/` holds the React, TypeScript, and CSS application. All seven sections render from the static build, including the three photography-first viewport stations. The design-system preview is lazy at `#/design-system`.
+- `public/media/kf003b/` holds the 74 approved responsive AVIF/WebP derivatives. The image catalog and preloads use the root deployment path.
+- `public/assets/kf01/kf01-kf004b-b3.1/` holds the portable runtime manifest, four individually addressable models, and two legend tier pairs. The static app does not request them. The future runtime will use native Three.js r180 with thin React adapters.
+- `tests/` holds the production schema, SHA-256 inventory, and validation scripts. The asset verifier checks the hosted byte inventory and manifest relationships. Source masters and original lab outputs live in the external KEYFORM asset workspace.
 
-## Key Documents
-
-- **Product & Engineering:** [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md)
-- **Visual Identity:** [docs/CREATIVE_DIRECTION.md](docs/CREATIVE_DIRECTION.md)
-- **Frontend & IA:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-- **3D & Media Pipeline:** [docs/ASSET_PIPELINE.md](docs/ASSET_PIPELINE.md)
-- **Milestones:** [docs/ROADMAP.md](docs/ROADMAP.md)
-- **Next Phase Handoff:** [docs/HANDOFF.md](docs/HANDOFF.md)
+See the [roadmap](docs/ROADMAP.md), [phase handoff](docs/HANDOFF.md), [P1 integration guide](docs/KF-004B-P1.md), [product specification](docs/PRODUCT_SPEC.md), and [asset pipeline](docs/ASSET_PIPELINE.md).

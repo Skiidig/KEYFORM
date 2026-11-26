@@ -1,0 +1,194 @@
+/* ==========================================================================
+   KEYFORM — Design System V1 Semantic Tokens (KF-DESIGN-002 Refinement)
+   Environments: After Hours | Form / Function | The Atelier
+   ========================================================================== */
+
+:root {
+  /* --- Primitive Palette: After Hours (Dark Cinematic) --- */
+  --kf-obsidian: #101211;
+  --kf-studio-void: #050606; /* Matches top studio backdrop of After Hours KF-003B renders */
+  --kf-graphite: #1c201e;
+  --kf-carbon: #2a302c;
+  --kf-ah-muted: #a5aca5;
+  --kf-chalk: #f2f1eb;
+
+  /* --- Primitive Palette: Form / Function (Swiss Editorial) --- */
+  --kf-paper: #f2f1eb;
+  --kf-surface: #e6e7e0;
+  --kf-border: #ced2c9;
+  --kf-ff-muted: #636b63;
+  --kf-ff-muted-elevated: #505751; /* WCAG AA >= 5.75:1 on Surface (#E6E7E0) & Limestone (#E9E5DB) */
+  --kf-ink: #181c19;
+
+  /* --- Primitive Palette: The Atelier (Tactile Customization) --- */
+  --kf-limestone: #e9e5db;
+  --kf-porcelain: #f8f6f0;
+  --kf-forest: #294b3b;
+  --kf-forest-hover: #1f3b2e;
+  --kf-forest-tint: rgba(41, 75, 59, 0.09);
+  --kf-forest-border-dark: #4b7d65;
+  --kf-brass: #b49a70;
+  --kf-brass-ink: #6f5934;
+  --kf-charcoal: #1a1f1e; /* Definitive Charcoal PBT baseline (#1A1F1E) */
+  --kf-charcoal-pbt: #1a1f1e;
+
+  /* --- Semantic Environment Defaults (Form / Function foundation) --- */
+  --env-bg: var(--kf-paper);
+  --env-surface: var(--kf-surface);
+  --env-surface-raised: var(--kf-porcelain);
+  --env-border: var(--kf-border);
+  --env-border-strong: #adb3a8;
+  --env-fg: var(--kf-ink);
+  --env-muted: var(--kf-ff-muted);
+  --env-muted-on-surface: var(--kf-ff-muted-elevated);
+  --env-accent: var(--kf-forest);
+  --env-accent-fg: var(--kf-porcelain);
+  --env-brass-detail: var(--kf-brass);
+  --env-focus: var(--kf-forest);
+
+  /* --- Selective Glassmorphism (Floating 3D/Viewport HUD only) --- */
+  --kf-hud-bg: rgba(16, 18, 17, 0.78);
+  --kf-hud-border: rgba(242, 241, 235, 0.16);
+  --kf-hud-fg: var(--kf-chalk);
+
+  /* --- Typography Families (Self-hosted OFL fonts) --- */
+  --kf-font-sans: 'Manrope Variable', 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --kf-font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* --- Fluid Typography Scale --- */
+  --kf-text-display: clamp(2.375rem, 5.6vw, 5.25rem);
+  --kf-text-h1: clamp(1.9375rem, 3.8vw, 3.375rem);
+  --kf-text-h2: clamp(1.5rem, 2.5vw, 2.25rem);
+  --kf-text-h3: clamp(1.125rem, 1.4vw, 1.3125rem);
+  --kf-text-lead: clamp(1rem, 1.25vw, 1.1875rem);
+  --kf-text-body: 0.96875rem;
+  --kf-text-value: 0.9375rem;
+  --kf-text-sm: 0.875rem;
+  --kf-text-control: 0.84375rem;
+  --kf-text-caption: 0.8125rem;
+  --kf-text-label: 0.78125rem;
+  --kf-text-mono: 0.8125rem;
+  --kf-text-code: 0.78125rem;
+  --kf-text-index: 0.75rem;
+  --kf-text-micro: 0.75rem;
+
+  /* --- Tracking & Leading --- */
+  --kf-track-display: -0.034em;
+  --kf-track-heading: -0.024em;
+  --kf-track-body: -0.004em;
+  --kf-track-control: 0.005em;
+  --kf-track-label: 0.015em;
+  --kf-track-mono: 0.03em;
+  --kf-track-code: 0.04em;
+  --kf-track-index: 0.08em;
+  --kf-track-micro: 0.06em;
+
+  --kf-lead-display: 0.98;
+  --kf-lead-heading: 1.08;
+  --kf-lead-body: 1.62;
+  --kf-lead-caption: 1.5;
+
+  /* --- Spacing Scale (4..144) --- */
+  --kf-sp-4: 4px;
+  --kf-sp-8: 8px;
+  --kf-sp-12: 12px;
+  --kf-sp-16: 16px;
+  --kf-sp-24: 24px;
+  --kf-sp-32: 32px;
+  --kf-sp-48: 48px;
+  --kf-sp-64: 64px;
+  --kf-sp-96: 96px;
+  --kf-sp-128: 128px;
+  --kf-sp-144: 144px;
+
+  /* --- Grid & Layout --- */
+  --kf-max-width: 1600px;
+  --kf-page-margin: 16px;
+  --kf-grid-gutter: 16px;
+  --kf-grid-cols: 4;
+  --kf-header-height: 68px;
+
+  /* --- Restrained Industrial Corner Radii (0–6px max) --- */
+  --kf-radius-none: 0px;
+  --kf-radius-xs: 2px;
+  --kf-radius-sm: 4px;
+  --kf-radius-md: 6px;
+
+  /* --- Minimal Structural Shadows --- */
+  --kf-shadow-subtle: 0 1px 2px rgba(16, 18, 17, 0.06);
+  --kf-shadow-hud: 0 12px 32px rgba(5, 6, 6, 0.34);
+}
+
+@media (min-width: 380px) {
+  :root {
+    --kf-page-margin: 20px;
+  }
+}
+
+@media (min-width: 640px) {
+  :root {
+    --kf-page-margin: 32px;
+    --kf-grid-gutter: 20px;
+    --kf-grid-cols: 8;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --kf-page-margin: 64px;
+    --kf-grid-gutter: 24px;
+    --kf-grid-cols: 12;
+  }
+}
+
+/* --- Environment Context Classes --- */
+.env-after-hours {
+  --env-bg: var(--kf-obsidian);
+  --env-surface: var(--kf-graphite);
+  --env-surface-raised: var(--kf-carbon);
+  --env-border: rgba(242, 241, 235, 0.12);
+  --env-border-strong: rgba(242, 241, 235, 0.24);
+  --env-fg: var(--kf-chalk);
+  --env-muted: var(--kf-ah-muted);
+  --env-muted-on-surface: var(--kf-ah-muted);
+  --env-accent: var(--kf-forest);
+  --env-accent-fg: var(--kf-chalk);
+  --env-brass-detail: var(--kf-brass);
+  --env-focus: var(--kf-brass);
+  background-color: var(--env-bg);
+  color: var(--env-fg);
+}
+
+.env-form-function {
+  --env-bg: var(--kf-paper);
+  --env-surface: var(--kf-surface);
+  --env-surface-raised: var(--kf-porcelain);
+  --env-border: var(--kf-border);
+  --env-border-strong: #adb3a8;
+  --env-fg: var(--kf-ink);
+  --env-muted: var(--kf-ff-muted);
+  --env-muted-on-surface: var(--kf-ff-muted-elevated);
+  --env-accent: var(--kf-forest);
+  --env-accent-fg: var(--kf-porcelain);
+  --env-brass-detail: var(--kf-brass);
+  --env-focus: var(--kf-forest);
+  background-color: var(--env-bg);
+  color: var(--env-fg);
+}
+
+.env-atelier {
+  --env-bg: var(--kf-limestone);
+  --env-surface: var(--kf-porcelain);
+  --env-surface-raised: var(--kf-porcelain);
+  --env-border: #d4cfc3;
+  --env-border-strong: #b4aea0;
+  --env-fg: var(--kf-charcoal);
+  --env-muted: var(--kf-ff-muted-elevated);
+  --env-muted-on-surface: var(--kf-ff-muted);
+  --env-accent: var(--kf-forest);
+  --env-accent-fg: var(--kf-porcelain);
+  --env-brass-detail: var(--kf-brass);
+  --env-focus: var(--kf-forest);
+  background-color: var(--env-bg);
+  color: var(--env-fg);
+}

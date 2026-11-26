@@ -1,0 +1,319 @@
+/* ==========================================================================
+   KEYFORM — Global Base, Swiss Grid, Typography & Accessibility
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--kf-header-height) + 12px);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--kf-studio-void);
+  color: var(--kf-ink);
+}
+
+body {
+  margin: 0;
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-body);
+  line-height: var(--kf-lead-body);
+  letter-spacing: var(--kf-track-body);
+  background-color: var(--kf-paper);
+  color: var(--kf-ink);
+  overflow-x: clip;
+}
+
+img,
+svg,
+picture {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+/* --- Accessible Skip Link --- */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: var(--kf-sp-16);
+  z-index: 1000;
+  padding: 12px 20px;
+  background: var(--kf-forest);
+  color: var(--kf-porcelain);
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--kf-radius-xs);
+  border: 1px solid var(--kf-brass);
+  transition: top var(--kf-dur-button) var(--kf-ease-mech);
+}
+
+.skip-link:focus {
+  top: var(--kf-sp-16);
+}
+
+/* --- Universal High-Contrast Focus Ring --- */
+:focus-visible {
+  outline: 2px solid var(--env-focus, var(--kf-forest));
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Swiss Container & 12 / 8 / 4 Responsive Grid --- */
+.kf-container {
+  width: 100%;
+  max-width: var(--kf-max-width);
+  margin-inline: auto;
+  padding-inline: var(--kf-page-margin);
+}
+
+.kf-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--kf-grid-cols), minmax(0, 1fr));
+  gap: var(--kf-grid-gutter);
+}
+
+/* --- Section Rhythm --- */
+.kf-section {
+  position: relative;
+  padding-block: var(--kf-sp-64);
+}
+
+@media (min-width: 1024px) {
+  .kf-section {
+    padding-block: var(--kf-sp-128);
+  }
+}
+
+.kf-section--tight {
+  padding-block: var(--kf-sp-48);
+}
+
+@media (min-width: 1024px) {
+  .kf-section--tight {
+    padding-block: var(--kf-sp-96);
+  }
+}
+
+.kf-section--ruled {
+  border-top: 1px solid var(--env-border);
+}
+
+/* --- Typography Primitives --- */
+.kf-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-caption);
+  font-weight: 500;
+  letter-spacing: var(--kf-track-label);
+  color: var(--env-muted);
+  margin: 0 0 var(--kf-sp-12);
+}
+
+.kf-eyebrow-index {
+  font-family: var(--kf-font-mono);
+  font-size: var(--kf-text-index);
+  letter-spacing: var(--kf-track-index);
+  font-variant-numeric: tabular-nums;
+  color: var(--env-fg);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.env-after-hours .kf-eyebrow-index {
+  color: var(--kf-brass);
+}
+
+.kf-display {
+  margin: 0;
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-display);
+  font-weight: 500;
+  line-height: var(--kf-lead-display);
+  letter-spacing: var(--kf-track-display);
+  text-wrap: balance;
+}
+
+.kf-h1 {
+  margin: 0;
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-h1);
+  font-weight: 500;
+  line-height: var(--kf-lead-heading);
+  letter-spacing: var(--kf-track-heading);
+  text-wrap: balance;
+}
+
+.kf-h2 {
+  margin: 0;
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-h2);
+  font-weight: 500;
+  line-height: 1.14;
+  letter-spacing: var(--kf-track-heading);
+  text-wrap: balance;
+}
+
+.kf-h3 {
+  margin: 0;
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-h3);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.014em;
+}
+
+.kf-lead {
+  margin: 0;
+  font-size: var(--kf-text-lead);
+  line-height: 1.5;
+  color: var(--env-muted);
+  max-width: 52ch;
+}
+
+.kf-body {
+  margin: 0;
+  font-size: var(--kf-text-body);
+  line-height: var(--kf-lead-body);
+  color: var(--env-muted);
+  max-width: 58ch;
+}
+
+.kf-mono {
+  font-family: var(--kf-font-mono);
+  font-size: var(--kf-text-code);
+  letter-spacing: var(--kf-track-code);
+  font-variant-numeric: tabular-nums;
+}
+
+.kf-code {
+  font-family: var(--kf-font-mono);
+  font-size: var(--kf-text-code);
+  letter-spacing: var(--kf-track-code);
+  font-variant-numeric: tabular-nums;
+}
+
+.kf-label {
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-label);
+  font-weight: 500;
+  letter-spacing: var(--kf-track-label);
+  color: var(--env-muted-on-surface);
+}
+
+.kf-value {
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-value);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--env-fg);
+}
+
+.kf-caption {
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-caption);
+  line-height: var(--kf-lead-caption);
+  color: var(--env-muted);
+}
+
+.kf-micro {
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-label);
+  font-weight: 500;
+  letter-spacing: var(--kf-track-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.kf-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Section Header Band (Asymmetric Swiss Editorial) --- */
+.kf-section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--kf-sp-24);
+  margin-bottom: var(--kf-sp-48);
+  padding-bottom: var(--kf-sp-32);
+  border-bottom: 1px solid var(--env-border);
+}
+
+@media (min-width: 1024px) {
+  .kf-section-head {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: end;
+    margin-bottom: var(--kf-sp-64);
+  }
+
+  .kf-section-head__title {
+    grid-column: 1 / span 6;
+  }
+
+  .kf-section-head__summary {
+    grid-column: 8 / span 5;
+  }
+}
+
+/* --- Subtle Brass Datum Accent Line --- */
+.kf-datum-tick {
+  display: inline-block;
+  width: 18px;
+  height: 1.5px;
+  background: var(--kf-brass);
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* --- Reduced Motion Compliance --- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

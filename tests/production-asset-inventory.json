@@ -1,0 +1,338 @@
+{
+  "schema": "keyform-production-inventory/1",
+  "manifest": "assets/kf01/kf01-kf004b-b3.1/manifest.json",
+  "files": {
+    "media/kf003b/avif/A01-desktop-hero-1600w.avif": {
+      "bytes": 38984,
+      "sha256": "8e3aa025a6b4f1d5299ac49c536c029c9d9984aaf279f6f7b4c6b3c9c36253a2"
+    },
+    "media/kf003b/avif/A01-desktop-hero-2560w.avif": {
+      "bytes": 69683,
+      "sha256": "cbbb884b71b44d888a0f9cb29e3db8e80aa4adf52d773531b3d1c0c80fb5fe1e"
+    },
+    "media/kf003b/avif/A01-desktop-hero-960w.avif": {
+      "bytes": 21042,
+      "sha256": "959a0c35ba7e4f3cc98f151e25a6363f059f6fd5c5fa6c5916518d71a2f039cd"
+    },
+    "media/kf003b/avif/A02-mobile-hero-1280w.avif": {
+      "bytes": 37938,
+      "sha256": "85a6a2cd0745da8b8665ddb9981a1a2d4e8abadcb0d3982980b28041ccde9860"
+    },
+    "media/kf003b/avif/A02-mobile-hero-800w.avif": {
+      "bytes": 21653,
+      "sha256": "2ccb846835285ce1d1e92c7c6f966a06f54f91494bcc185506a725e427643d5e"
+    },
+    "media/kf003b/avif/A03-form-function-forest-1200w.avif": {
+      "bytes": 35787,
+      "sha256": "dcd1c8160fd5db5d1b83347fea85615e051e006f28215f088e44484419d69170"
+    },
+    "media/kf003b/avif/A03-form-function-forest-1920w.avif": {
+      "bytes": 63094,
+      "sha256": "48a7f58ed5d4ef8705d24b8e5edca1d33435728878a02bca2ad721343bd058b1"
+    },
+    "media/kf003b/avif/A04a-engineering-macro-1600w.avif": {
+      "bytes": 72042,
+      "sha256": "4029c25c1806d9e45737b2589b36da219b2e3996b7b4c08146312ce1bdf0eef1"
+    },
+    "media/kf003b/avif/A04a-engineering-macro-960w.avif": {
+      "bytes": 37808,
+      "sha256": "08c2f5157887dbe3965cc71c9efb9d8dfe9a2c1fc536febef4eac5f3e95f6d4c"
+    },
+    "media/kf003b/avif/A04b-side-profile-1200w.avif": {
+      "bytes": 11290,
+      "sha256": "1e7822e8124f2cf072300c3c893b86bcb78408da376fc58bf5dde6604a968658"
+    },
+    "media/kf003b/avif/A04b-side-profile-1920w.avif": {
+      "bytes": 20971,
+      "sha256": "c3fac6b0f826cb73ce3edcb17790d47004bc7048f3e95c677c15728cab4d6d4f"
+    },
+    "media/kf003b/avif/A04c-rear-usbc-1600w.avif": {
+      "bytes": 78141,
+      "sha256": "e66bfd7d1c0c51dd3dd4e018e245ca4a7cded3f063742c4d43551459a50e70db"
+    },
+    "media/kf003b/avif/A04c-rear-usbc-960w.avif": {
+      "bytes": 26353,
+      "sha256": "5a7314f1c8ed25cc89ecd229f200601de339ae8f1ae990c9083ca7a990fc9491"
+    },
+    "media/kf003b/avif/A05-exploded-anatomy-1000w.avif": {
+      "bytes": 57772,
+      "sha256": "5b584cb251ca8207935f3833ee1b2dc62f2c141665aea70f8a53582e9b88dac3"
+    },
+    "media/kf003b/avif/A05-exploded-anatomy-1600w.avif": {
+      "bytes": 102344,
+      "sha256": "6622e01ef9bffdede68582f9e2f360c85d3282f1dea4219cbb9c638e2abf7673"
+    },
+    "media/kf003b/avif/A06a-switch-linear45-1600w.avif": {
+      "bytes": 52122,
+      "sha256": "e3ed3f1663dbf59b0179c1d5a23cceea577a2958360e34d1ce80bb33e26b5c96"
+    },
+    "media/kf003b/avif/A06a-switch-linear45-960w.avif": {
+      "bytes": 22826,
+      "sha256": "4edb8820bf9950d650ea830626e279b191be04317ac78bdeec9687d902d9fbc5"
+    },
+    "media/kf003b/avif/A06b-switch-tactile58-1600w.avif": {
+      "bytes": 45133,
+      "sha256": "e991d9549f7d59fcdce724ed5754357e72069aa5f6963b1ef90985181b881a24"
+    },
+    "media/kf003b/avif/A06b-switch-tactile58-960w.avif": {
+      "bytes": 21248,
+      "sha256": "4a3b75566ae5e7946eb6dd120a7a7385a498d5d5de68eb6474c412d1e774be85"
+    },
+    "media/kf003b/avif/A06c-switch-silent50-1600w.avif": {
+      "bytes": 44901,
+      "sha256": "e5d2ae308b290b90754ddf5ed01cb8fb521a004439f66159a9a126cc647130ba"
+    },
+    "media/kf003b/avif/A06c-switch-silent50-960w.avif": {
+      "bytes": 20484,
+      "sha256": "497c9b631eb360f59b171887e0a4dca6e82077f391b8964734ecb37c80cc5d4a"
+    },
+    "media/kf003b/avif/A07a-mat-aluminium-1600w.avif": {
+      "bytes": 41969,
+      "sha256": "2c725574764f69804c1f4af6305b2b4d393256a35513da5986bef5dcd7b830e8"
+    },
+    "media/kf003b/avif/A07a-mat-aluminium-960w.avif": {
+      "bytes": 23080,
+      "sha256": "1fd4c78be587e0947b9d26e4d8526cb9606c112c3524c823f3baa7b646af9267"
+    },
+    "media/kf003b/avif/A07b-mat-brass-weight-1600w.avif": {
+      "bytes": 19170,
+      "sha256": "0d2c68cc421b8121f76f87e643f384256f97c17c441541a9682cd3c4a166073d"
+    },
+    "media/kf003b/avif/A07b-mat-brass-weight-960w.avif": {
+      "bytes": 11045,
+      "sha256": "001100bfa8a34d5310c139ff6d0fb99179234595449f1ea89320b984382ef4f1"
+    },
+    "media/kf003b/avif/A07c-mat-charcoal-pbt-1600w.avif": {
+      "bytes": 22299,
+      "sha256": "5701acc35d9ab261bccf8dcd12bf083664c34f487cb97f8edae7b1215f1dbf99"
+    },
+    "media/kf003b/avif/A07c-mat-charcoal-pbt-960w.avif": {
+      "bytes": 13627,
+      "sha256": "299d0cd3e2af50fbd5a3f24717ed997ad922aefc64baaf6616ff4b8a8ae95a66"
+    },
+    "media/kf003b/avif/A07d-mat-acoustic-stack-1600w.avif": {
+      "bytes": 72783,
+      "sha256": "2e9333797340d306a84bb96d831752e647fd7ea64286b5526eda2f5f71d79be0"
+    },
+    "media/kf003b/avif/A07d-mat-acoustic-stack-960w.avif": {
+      "bytes": 37636,
+      "sha256": "843706db2b35a03232cc43e95bd2ad0e21ff55da113a803fd2d9f54ded3f9750"
+    },
+    "media/kf003b/avif/A08-closing-statement-1200w.avif": {
+      "bytes": 21811,
+      "sha256": "e600abb41d4616fce417580e5b736ccc0a2f0f5a16fd554d3385a2ba81af0b53"
+    },
+    "media/kf003b/avif/A08-closing-statement-1920w.avif": {
+      "bytes": 37979,
+      "sha256": "2a0684dad519b65ed7d72f8962b0835789f8efb031d38ae6349df88d55425951"
+    },
+    "media/kf003b/avif/B01-fallback-obsidian-1200w.avif": {
+      "bytes": 35473,
+      "sha256": "73e8aa851f3512fe7c78af5d72849f75c2b3ccc286c717b3831dc797f7e23f08"
+    },
+    "media/kf003b/avif/B01-fallback-obsidian-1920w.avif": {
+      "bytes": 62330,
+      "sha256": "21bc9e21dbbb5f39a29b637acdce515b1d219baa506780efb74863be639db0a9"
+    },
+    "media/kf003b/avif/B02-fallback-carbon-1200w.avif": {
+      "bytes": 35594,
+      "sha256": "39ee74e255a18ef8ec3c6db24c06287a58f7971fd23ac3c51137cecd5bcddd1f"
+    },
+    "media/kf003b/avif/B02-fallback-carbon-1920w.avif": {
+      "bytes": 62770,
+      "sha256": "d21a778739758cb555fa5cf735859cfa1a631677df372110e5bcc26ad637bcc2"
+    },
+    "media/kf003b/avif/B03-fallback-titanium-1200w.avif": {
+      "bytes": 34795,
+      "sha256": "5565d77b5e6ab3dd11425950bbdc563eb685b6e0e9842a2b7cc7095361dccd78"
+    },
+    "media/kf003b/avif/B03-fallback-titanium-1920w.avif": {
+      "bytes": 61273,
+      "sha256": "536663368fafc2e04faea4822fc689fe6fd3a6b8c0d91ac4b933311fa5431068"
+    },
+    "media/kf003b/webp/A01-desktop-hero-1600w.webp": {
+      "bytes": 52892,
+      "sha256": "aa153f11bfd9b96a74c67fee17f9628882d9d39a40b707fd18f7f7d240698a40"
+    },
+    "media/kf003b/webp/A01-desktop-hero-2560w.webp": {
+      "bytes": 94282,
+      "sha256": "3bd54c91d817f1ec7841cb11a5723b4a3893b0cead9cc70952b1a027fbebbea4"
+    },
+    "media/kf003b/webp/A01-desktop-hero-960w.webp": {
+      "bytes": 28116,
+      "sha256": "daac3023ce7de02ccb9a5f39292883ae0c1699959908ab7c2d2babc8b77b5db4"
+    },
+    "media/kf003b/webp/A02-mobile-hero-1280w.webp": {
+      "bytes": 50398,
+      "sha256": "3c18423282d01708a939a5f6f06a90ddbd5cfffaa66bb5c1d5aacedf970df8a8"
+    },
+    "media/kf003b/webp/A02-mobile-hero-800w.webp": {
+      "bytes": 27050,
+      "sha256": "6b8f62b399b6590ce7783d51683862a5ffe37a00a9216800aa0e729f10a3fdab"
+    },
+    "media/kf003b/webp/A03-form-function-forest-1200w.webp": {
+      "bytes": 46478,
+      "sha256": "cc374882391c9cd6da8e6c75aea99b795c409dabb31bb983fc99fd490fe92367"
+    },
+    "media/kf003b/webp/A03-form-function-forest-1920w.webp": {
+      "bytes": 79188,
+      "sha256": "792ada215d3071dc40d3eec1adbe323d18ff8f79872b98441464b85a7904fcd3"
+    },
+    "media/kf003b/webp/A04a-engineering-macro-1600w.webp": {
+      "bytes": 85926,
+      "sha256": "79dc1c7c0d0f5a822b5691db80c9e33e489c113ed34d8c80ede3b52d7fd515f4"
+    },
+    "media/kf003b/webp/A04a-engineering-macro-960w.webp": {
+      "bytes": 47414,
+      "sha256": "81f39f6d89e633f3aa723e50f7518ad94d14eb87dec1a485dbce39b16a5ded02"
+    },
+    "media/kf003b/webp/A04b-side-profile-1200w.webp": {
+      "bytes": 15644,
+      "sha256": "d36e9e71756891efdcb9b573862986324a8bfc324bea708ee5ca91efc6273993"
+    },
+    "media/kf003b/webp/A04b-side-profile-1920w.webp": {
+      "bytes": 31070,
+      "sha256": "452bd5f49309c3a600da404e784f018a4980b196b232eef33c9c6f3cad7ddac1"
+    },
+    "media/kf003b/webp/A04c-rear-usbc-1600w.webp": {
+      "bytes": 83732,
+      "sha256": "dbdf08740f91c03237e27abbab8c9221343b2ef45e943b32524efbcc5d6e6e77"
+    },
+    "media/kf003b/webp/A04c-rear-usbc-960w.webp": {
+      "bytes": 27792,
+      "sha256": "070a25ba5d35a4ca51fe68479e67e079f0b8303a04855bd538f337dbf290e2f0"
+    },
+    "media/kf003b/webp/A05-exploded-anatomy-1000w.webp": {
+      "bytes": 77146,
+      "sha256": "307256f130e3d80430d8e783557d204b010130e50edfeea64f32c8e3a9353d82"
+    },
+    "media/kf003b/webp/A05-exploded-anatomy-1600w.webp": {
+      "bytes": 138754,
+      "sha256": "d86f13df5657898fcd07baa92678ff1b1a564534d8515d0154656181ea1dd60e"
+    },
+    "media/kf003b/webp/A06a-switch-linear45-1600w.webp": {
+      "bytes": 53898,
+      "sha256": "9f2b03ebd33b07bf37078fb3365c4e6cc1f5bb52d2d6f9b576af22b94f5a0cdb"
+    },
+    "media/kf003b/webp/A06a-switch-linear45-960w.webp": {
+      "bytes": 23932,
+      "sha256": "649e0cbfc3d71d82712818e12a05f8bfbb756010c398a0a7b4f860716a2d8811"
+    },
+    "media/kf003b/webp/A06b-switch-tactile58-1600w.webp": {
+      "bytes": 50774,
+      "sha256": "faef022a82ce2da4655b3d8752799a08a8ecc2f3aadbe840dd7819d37e4c896b"
+    },
+    "media/kf003b/webp/A06b-switch-tactile58-960w.webp": {
+      "bytes": 23924,
+      "sha256": "5d45f3370849a8cbfc9b60248d86101f4dcc6d391f3023f9406a09f228d71734"
+    },
+    "media/kf003b/webp/A06c-switch-silent50-1600w.webp": {
+      "bytes": 47730,
+      "sha256": "a1216c3497369286ff6434c407832e2b3a2afc887f1110d7d6d2c5291d38a35f"
+    },
+    "media/kf003b/webp/A06c-switch-silent50-960w.webp": {
+      "bytes": 22680,
+      "sha256": "1f49a05173d952c96d2c3889488f2fb3affe93756d356d4b40bf9778eb17c040"
+    },
+    "media/kf003b/webp/A07a-mat-aluminium-1600w.webp": {
+      "bytes": 56340,
+      "sha256": "28a6cd8dac023487f7dfa95fa7ee509d87ead964a801c44cf221b99bd2437394"
+    },
+    "media/kf003b/webp/A07a-mat-aluminium-960w.webp": {
+      "bytes": 30254,
+      "sha256": "c870ba6178e6f1e93d3b044b882e042e9983e68f3cddc9de8fc97ba5d9ac5c39"
+    },
+    "media/kf003b/webp/A07b-mat-brass-weight-1600w.webp": {
+      "bytes": 24848,
+      "sha256": "65f19ea97d2dd850627d44ee1b2a7d053cab1340f7c885bd719f8dd5b0fe7a3c"
+    },
+    "media/kf003b/webp/A07b-mat-brass-weight-960w.webp": {
+      "bytes": 13680,
+      "sha256": "2fc0d2093ec0cc3d0532d31c77efae8284026e3683e0fd242e88f324638a9428"
+    },
+    "media/kf003b/webp/A07c-mat-charcoal-pbt-1600w.webp": {
+      "bytes": 32560,
+      "sha256": "2db614e09e0b15fda67dfc09331fc483e013ac834b7fa173f0ec09fa6e6b1961"
+    },
+    "media/kf003b/webp/A07c-mat-charcoal-pbt-960w.webp": {
+      "bytes": 17404,
+      "sha256": "30140ee134fff4f5c390cd8a39999ae90ffbab3ea87d1ef5d9147be948d8a328"
+    },
+    "media/kf003b/webp/A07d-mat-acoustic-stack-1600w.webp": {
+      "bytes": 80668,
+      "sha256": "34fb061f77322dba00e2458ea62db0440b05925b4600898e1a543767007fd8bd"
+    },
+    "media/kf003b/webp/A07d-mat-acoustic-stack-960w.webp": {
+      "bytes": 43610,
+      "sha256": "f84c7c47217a98b504a6f0555004357445819fd8122c19d314c203f426c50e5f"
+    },
+    "media/kf003b/webp/A08-closing-statement-1200w.webp": {
+      "bytes": 28846,
+      "sha256": "9c235953d7241829529fa4e8a59065f1e725218406cfaf933cd996e72066b249"
+    },
+    "media/kf003b/webp/A08-closing-statement-1920w.webp": {
+      "bytes": 53048,
+      "sha256": "996c4f510ff472ba7760b44424c75f6de450183997bee794c2bf06c63de0d266"
+    },
+    "media/kf003b/webp/B01-fallback-obsidian-1200w.webp": {
+      "bytes": 44058,
+      "sha256": "2fe4257bcff5eb8b5f0f978e8b6304dbd45a041d5641df9243cf4f0e5809b209"
+    },
+    "media/kf003b/webp/B01-fallback-obsidian-1920w.webp": {
+      "bytes": 77364,
+      "sha256": "86a6e2efa119dd79f39040331a49620a11ec2826421a48cf5493916058e2c897"
+    },
+    "media/kf003b/webp/B02-fallback-carbon-1200w.webp": {
+      "bytes": 45778,
+      "sha256": "f212a3addff5ad4bf1c102170fe70d7807c3a4203bbaea79dc0afc2209acb7fe"
+    },
+    "media/kf003b/webp/B02-fallback-carbon-1920w.webp": {
+      "bytes": 78388,
+      "sha256": "1d36bc9e0a4bf67b8da72e0e9d408a52734bffaa75f795437ea155318c39ba54"
+    },
+    "media/kf003b/webp/B03-fallback-titanium-1200w.webp": {
+      "bytes": 43690,
+      "sha256": "2114e23c10ca23b548b3a25cd4bee2af1c3f93b22614f0e8a33d7e0cbfd45aa3"
+    },
+    "media/kf003b/webp/B03-fallback-titanium-1920w.webp": {
+      "bytes": 75150,
+      "sha256": "03bc18e652026a51b7162465dee22d3444339fee26e558bdacf74751e960f0b5"
+    },
+    "assets/kf01/kf01-kf004b-b3.1/models/kf01_exterior_b21.meshopt.glb": {
+      "bytes": 2013932,
+      "sha256": "640b6146c2081cca1ffa1cebe9e6e045a605e16b3b98d7b2f0edd5e90f3c8656"
+    },
+    "assets/kf01/kf01-kf004b-b3.1/models/kf01_internal_b21.meshopt.glb": {
+      "bytes": 2476728,
+      "sha256": "a6b07106dad51420196b1da819b024e98d3da5a10db095d20af50d95889ea827"
+    },
+    "assets/kf01/kf01-kf004b-b3.1/models/kf01_encoder_macro_b21.meshopt.glb": {
+      "bytes": 1746268,
+      "sha256": "b40789e3420ec1679ebc3a43db36d37aad21509338adbcd3e9fd2cf8879789d2"
+    },
+    "assets/kf01/kf01-kf004b-b3.1/models/kf01_hero_switch_b21.reference.glb": {
+      "bytes": 1057900,
+      "sha256": "e19723252fc1d049ea3f89662428820abfb7b1a71cb1e13b0478c1206b723123"
+    },
+    "assets/kf01/kf01-kf004b-b3.1/textures/legend-1024.json": {
+      "bytes": 59847,
+      "sha256": "21addbfa0a8eac519743c7bf117503c9fb9c53ad4c441a4573ccf2b18a4b5cb2"
+    },
+    "assets/kf01/kf01-kf004b-b3.1/textures/kf01_legends_b21_1024.png": {
+      "bytes": 12607,
+      "sha256": "3970a2e53debe19f603262c3008d39bbdeb8def36116d0b34c82e4a18e03c41c"
+    },
+    "assets/kf01/kf01-kf004b-b3.1/textures/legend-2048.json": {
+      "bytes": 60272,
+      "sha256": "1814e421af52a6cd45ea28c0c967b165363bb02e9e39cd5d50fe5bdbfadd0c4f"
+    },
+    "assets/kf01/kf01-kf004b-b3.1/textures/kf01_legends_b21_2048.png": {
+      "bytes": 29142,
+      "sha256": "b4f4b9ba5a51044c1eca27daa266f0f3378fada18c23ccfbb5fe80161f9aed83"
+    },
+    "assets/kf01/kf01-kf004b-b3.1/manifest.json": {
+      "bytes": 245910,
+      "sha256": "430ea532e0736648d67037dd701dfc83d8e37820f9ceef3a160db92291152b91"
+    }
+  }
+}
