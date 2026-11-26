@@ -1,6 +1,6 @@
 # KF—01 Product Specification
 
-> **Document Status:** KF-002 geometry candidate for owner review
+> **Document Status:** KF-003A-R3 Alternative A canonical geometry frozen and approved; KF-003A finishes provisionally approved; entering KF-003B production rendering
 >
 > **Scope Rule:** Verified industry engineering standards are explicitly separated from fictional KF—01 product specifications. No certifications, laboratory test data, or measured acoustic figures are claimed.
 
@@ -23,7 +23,7 @@ The referenced parts and the nominal KF—01 modeling datums define the geometry
 | PCB thickness and plate stack | `1.60 mm` FR4 and `5.00 mm` plate top to PCB top | Nominal KF—01 stack based on the MX mounting drawing |
 | MX downstroke | `4.00 mm` | [CHERRY MX2A Red](https://www.cherry.de/fileadmin/media/Industrial/Switch/MX_RED/Data_sheet_MX2A_Red.pdf) specifies 4 mm total travel and 2 mm pretravel |
 | Keycap shells | 1u base `18.00 × 18.00 mm`, `1.05 mm` minimum base gap | KF—01 Cherry-inspired profile candidate |
-| Keycap crown heights | `R1 9.40`, `R2 9.00`, `R3 8.75`, `R4 8.10 mm` at center, measured from base | KF—01 sculpted rows, with a dedicated convex Space profile |
+| Keycap crown heights | `R1 9.40`, `R2 9.00`, `R3 8.75`, `R4 8.10 mm` at center, measured from the installed cap datum | KF—01 sculpted rows, with a dedicated convex Space profile |
 | PCB-mount stabilizer wire span | `23.8 mm` for 2u and 2.25u positions, `100.0 mm` for 6.25u | CHERRY drawing and [KiCad 6.25u PCB footprint](https://github.com/KiCad/kicad-footprints/blob/master/Button_Switch_Keyboard.pretty/SW_Cherry_MX_6.25u_PCB.kicad_mod) |
 | Rotary encoder | `~11 × 11 mm` body, flat `Ø6 mm` shaft, `30` detents, `0.5 mm` push | [ALPS Alpine EC11E15244G1](https://tech.alpsalpine.com/e/products/detail/EC11E15244G1/) motion reference |
 | USB-C receptacle and throat | `8.94 × 3.46 mm` represented shell and `9.70 × 4.22 mm` case throat | [GCT USB4085](https://gct.co/connector/usb4085) and [Unified Daughterboard case guidance](https://github.com/Unified-Daughterboard/Unified-Daughterboard.github.io/blob/main/info-designer-case.md) |
@@ -63,6 +63,9 @@ KF—01 uses an **exploded 75% ANSI layout** (`16.25u` wide × `6.25u` deep incl
 ### 3.3 Construction & Materials (Fictional)
 
 - **Enclosure:** Two-piece CNC-machined 6063 aluminium (top frame + bottom chassis) joined by `8× M2.5` recessed stainless Torx fasteners accessible from the underside.
+- **Integrated deck candidate (KF-003A-R1):** Four function pockets, an integral navigation separator, and a stepped opening beside the arrow keys. Retained reliefs at the close-spaced rows kept the frame continuous at the specified cap travel.
+- **Right-cluster candidate (KF-003A-R2, superseded):** Added locally raised chamfered shoulders around the navigation column and arrows while keeping shared openings across the `1.05 mm` throats.
+- **Alternative A integrated deck candidate (KF-003A-R3):** Restores the clean flat R1 deck and relocates eight key centers per KF-LAYOUT-001 Alternative A (`Nav +1.45 mm X`; `Arrows −1.45 mm X, −2.85 mm Y`) to establish independent main typing, navigation column (`Delete`, `PgUp`, `PgDn`, `End`), and inverted-T arrow apertures separated by continuous aluminium webs (`2.46 mm` nominal / `2.22 mm` study flat minimum), backed by local front-right plate/PCB/foam extensions and a compact front-right silicone gasket sock.
 - **Surface Finishes (Build Studio candidates):**
   - *Obsidian* — Bead-blasted dark charcoal anodization
   - *Carbon* — Fine matte graphite anodization
@@ -85,7 +88,8 @@ KF—01 uses an **exploded 75% ANSI layout** (`16.25u` wide × `6.25u` deep incl
 - **Rotary Encoder Knob:**
   - CNC-machined `Ø 20.0 mm × 15.5 mm` cylindrical aluminium/brass candidate with diamond knurling, chamfered top face and flat-shaft bore. The model uses `12°` detent steps and `0.5 mm` push.
 - **Keycaps:**
-  - Approximately `1.5 mm` wall thickness, sculpted Cherry-inspired PBT, and dye-sublimated legends as a finish target. The KF-002 draft uses charcoal shells with one ivory Esc accent.
+  - Approximately `1.5 mm` wall thickness, sculpted Cherry-inspired PBT, and dye-sublimated legends as a finish target. The review colorway uses charcoal shells with one ivory Esc accent.
+  - The KF-003A candidate extends the hollow skirt `0.56 mm` below the installed KF-002 cap datum. Profile crown heights and the cap-to-stem mounting datum refer to that original datum. The skirt extends around the switch lid while the mount retains its original full-stroke clearance.
 
 ### 3.4 Switch Lab Lineup (Fictional KEYFORM Editions)
 

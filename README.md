@@ -6,7 +6,7 @@
 
 KEYFORM is an experimental, fictional premium mechanical keyboard brand and interactive product website. It combines photorealistic Blender CGI, Swiss-inspired editorial typography, disciplined Bento Grid architecture, selective glassmorphism, interactive mechanical anatomy, and a real-time 3D **Build Studio** configurator.
 
-> **Project Status:** `KF-002` — Blender geometry candidate and eight Cycles review stills are ready for owner review.
+> **Project Status:** `KF-003A-R3` — Canonical Alternative A geometry frozen and approved. Entering `KF-003B` production lookdev and rendering.
 
 ## Repository Structure
 
@@ -29,7 +29,7 @@ KEYFORM/
 
 Large binary production files (`.blend` masters, Cycles `.exr`/`.png` renders, HDRIs, and raw texture sources) are intentionally excluded from Git and live in a dedicated local workspace outside this repository:
 
-- Asset workspace: `D:\Assets\KEYFORM\`. The editable master is at `blender\kf01_master.blend` and draft views are in `renders\kf002\`. See [docs/ASSET_PIPELINE.md](docs/ASSET_PIPELINE.md).
+- Asset workspace: `D:\Assets\KEYFORM\`. The R3 candidate is at `blender\kf01_kf003a_r3.blend` with six review views in `renders\kf003a-r3\` and updated Alternative A canonical layout in `reference\kf01_layout.json`. The pre-R3 R1/R2 masters, baseline manifest, and scripts have a verified recovery copy under `backups\kf003a-r2-before-r3\`. See [docs/ASSET_PIPELINE.md](docs/ASSET_PIPELINE.md).
 
 Only optimized, web-ready derivatives (`.glb`, `.avif`, `.webp`, `.woff2`) will enter the repository once asset budgets are verified in later phases.
 
