@@ -52,3 +52,8 @@ renders-wip/
 
 # Workspace-local build and browser verification
 .tmp/
+.vercel
+.env*
+
+.commandcode/
+img-generate/

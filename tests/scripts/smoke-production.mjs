@@ -165,12 +165,13 @@ try {
     requests.clear();
     const loaderId = await navigate();
     const layout = await evaluate(geometry);
-    const expected = 'OR01-provisional-desktop-hero';
+    const expected = width < 768 ? 'OR14-mobile-hero' : 'OR13-desktop-hero';
+    const unexpectedHero = width < 768 ? 'OR13-desktop-hero' : 'OR14-mobile-hero';
     assert.equal(layout.overflowX, 0, name);
     assert.ok(layout.ctaTouchTargetsOk, name);
     assert.ok(layout.railBelowImage, name);
     assert.equal(layout.heroSpecCount, 4, name);
-    if (width < 768) assert.ok(Math.abs(layout.heroRatio - 16 / 9) < 0.02, name);
+    if (width < 768) assert.ok(Math.abs(layout.heroRatio - 1) < 0.02, name);
     else assert.equal(layout.heroObjectFit, 'cover', name);
     assert.ok(layout.hero.includes(expected) && layout.hero.endsWith('.avif'), layout.hero);
     assert.deepEqual(layout.sections, ['hero', 'engineering', 'anatomy', 'switch-lab', 'materials', 'build-studio', 'closing']);
@@ -178,7 +179,8 @@ try {
     assert.ok(layout.lazyImages > 0);
     const network = [...requests.values()].filter((row) => row.loaderId === loaderId);
     assert.ok(network.every(({url, mimeType}) => !/\/assets\/kf01\/|\.glb(?:$|\?)|meshopt|three(?:[.-]|\b)|\/audio\/|audio-engine|legend-\d/i.test(url) && !mimeType?.startsWith('audio/')));
-    assert.ok(!network.some(({url}) => /A01-desktop-hero|H02-mobile-hero/.test(url)), 'Unexpected canonical hero preload');
+    assert.ok(!network.some(({url}) => /A01-desktop-hero|H02-mobile-hero|OR01-provisional-desktop-hero/.test(url)), 'Unexpected legacy hero preload');
+    assert.ok(!network.some(({url}) => url.includes(unexpectedHero)), `Unexpected cross-viewport hero requested on ${name}`);
     assert.ok(!network.some(({url}) => url.includes('A02-mobile-hero')), 'Obsolete A02 mobile hero requested');
     const heroes = network.filter(({url}) => url.includes(expected));
     assert.equal(heroes.length, 1, JSON.stringify({ name, heroes }));
@@ -206,7 +208,7 @@ try {
     await img.decode();
     return new URL(img.currentSrc).pathname;
   });
-  assert.match(fallback, /OR01-provisional-desktop-hero-.+\.webp$/);
+  assert.match(fallback, /OR14-mobile-hero-.+\.webp$/);
 
   await device(dimensions[0]);
   await navigate();

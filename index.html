@@ -21,9 +21,9 @@
       content="KEYFORM KF—01 is a fictional independent industrial design concept for a 75% ANSI CNC-machined mechanical keyboard."
     />
     <!-- Path-relative preview: prefix with the confirmed production origin when canonical is set. -->
-    <meta property="og:image" content="/media/kf-008a/webp/OR01-provisional-desktop-hero-1600w.webp" />
+    <meta property="og:image" content="/media/kf-008a/webp/OR13-desktop-hero-1600w.webp" />
     <meta property="og:image:width" content="1600" />
-    <meta property="og:image:height" content="900" />
+    <meta property="og:image:height" content="893" />
     <meta
       property="og:image:alt"
       content="KEYFORM KF—01 concept keyboard in forest-anodized aluminium with sculpted charcoal PBT keycaps."
@@ -34,14 +34,24 @@
       name="twitter:description"
       content="KEYFORM KF—01 is a fictional independent industrial design concept for a 75% ANSI CNC-machined mechanical keyboard."
     />
-    <meta name="twitter:image" content="/media/kf-008a/webp/OR01-provisional-desktop-hero-1600w.webp" />
+    <meta name="twitter:image" content="/media/kf-008a/webp/OR13-desktop-hero-1600w.webp" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Responsive priority preload for the OR01 hero -->
+    <!-- Responsive priority preloads for desktop (OR13) and mobile (OR14) hero artwork -->
     <link
       rel="preload"
       as="image"
       type="image/avif"
-      imagesrcset="/media/kf-008a/avif/OR01-provisional-desktop-hero-960w.avif 960w, /media/kf-008a/avif/OR01-provisional-desktop-hero-1600w.avif 1600w, /media/kf-008a/avif/OR01-provisional-desktop-hero-2560w.avif 2560w"
+      media="(min-width: 768px)"
+      imagesrcset="/media/kf-008a/avif/OR13-desktop-hero-960w.avif 960w, /media/kf-008a/avif/OR13-desktop-hero-1600w.avif 1600w, /media/kf-008a/avif/OR13-desktop-hero-2560w.avif 2560w"
+      imagesizes="100vw"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      media="(max-width: 767px)"
+      imagesrcset="/media/kf-008a/avif/OR14-mobile-hero-800w.avif 800w, /media/kf-008a/avif/OR14-mobile-hero-1280w.avif 1280w, /media/kf-008a/avif/OR14-mobile-hero-1600w.avif 1600w"
       imagesizes="100vw"
       fetchpriority="high"
     />

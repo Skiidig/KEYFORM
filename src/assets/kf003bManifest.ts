@@ -43,7 +43,9 @@ export type ShotId =
   | 'OR09'
   | 'OR10'
   | 'OR11'
-  | 'OR12';
+  | 'OR12'
+  | 'OR13'
+  | 'OR14';
 
 export interface ImageVariant {
   width: number;
@@ -65,6 +67,18 @@ export interface ProductionAsset {
 const BASE = '/media/kf003b';
 const ART_002A_BASE = '/media/kf-art-002a';
 const OWNER_BASE = '/media/kf-008a';
+
+const mkVariants = (
+  base: string,
+  slug: string,
+  dims: readonly (readonly [number, number])[],
+): readonly ImageVariant[] =>
+  dims.map(([width, height]) => ({
+    width,
+    height,
+    avif: `${base}/avif/${slug}-${width}w.avif`,
+    webp: `${base}/webp/${slug}-${width}w.webp`,
+  }));
 
 export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   A01: {
@@ -475,26 +489,11 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
     intrinsicHeight: 1060,
     defaultAlt:
       'KEYFORM KF—01 with a Forest aluminium enclosure, Charcoal keycaps and a knurled rotary dial.',
-    variants: [
-      {
-        width: 800,
-        height: 530,
-        avif: `${ART_002A_BASE}/avif/H02-mobile-hero-800w.avif`,
-        webp: `${ART_002A_BASE}/webp/H02-mobile-hero-800w.webp`,
-      },
-      {
-        width: 1280,
-        height: 848,
-        avif: `${ART_002A_BASE}/avif/H02-mobile-hero-1280w.avif`,
-        webp: `${ART_002A_BASE}/webp/H02-mobile-hero-1280w.webp`,
-      },
-      {
-        width: 1600,
-        height: 1060,
-        avif: `${ART_002A_BASE}/avif/H02-mobile-hero-1600w.avif`,
-        webp: `${ART_002A_BASE}/webp/H02-mobile-hero-1600w.webp`,
-      },
-    ],
+    variants: mkVariants(ART_002A_BASE, 'H02-mobile-hero', [
+      [800, 530],
+      [1280, 848],
+      [1600, 1060],
+    ]),
     fallbackSrc: `${ART_002A_BASE}/webp/H02-mobile-hero-800w.webp`,
   },
   C02: {
@@ -503,26 +502,11 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
     intrinsicHeight: 1400,
     defaultAlt:
       'Close-up of the KF—01 diamond-knurled encoder, Charcoal keycaps and chamfered Forest aluminium enclosure.',
-    variants: [
-      {
-        width: 1280,
-        height: 700,
-        avif: `${ART_002A_BASE}/avif/C02-desktop-closing-1280w.avif`,
-        webp: `${ART_002A_BASE}/webp/C02-desktop-closing-1280w.webp`,
-      },
-      {
-        width: 1600,
-        height: 875,
-        avif: `${ART_002A_BASE}/avif/C02-desktop-closing-1600w.avif`,
-        webp: `${ART_002A_BASE}/webp/C02-desktop-closing-1600w.webp`,
-      },
-      {
-        width: 2560,
-        height: 1400,
-        avif: `${ART_002A_BASE}/avif/C02-desktop-closing-2560w.avif`,
-        webp: `${ART_002A_BASE}/webp/C02-desktop-closing-2560w.webp`,
-      },
-    ],
+    variants: mkVariants(ART_002A_BASE, 'C02-desktop-closing', [
+      [1280, 700],
+      [1600, 875],
+      [2560, 1400],
+    ]),
     fallbackSrc: `${ART_002A_BASE}/webp/C02-desktop-closing-1280w.webp`,
   },
   C02Mobile: {
@@ -531,26 +515,11 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
     intrinsicHeight: 1700,
     defaultAlt:
       'Close-up of the KF—01 diamond-knurled encoder, Charcoal keycaps and chamfered Forest aluminium enclosure.',
-    variants: [
-      {
-        width: 800,
-        height: 895,
-        avif: `${ART_002A_BASE}/avif/C02-mobile-closing-800w.avif`,
-        webp: `${ART_002A_BASE}/webp/C02-mobile-closing-800w.webp`,
-      },
-      {
-        width: 1200,
-        height: 1342,
-        avif: `${ART_002A_BASE}/avif/C02-mobile-closing-1200w.avif`,
-        webp: `${ART_002A_BASE}/webp/C02-mobile-closing-1200w.webp`,
-      },
-      {
-        width: 1520,
-        height: 1700,
-        avif: `${ART_002A_BASE}/avif/C02-mobile-closing-1520w.avif`,
-        webp: `${ART_002A_BASE}/webp/C02-mobile-closing-1520w.webp`,
-      },
-    ],
+    variants: mkVariants(ART_002A_BASE, 'C02-mobile-closing', [
+      [800, 895],
+      [1200, 1342],
+      [1520, 1700],
+    ]),
     fallbackSrc: `${ART_002A_BASE}/webp/C02-mobile-closing-800w.webp`,
   },
   OR01: {
@@ -558,26 +527,11 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
     intrinsicWidth: 2560,
     intrinsicHeight: 1440,
     defaultAlt: 'Illustrative KF—01 concept render in Forest aluminium and Charcoal PBT. Layout and legends differ from the canonical model.',
-    variants: [
-      {
-        width: 960,
-        height: 540,
-        avif: `${OWNER_BASE}/avif/OR01-provisional-desktop-hero-960w.avif`,
-        webp: `${OWNER_BASE}/webp/OR01-provisional-desktop-hero-960w.webp`,
-      },
-      {
-        width: 1600,
-        height: 900,
-        avif: `${OWNER_BASE}/avif/OR01-provisional-desktop-hero-1600w.avif`,
-        webp: `${OWNER_BASE}/webp/OR01-provisional-desktop-hero-1600w.webp`,
-      },
-      {
-        width: 2560,
-        height: 1440,
-        avif: `${OWNER_BASE}/avif/OR01-provisional-desktop-hero-2560w.avif`,
-        webp: `${OWNER_BASE}/webp/OR01-provisional-desktop-hero-2560w.webp`,
-      },
-    ],
+    variants: mkVariants(OWNER_BASE, 'OR01-provisional-desktop-hero', [
+      [960, 540],
+      [1600, 900],
+      [2560, 1440],
+    ]),
     fallbackSrc: `${OWNER_BASE}/webp/OR01-provisional-desktop-hero-1600w.webp`,
   },
   OR04: {
@@ -732,27 +686,38 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
     intrinsicWidth: 2560,
     intrinsicHeight: 1429,
     defaultAlt: 'Illustrative KF—01 concept render of the encoder and Forest enclosure.',
-    variants: [
-      {
-        width: 1280,
-        height: 714,
-        avif: `${OWNER_BASE}/avif/OR12-closing-1280w.avif`,
-        webp: `${OWNER_BASE}/webp/OR12-closing-1280w.webp`,
-      },
-      {
-        width: 1920,
-        height: 1072,
-        avif: `${OWNER_BASE}/avif/OR12-closing-1920w.avif`,
-        webp: `${OWNER_BASE}/webp/OR12-closing-1920w.webp`,
-      },
-      {
-        width: 2560,
-        height: 1429,
-        avif: `${OWNER_BASE}/avif/OR12-closing-2560w.avif`,
-        webp: `${OWNER_BASE}/webp/OR12-closing-2560w.webp`,
-      },
-    ],
+    variants: mkVariants(OWNER_BASE, 'OR12-closing', [
+      [1280, 714],
+      [1920, 1072],
+      [2560, 1429],
+    ]),
     fallbackSrc: `${OWNER_BASE}/webp/OR12-closing-1280w.webp`,
+  },
+  OR13: {
+    shotId: 'OR13',
+    intrinsicWidth: 2560,
+    intrinsicHeight: 1429,
+    defaultAlt:
+      'KEYFORM KF—01 studio photograph in Forest anodized 6063 aluminium with Charcoal PBT keycaps and diamond-knurled rotary dial.',
+    variants: mkVariants(OWNER_BASE, 'OR13-desktop-hero', [
+      [960, 536],
+      [1600, 893],
+      [2560, 1429],
+    ]),
+    fallbackSrc: `${OWNER_BASE}/webp/OR13-desktop-hero-1600w.webp`,
+  },
+  OR14: {
+    shotId: 'OR14',
+    intrinsicWidth: 1600,
+    intrinsicHeight: 1600,
+    defaultAlt:
+      'KEYFORM KF—01 square studio photograph in Forest anodized 6063 aluminium with Charcoal PBT keycaps and diamond-knurled rotary dial.',
+    variants: mkVariants(OWNER_BASE, 'OR14-mobile-hero', [
+      [800, 800],
+      [1280, 1280],
+      [1600, 1600],
+    ]),
+    fallbackSrc: `${OWNER_BASE}/webp/OR14-mobile-hero-800w.webp`,
   },
 };
 

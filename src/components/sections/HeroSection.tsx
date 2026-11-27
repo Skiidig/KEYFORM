@@ -1,9 +1,12 @@
 import React from 'react';
+import { KF003B_ASSETS, buildSrcSet } from '../../assets/kf003bManifest';
 import { HERO_DATUMS } from '../../data/kf01Data';
 import { Button } from '../ui/Button';
-import { ResponsiveImage } from '../ui/ResponsiveImage';
 
 export const HeroSection: React.FC = () => {
+  const desktopHero = KF003B_ASSETS.OR13;
+  const mobileHero = KF003B_ASSETS.OR14;
+
   return (
     <section id="hero" className="kf-hero env-after-hours" aria-labelledby="hero-heading">
       <div className="kf-container kf-hero__content">
@@ -37,13 +40,42 @@ export const HeroSection: React.FC = () => {
       </div>
 
       <div className="kf-hero__media">
-        <ResponsiveImage
-          shotId="OR01"
-          sizes="100vw"
-          priority
-          pictureClassName="kf-hero__picture"
-          className="kf-hero__img"
-        />
+        <picture className="kf-hero__picture">
+          <source
+            media="(min-width: 768px)"
+            type="image/avif"
+            srcSet={buildSrcSet(desktopHero, 'avif')}
+            sizes="100vw"
+          />
+          <source
+            media="(min-width: 768px)"
+            type="image/webp"
+            srcSet={buildSrcSet(desktopHero, 'webp')}
+            sizes="100vw"
+          />
+          <source
+            media="(max-width: 767px)"
+            type="image/avif"
+            srcSet={buildSrcSet(mobileHero, 'avif')}
+            sizes="100vw"
+          />
+          <source
+            media="(max-width: 767px)"
+            type="image/webp"
+            srcSet={buildSrcSet(mobileHero, 'webp')}
+            sizes="100vw"
+          />
+          <img
+            src={desktopHero.fallbackSrc}
+            alt={desktopHero.defaultAlt}
+            width={desktopHero.intrinsicWidth}
+            height={desktopHero.intrinsicHeight}
+            loading="eager"
+            decoding="sync"
+            fetchPriority="high"
+            className="kf-hero__img"
+          />
+        </picture>
         <div className="kf-hero__scrim" aria-hidden="true" />
       </div>
 

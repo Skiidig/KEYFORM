@@ -18,6 +18,18 @@ const SECTION_LINKS = [
 export const HeaderNav: React.FC<HeaderNavProps> = ({ activeView, onChangeView }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const menuBtnRef = useRef<HTMLButtonElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    const update = () => {
+      header.toggleAttribute('data-scrolled', activeView !== 'prototype' || window.scrollY > 12);
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
+  }, [activeView]);
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -43,7 +55,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ activeView, onChangeView }
   };
 
   return (
-    <header className="kf-header env-after-hours">
+    <header ref={headerRef} className="kf-header env-after-hours">
       <div className="kf-container kf-header__inner">
         <a
           href="#hero"

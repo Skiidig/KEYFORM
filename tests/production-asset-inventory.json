@@ -641,6 +641,54 @@
     "media/kf-008a/webp/OR12-closing-2560w.webp": {
       "bytes": 100112,
       "sha256": "dfa44d7eed2dac37678e19888f9e412ba3898c26bd1c50fb7778489770712a33"
+    },
+    "media/kf-008a/avif/OR13-desktop-hero-960w.avif": {
+      "bytes": 18565,
+      "sha256": "892e79b38c9cf60a4721c4e58be54e0cd1174d52a979c4ec312358d604d0462c"
+    },
+    "media/kf-008a/webp/OR13-desktop-hero-960w.webp": {
+      "bytes": 26528,
+      "sha256": "cf8a40722aaaadaec90529efc6a479d7d054a5908c38eddaf3c8f63c2c68db4a"
+    },
+    "media/kf-008a/avif/OR13-desktop-hero-1600w.avif": {
+      "bytes": 42177,
+      "sha256": "9f06cda2a1b0552ccd63f0b8d2d6b9ee10e78e8e9d3cbdd365b30cb624eb975b"
+    },
+    "media/kf-008a/webp/OR13-desktop-hero-1600w.webp": {
+      "bytes": 54596,
+      "sha256": "8a3867b7f84369df75ed762b56aced4c9a7607f9558b9f6f364a19d6a263c064"
+    },
+    "media/kf-008a/avif/OR13-desktop-hero-2560w.avif": {
+      "bytes": 131454,
+      "sha256": "fc331cb6b7c2dd2f7f8856c643ff4061ea1c8e5090540b30e612314e6c00c086"
+    },
+    "media/kf-008a/webp/OR13-desktop-hero-2560w.webp": {
+      "bytes": 148580,
+      "sha256": "4b689979f18a7b3154829167d8c96c2ea9cf61bacd43d61e45c8cc73049bfdf6"
+    },
+    "media/kf-008a/avif/OR14-mobile-hero-800w.avif": {
+      "bytes": 21388,
+      "sha256": "372a293c8d5e350ed9604edb46923f8704bb3b0426036b55af58aee0887a22da"
+    },
+    "media/kf-008a/webp/OR14-mobile-hero-800w.webp": {
+      "bytes": 28364,
+      "sha256": "0cb2d383d99e639974bd42f8d968caf5a49e9afc4bc1c893ceabef2168a62d55"
+    },
+    "media/kf-008a/avif/OR14-mobile-hero-1280w.avif": {
+      "bytes": 48119,
+      "sha256": "b84f86891e5f9e17e34f52bdc6cf995a20d57fe2523a7229802cd85b0b5404d4"
+    },
+    "media/kf-008a/webp/OR14-mobile-hero-1280w.webp": {
+      "bytes": 60036,
+      "sha256": "be19c1e7480fe33eecf7d1de3a35102d55b484969d98bdb48bc28477a73cd024"
+    },
+    "media/kf-008a/avif/OR14-mobile-hero-1600w.avif": {
+      "bytes": 79360,
+      "sha256": "a4cf41a6414c077106310a56111255f04c8f349a4d6f50f542d8626059da2627"
+    },
+    "media/kf-008a/webp/OR14-mobile-hero-1600w.webp": {
+      "bytes": 92714,
+      "sha256": "e21cc962f431ba8d9a267245c817fab6be9ffa140bf75578558d5c27eadedee0"
     }
   },
   "audioManifest": "audio/kf01-v2/manifest.json"
