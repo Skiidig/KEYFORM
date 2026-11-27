@@ -50,7 +50,6 @@ export const EngineeringBento: React.FC = () => {
                   <span className="kf-bento__index">02.1</span>
                   <span>Enclosure</span>
                 </span>
-                <span className="kf-bento__origin">Concept spec</span>
               </div>
               <h3 className="kf-h2">6063 CNC Aluminium</h3>
               <p className="kf-bento__desc">
@@ -61,7 +60,7 @@ export const EngineeringBento: React.FC = () => {
           </article>
 
           {/* Cell 2: 6.5-degree typing angle (5 cols) — A04b */}
-          <article className="kf-bento__cell kf-bento__cell--surface kf-bento__angle">
+          <article className="kf-bento__cell kf-bento__angle">
             <div className="kf-bento__angle-top">
               <div className="kf-bento__media kf-bento__media--profile">
                 <ResponsiveImage
@@ -71,57 +70,18 @@ export const EngineeringBento: React.FC = () => {
               </div>
               <div className="kf-schematic-box">
                 <svg
-                  viewBox="0 0 360 92"
+                  viewBox="0 0 360 88"
                   fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
                   role="img"
                   aria-label="Technical elevation diagram showing 6.5 degree typing incline, 18.5 mm front chin, and 34.2 mm rear height"
                 >
-                  <line x1="16" y1="70" x2="344" y2="70" stroke="#181C19" strokeWidth="1.15" />
-                  <path
-                    d="M32 66V44L324 16V66H32Z"
-                    fill="#E6E7E0"
-                    stroke="#181C19"
-                    strokeWidth="1.35"
-                  />
-                  <line
-                    x1="32"
-                    y1="44"
-                    x2="236"
-                    y2="44"
-                    stroke="#B49A70"
-                    strokeWidth="1.15"
-                    strokeDasharray="3 3"
-                  />
-                  <path d="M186 44A154 154 0 0 0 184.5 29.5" stroke="#294B3B" strokeWidth="1.6" />
-                  <text
-                    x="196"
-                    y="40"
-                    fill="#294B3B"
-                    fontSize="11.5"
-                    fontWeight="600"
-                    fontFamily="IBM Plex Mono, monospace"
-                  >
-                    6.5° INCLINE
-                  </text>
-                  <text
-                    x="18"
-                    y="86"
-                    fill="#505751"
-                    fontSize="10"
-                    fontFamily="IBM Plex Mono, monospace"
-                  >
-                    FRONT 18.5 MM
-                  </text>
-                  <text
-                    x="252"
-                    y="86"
-                    fill="#505751"
-                    fontSize="10"
-                    fontFamily="IBM Plex Mono, monospace"
-                  >
-                    REAR 34.2 MM
-                  </text>
+                  <line x1="16" y1="64" x2="344" y2="64" stroke="rgba(242,241,235,.36)" strokeWidth="1.1" />
+                  <path d="M32 61V41L324 14V61H32Z" fill="rgba(242,241,235,.08)" stroke="#F2F1EB" strokeWidth="1.25" />
+                  <line x1="32" y1="41" x2="236" y2="41" stroke="#B49A70" strokeWidth="1.1" strokeDasharray="3 3" />
+                  <path d="M186 41A154 154 0 0 0 184.5 27" stroke="#B49A70" strokeWidth="1.5" />
+                  <text x="196" y="37" fill="#F2F1EB" fontSize="11" fontWeight="600" fontFamily="IBM Plex Mono,monospace">6.5° INCLINE</text>
+                  <text x="18" y="80" fill="rgba(242,241,235,.72)" fontSize="9.5" fontFamily="IBM Plex Mono,monospace">FRONT 18.5 MM</text>
+                  <text x="252" y="80" fill="rgba(242,241,235,.72)" fontSize="9.5" fontFamily="IBM Plex Mono,monospace">REAR 34.2 MM</text>
                 </svg>
               </div>
             </div>
@@ -131,7 +91,6 @@ export const EngineeringBento: React.FC = () => {
                   <span className="kf-bento__index">02.2</span>
                   <span>Ergonomics</span>
                 </span>
-                <span className="kf-bento__origin">Concept spec</span>
               </div>
               <div className="kf-bento__figure">6.5°</div>
               <h3 className="kf-h3">Typing Incline</h3>
@@ -150,7 +109,6 @@ export const EngineeringBento: React.FC = () => {
                   <span className="kf-bento__index">02.3</span>
                   <span>75% ANSI</span>
                 </span>
-                <span className="kf-bento__origin">Concept spec</span>
               </div>
               <div className="kf-bento__figure">81 + 1</div>
               <h3 className="kf-h3">Compact Layout &amp; Rotary Dial</h3>
@@ -223,9 +181,6 @@ export const EngineeringBento: React.FC = () => {
                   <span className="kf-bento__index">02.5</span>
                   <span>Isolation &amp; Port</span>
                 </span>
-                <span className="kf-bento__origin" style={{ color: '#B49A70' }}>
-                  Concept spec
-                </span>
               </div>
               <div className="kf-bento__figure" style={{ color: '#F2F1EB' }}>
                 12×
@@ -240,7 +195,7 @@ export const EngineeringBento: React.FC = () => {
             </div>
           </article>
 
-          {/* Cell 6: Internal Brass Weight (12 cols editorial split) — A07b */}
+          {/* Cell 6: Internal Brass Weight (12 cols editorial split) — A07b corner fastener detail crop */}
           <article className="kf-bento__cell kf-bento__weight">
             <div className="kf-bento__media kf-bento__media--weight">
               <ResponsiveImage
@@ -250,14 +205,13 @@ export const EngineeringBento: React.FC = () => {
             </div>
             <div className="kf-bento__pad">
               <div>
-                <div className="kf-bento__kicker" style={{ marginBottom: '20px' }}>
+                <div className="kf-bento__kicker">
                   <span className="kf-bento__kicker-main">
                     <span className="kf-bento__index">02.6</span>
                     <span>Weight</span>
                   </span>
-                  <span className="kf-bento__origin">Concept spec</span>
                 </div>
-                <h3 className="kf-h2" style={{ marginBottom: '16px' }}>
+                <h3 className="kf-h2 kf-bento__weight-title">
                   Internal Brushed Brass Weight
                 </h3>
                 <p className="kf-bento__desc">
@@ -267,25 +221,22 @@ export const EngineeringBento: React.FC = () => {
               </div>
               <div className="kf-bento__weight-metrics">
                 <div>
-                  <span className="kf-label" style={{ display: 'block', marginBottom: '4px' }}>
-                    Target weight
-                  </span>
-                  <span className="kf-value" style={{ fontSize: '1.125rem' }}>
-                    ~1,680 g
-                  </span>
+                  <span className="kf-label">Target weight</span>
+                  <span className="kf-value">~1,680 g</span>
                 </div>
                 <div>
-                  <span className="kf-label" style={{ display: 'block', marginBottom: '4px' }}>
-                    Mounting
-                  </span>
-                  <span className="kf-value" style={{ fontSize: '1.125rem' }}>
-                    4× M3 countersunk
-                  </span>
+                  <span className="kf-label">Mounting</span>
+                  <span className="kf-value">4× M3 countersunk</span>
                 </div>
               </div>
             </div>
           </article>
         </div>
+
+        <p className="kf-bento__footnote">
+          KF—01 enclosure dimensions, ergonomics, and mass figures are industrial design concepts;
+          key spacing and switch cutouts follow standard Cherry MX geometry.
+        </p>
       </div>
     </section>
   );

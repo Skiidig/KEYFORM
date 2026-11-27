@@ -79,8 +79,8 @@ export const App: React.FC = () => {
                 setBuildConfig((prev) => ({ ...prev, switchProfile }))
               }
             />
-            <BuildStudio config={buildConfig} onChangeConfig={setBuildConfig} />
             <MaterialLibrary />
+            <BuildStudio config={buildConfig} onChangeConfig={setBuildConfig} />
             <ClosingStatement
               config={buildConfig}
               onOpenDesignSystem={() => {

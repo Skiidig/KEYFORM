@@ -168,7 +168,7 @@ try {
     assert.ok(layout.ctaTouchTargetsOk, name);
     if (width < 768) assert.ok(layout.imgAboveFold && layout.ctaSingleRow, name);
     assert.ok(layout.hero.includes(expected) && layout.hero.endsWith('.avif'), layout.hero);
-    assert.deepEqual(layout.sections, ['hero', 'engineering', 'anatomy', 'switch-lab', 'build-studio', 'materials', 'closing']);
+    assert.deepEqual(layout.sections, ['hero', 'engineering', 'anatomy', 'switch-lab', 'materials', 'build-studio', 'closing']);
     assert.equal(layout.canvases, 0);
     assert.ok(layout.lazyImages > 0);
     const network = [...requests.values()].filter((row) => row.loaderId === loaderId);
@@ -222,6 +222,8 @@ try {
       await image().decode();
       enclosures[radio.textContent.trim()] = { code: code(), source: image().currentSrc, match: match() };
     }
+    button(studio, 'Keycaps').click();
+    await frame();
     studio.querySelector('[aria-label="Escape key"] [role="radio"]:nth-of-type(2)').click();
     await frame();
     const partial = match();

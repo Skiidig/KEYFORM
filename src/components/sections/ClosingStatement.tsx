@@ -42,7 +42,7 @@ export const ClosingStatement: React.FC<ClosingStatementProps> = ({
                 Return to Build Studio
               </Button>
               <span className="kf-closing__build-code">
-                <span>Active build</span>
+                <span>Active spec</span>
                 <strong>{buildCode}</strong>
               </span>
             </div>
@@ -52,11 +52,11 @@ export const ClosingStatement: React.FC<ClosingStatementProps> = ({
             <figure className="kf-closing__figure">
               <ResponsiveImage
                 shotId="A08"
-                sizes="(min-width: 1024px) 58vw, 100vw"
+                sizes="(min-width: 1024px) 60vw, 100vw"
                 className="kf-closing__img"
               />
               <figcaption className="kf-closing__caption">
-                Rear view — centered recessed USB-C port
+                Reference finish — Forest anodized 6063 aluminium, centered recessed USB-C
               </figcaption>
             </figure>
           </div>

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import {
   ACCENT_KEYS,
+  CHARCOAL_PBT_BASELINE_HEX,
   DEFAULT_BUILD_CONFIG,
   ENCLOSURE_FINISHES,
   KEYCAP_SETS,
@@ -73,10 +74,18 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
     config.plate === DEFAULT_BUILD_CONFIG.plate &&
     (!config.keyOverrides || Object.keys(config.keyOverrides).length === 0);
 
-  const pairingAccentHex =
-    config.accent === 'matched' && config.keycaps !== 'charcoal-pbt'
-      ? (selectedKeycaps.secondaryHex ?? selectedKeycaps.swatchHex)
-      : selectedAccent.swatchHex;
+  const matchedEscHex =
+    config.keycaps === 'charcoal-pbt'
+      ? CHARCOAL_PBT_BASELINE_HEX
+      : (selectedKeycaps.secondaryHex ?? selectedKeycaps.swatchHex);
+
+  const resolvedAccentOptions = useMemo(
+    () =>
+      ACCENT_KEYS.map((option) =>
+        option.id === 'matched' ? { ...option, swatchHex: matchedEscHex } : option,
+      ),
+    [matchedEscHex],
+  );
 
   const handleSelectEnclosure = (enclosure: EnclosureFinishId) => {
     onChangeConfig({ ...config, enclosure });
@@ -147,7 +156,7 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
         <header className="kf-section-head">
           <div className="kf-section-head__title">
             <p className="kf-eyebrow">
-              <span className="kf-eyebrow-index">05</span>
+              <span className="kf-eyebrow-index">06</span>
               <span className="kf-datum-tick" aria-hidden="true" />
               <span>Build Studio</span>
             </p>
@@ -157,8 +166,8 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
           </div>
           <div className="kf-section-head__summary">
             <p className="kf-body">
-              Compare all four anodized aluminium finishes in studio light, then tailor keycaps,
-              switches, and plate material to compose your KF—01 specification.
+              Pair anodized aluminium finishes with PBT keycaps, switches, and internal plate
+              materials to compose your KF—01.
             </p>
           </div>
         </header>
@@ -205,67 +214,23 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                       </button>
                     ))}
                   </div>
-                  <span
-                    className={`kf-hud-status kf-hud-status--${interactive ? 'matched' : preview.match}`}
-                    aria-live="polite"
-                  >
-                    {interactive ? `${selectedEnclosure.name} · Live 3D` : preview.statusLabel}
-                  </span>
-                </div>
-              </div>
-
-              {/* Live selected palette pairing strip */}
-              <div className="kf-pairing-strip" aria-label="Selected finish pairing swatches">
-                <div className="kf-pairing-strip__item">
-                  <span
-                    className="kf-pairing-strip__dot"
-                    style={{ background: selectedEnclosure.swatchHex }}
-                    aria-hidden="true"
-                  />
-                  <span className="kf-pairing-strip__text">{selectedEnclosure.name}</span>
-                </div>
-                <div className="kf-pairing-strip__item">
-                  <span
-                    className="kf-pairing-strip__dot"
-                    style={{ background: selectedKeycaps.swatchHex }}
-                    aria-hidden="true"
-                  />
-                  <span className="kf-pairing-strip__text">{selectedKeycaps.name}</span>
-                </div>
-                <div className="kf-pairing-strip__item">
-                  <span
-                    className="kf-pairing-strip__dot"
-                    style={{ background: pairingAccentHex }}
-                    aria-hidden="true"
-                  />
-                  <span className="kf-pairing-strip__text">{selectedAccent.name}</span>
-                </div>
-                <div className="kf-pairing-strip__item">
-                  <span
-                    className="kf-pairing-strip__dot"
-                    style={{ background: selectedPlate.swatchHex }}
-                    aria-hidden="true"
-                  />
-                  <span className="kf-pairing-strip__text">{selectedPlate.name}</span>
                 </div>
               </div>
             </div>
 
-            {/* Transparent static / live preview disclosure */}
+            {/* Single consolidated, truthful static / live preview status */}
             <p className="kf-viewport__note" aria-live="polite">
               <span
                 className={`kf-viewport__match-tag kf-viewport__match-tag--${interactive ? 'matched' : preview.match}`}
               >
-                {interactive ? '3D preview' : preview.match === 'matched'
-                  ? 'Studio preview'
-                  : preview.match === 'partial'
-                    ? 'Partial preview'
-                    : 'Reference view'}
+                {interactive
+                  ? `${selectedEnclosure.name} · Live 3D`
+                  : preview.statusLabel}
               </span>{' '}
               {interactive
                 ? cameraId === 'exploded' || cameraId === 'rear-usb'
-                  ? 'Enclosure, keycaps, Escape, switch finish (material preview), and plate are live. Drag to orbit.'
-                  : 'Enclosure, keycaps, and Escape are live. Drag to orbit or open Exploded for switch and plate finishes.'
+                  ? 'All exterior and internal selections are live. Drag to orbit.'
+                  : 'Exterior selections are live. Drag to orbit or open Exploded for switches and plate.'
                 : preview.detailNote}
             </p>
           </div>
@@ -296,17 +261,6 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                       onChange={handleSelectEnclosure}
                     />
                     <p className="kf-studio-hint">{selectedEnclosure.finishNote}</p>
-
-                    <SwatchSelector
-                      label="Escape key"
-                      options={ACCENT_KEYS}
-                      value={config.accent}
-                      onChange={(id) => {
-                        onChangeConfig({ ...config, accent: id });
-                        setCopyFeedback('');
-                      }}
-                    />
-                    <p className="kf-studio-hint">{selectedAccent.finishNote}</p>
                   </>
                 )}
 
@@ -325,7 +279,7 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
 
                     <SwatchSelector
                       label="Escape key"
-                      options={ACCENT_KEYS}
+                      options={resolvedAccentOptions}
                       value={config.accent}
                       onChange={(id) => {
                         onChangeConfig({ ...config, accent: id });
@@ -356,7 +310,7 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                         }))}
                       />
                       <p className="kf-studio-hint">
-                        {selectedSwitch.nominalForce} target · {selectedSwitch.archetype} concept · Live material preview in Exploded 3D.
+                        {selectedSwitch.nominalForce} target · {selectedSwitch.archetype} concept · Visible in Exploded 3D.
                       </p>
                     </div>
 
@@ -374,10 +328,10 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                 )}
               </div>
 
-              {/* Concise Active Build Summary */}
+              {/* Restrained Secondary Specification Summary & Utilities */}
               <div className="kf-summary-box" aria-live="polite">
                 <div className="kf-summary-box__head">
-                  <span className="kf-summary-box__title">Build summary</span>
+                  <span className="kf-summary-box__title">Specification</span>
                   <span className="kf-summary-box__code">{buildCode}</span>
                 </div>
 
@@ -393,15 +347,15 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                   <dt>Plate</dt>
                   <dd>{selectedPlate.name}</dd>
                 </dl>
-              </div>
 
-              <div className="kf-studio-actions">
-                <Button variant="primary" onClick={handleCopyBuild}>
-                  Copy Build Summary
-                </Button>
-                <Button variant="secondary" onClick={handleReset} disabled={isDefault}>
-                  Reset
-                </Button>
+                <div className="kf-studio-actions">
+                  <Button variant="secondary" compact onClick={handleCopyBuild}>
+                    Copy Build Summary
+                  </Button>
+                  <Button variant="ghost" compact onClick={handleReset} disabled={isDefault}>
+                    Reset
+                  </Button>
+                </div>
               </div>
 
               {copyFeedback && (

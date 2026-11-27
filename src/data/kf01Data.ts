@@ -476,40 +476,40 @@ export const MATERIALS_LIBRARY: readonly MaterialPlate[] = [
     index: '01',
     shotId: 'A07a',
     name: '6063 Bead-Blasted Aluminium',
-    role: 'Enclosure & top frame',
+    role: 'Enclosure & dial',
     description:
-      'CNC-machined from solid 6063 billets with a crisp 1.2 mm perimeter chamfer and fine matte anodization. Light settles softly across the bead-blasted finish alongside the diamond-knurled rotary dial.',
-    specs: ['Fine matte anodized', '1.2 mm 45° chamfer', '48-tooth knurled dial'],
+      'Fine matte anodization softens reflections across the chamfered billet shell, contrasting the sharper grip of the diamond-knurled rotary dial.',
+    specs: ['Matte anodized 6063', '1.2 mm 45° chamfer', '48-tooth knurled dial'],
   },
   {
     id: 'brushed-brass',
     index: '02',
     shotId: 'A07b',
     name: 'Brushed Solid Brass',
-    role: 'Internal weight',
+    role: 'Internal mass',
     description:
-      'A solid machined brass bar recessed inside the lower cavity. Fine directional brushing and restrained dark engraving add quiet warmth and anchor the keyboard firmly on the desk.',
-    specs: ['Recessed CNC pocket', '4× M3 countersunk', '~1,680 g target weight'],
+      'Directionally brushed brass recessed into the lower cavity adds quiet low-center heft and subtle metallic warmth beneath the acoustic liner.',
+    specs: ['Brushed CNC bar', 'Flush lower cavity', '~1,680 g target build'],
   },
   {
     id: 'sculpted-pbt',
     index: '03',
     shotId: 'A07c',
     name: 'Sculpted Matte Charcoal PBT',
-    role: 'Keycaps & legends',
+    role: 'Touch surface',
     description:
-      'Dry, finely textured 1.5 mm PBT shells in uniform Charcoal across all 81 keys, shaped in R1–R4 row profiles with restrained off-white legends that resist shine over years of typing.',
-    specs: ['1.5 mm wall thickness', 'Uniform Charcoal PBT', 'R1–R4 sculpted profile'],
+      'Dry, finely textured PBT shells in uniform Charcoal resist shine over years of typing, finished with restrained off-white legends.',
+    specs: ['1.5 mm PBT wall', 'Uniform Charcoal', 'R1–R4 sculpted profile'],
   },
   {
     id: 'acoustic-elastomers',
     index: '04',
     shotId: 'A07d',
     name: 'Poron, IXPE & Silicone',
-    role: 'Gasket & acoustic stack',
+    role: 'Acoustic isolation',
     description:
-      'Twelve molded silicone gaskets decouple the switch plate from the aluminium walls, supported by open-cell Poron liners and a 0.5 mm IXPE switch pad over the matte-black FR4 PCB.',
-    specs: ['12× silicone gaskets', '3.0 mm + 2.0 mm Poron', '0.5 mm IXPE pad'],
+      'Perimeter silicone gaskets suspend the typing core away from the aluminium walls while layered Poron and IXPE damp hollow case resonance.',
+    specs: ['12× silicone gaskets', 'Poron plate & case foam', '0.5 mm IXPE pad'],
   },
 ] as const;
 

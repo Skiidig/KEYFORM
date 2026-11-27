@@ -251,7 +251,6 @@ try {
       closingCode: document.querySelector('.kf-closing__build-code strong')?.textContent?.trim(),
       dlText: document.querySelector('#build-studio .kf-summary-dl')?.textContent?.replace(/\s+/g, ' ').trim(),
       note: document.querySelector('#build-studio .kf-viewport__note')?.textContent?.replace(/\s+/g, ' ').trim(),
-      pairing: [...document.querySelectorAll('#build-studio .kf-pairing-strip__text')].map((el) => el.textContent.trim()),
       match: document.querySelector('[data-kf-viewport="build-studio"]')?.dataset.kfPreviewMatch,
     }));
   const captureStudio = async (file) => {
@@ -315,14 +314,20 @@ try {
   await evaluate(() => document.querySelector('[data-kf-viewport="build-studio"] [aria-label="Reset camera view"]').click());
   await delay(120);
 
-  // Porcelain PBT
+  // Verify Matched Escape swatch dynamically follows selected base keycap set (Porcelain #c2beb2 & Slate #434a46)
   await clickStudioTab('Keycaps');
   await clickRadio('Keycap set (1.5 mm PBT)', 'Porcelain PBT');
   await captureStudio('02-forest-porcelain.png');
+  const porcelainMatchedChip = await evaluate(() =>
+    getComputedStyle(document.querySelector('#build-studio [aria-label="Escape key"] [role="radio"] .kf-swatch__chip')).backgroundColor,
+  );
 
   // Two-Tone Slate
   await clickRadio('Keycap set (1.5 mm PBT)', 'Two-Tone Slate');
   await captureStudio('03-forest-twotone-slate.png');
+  const slateMatchedChip = await evaluate(() =>
+    getComputedStyle(document.querySelector('#build-studio [aria-label="Escape key"] [role="radio"] .kf-swatch__chip')).backgroundColor,
+  );
 
   // Enclosure + keycap combinations
   await clickStudioTab('Exterior');
@@ -367,7 +372,12 @@ try {
       !newReqsDuringExteriorEdits.some((u) => /\/assets\/kf01\/|\.glb/.test(u)) &&
       summarySync.code === 'KF01-FOR-CHR-BRS-T58-BRS' &&
       summarySync.closingCode === 'KF01-FOR-CHR-BRS-T58-BRS' &&
-      summarySync.pairing.join('|') === 'Forest|Charcoal PBT|Brass Accent|Sandblasted Brass',
+      /Forest/.test(summarySync.dlText ?? '') &&
+      /Charcoal PBT/.test(summarySync.dlText ?? '') &&
+      /Brass Accent/.test(summarySync.dlText ?? '') &&
+      /Sandblasted Brass/.test(summarySync.dlText ?? '') &&
+      porcelainMatchedChip === 'rgb(194, 190, 178)' &&
+      slateMatchedChip === 'rgb(67, 74, 70)',
   );
 
   // Copy Build Summary writes current active build code

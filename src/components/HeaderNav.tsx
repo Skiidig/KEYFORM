@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { MachinedSymbol, SwissWordmark } from './BrandMarks';
 
 export type ActiveView = 'prototype' | 'design-system';
@@ -12,11 +12,25 @@ const SECTION_LINKS = [
   { href: '#engineering', label: 'Engineering', num: '02' },
   { href: '#anatomy', label: 'Anatomy', num: '03' },
   { href: '#switch-lab', label: 'Switches', num: '04' },
-  { href: '#materials', label: 'Materials', num: '06' },
+  { href: '#materials', label: 'Materials', num: '05' },
 ];
 
 export const HeaderNav: React.FC<HeaderNavProps> = ({ activeView, onChangeView }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const menuBtnRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMobileOpen(false);
+        menuBtnRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [mobileOpen]);
 
   const navigateToSection = (href: string) => {
     setMobileOpen(false);
@@ -87,6 +101,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ activeView, onChangeView }
           )}
 
           <button
+            ref={menuBtnRef}
             type="button"
             className="kf-mobile-menu-btn"
             aria-expanded={mobileOpen}
@@ -141,25 +156,25 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ activeView, onChangeView }
                 onClick={() => navigateToSection('#build-studio')}
               >
                 <span>Build Studio</span>
-                <span className="kf-mobile-drawer__num">05</span>
+                <span className="kf-mobile-drawer__num">06</span>
               </a>
             </li>
           </ul>
-          <div className="kf-mobile-drawer__dev">
-            <button
-              type="button"
-              className="kf-mobile-drawer__sublink"
-              onClick={() => {
-                setMobileOpen(false);
-                onChangeView(activeView === 'design-system' ? 'prototype' : 'design-system');
-                window.scrollTo({ top: 0 });
-              }}
-            >
-              {activeView === 'design-system'
-                ? '← Back to KF—01 Showcase'
-                : 'Review Reference · Design System & Brand Lab →'}
-            </button>
-          </div>
+          {activeView === 'design-system' && (
+            <div className="kf-mobile-drawer__dev">
+              <button
+                type="button"
+                className="kf-mobile-drawer__sublink"
+                onClick={() => {
+                  setMobileOpen(false);
+                  onChangeView('prototype');
+                  window.scrollTo({ top: 0 });
+                }}
+              >
+                ← Back to KF—01 Showcase
+              </button>
+            </div>
+          )}
         </nav>
       )}
     </header>

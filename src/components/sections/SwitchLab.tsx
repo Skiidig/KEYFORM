@@ -12,10 +12,14 @@ import type {
 } from '../../runtime/types';
 import { Button } from '../ui/Button';
 import { SegmentedControl } from '../ui/SegmentedControl';
-import type { SwitchTravelController } from './SwitchLabInteractive';
+import type { SwitchCurveDomRefs, SwitchTravelController } from './SwitchLabInteractive';
 
+const loadSwitchLabInteractive = () => import('./SwitchLabInteractive');
 const SwitchLabInteractive = lazy(() =>
-  import('./SwitchLabInteractive').then((m) => ({ default: m.SwitchLabInteractive })),
+  loadSwitchLabInteractive().then((m) => ({ default: m.SwitchLabInteractive })),
+);
+const SwitchLabCurve = lazy(() =>
+  loadSwitchLabInteractive().then((m) => ({ default: m.SwitchLabCurve })),
 );
 
 interface SwitchLabProps {
@@ -34,6 +38,7 @@ export const SwitchLab: React.FC<SwitchLabProps> = ({
   const [controlsReady, setControlsReady] = useState(false);
   const { ref, revealed } = useReveal<HTMLDivElement>();
   const controllerRef = useRef<SwitchTravelController | null>(null);
+  const curveDomRef = useRef<SwitchCurveDomRefs>({ line: null, dot: null, readout: null });
 
   const activeSwitch =
     SWITCH_PROFILES.find((item) => item.id === activeId) ?? SWITCH_PROFILES[0];
@@ -119,10 +124,19 @@ export const SwitchLab: React.FC<SwitchLabProps> = ({
           <div className="kf-section-head__summary">
             <p className="kf-lead">
               Three conceptual switch profiles—smooth linear, crisp tactile, and quiet dampened—defined
-              as nominal design targets and not laboratory tested.
+              as nominal design targets.
             </p>
           </div>
         </header>
+
+        <div className="kf-switch-lab__tabs">
+          <SegmentedControl
+            ariaLabel="Switch profile selector"
+            value={activeId}
+            onChange={handleSelectSwitch}
+            options={SWITCH_PROFILES.map((sw) => ({ id: sw.id, label: sw.name }))}
+          />
+        </div>
 
         <div ref={ref} className={`kf-switch-lab kf-reveal ${revealed ? 'kf-reveal--visible' : ''}`}>
           <div className="kf-switch-lab__visual">
@@ -136,59 +150,73 @@ export const SwitchLab: React.FC<SwitchLabProps> = ({
                   imgClassName="kf-switch-specimen__img"
                 />
               </div>
-              {interactive && (
-                <div className="kf-switch-specimen__bar">
-                  <div className="kf-switch-pose" role="group" aria-label="Switch presentation">
-                    <button
-                      type="button"
-                      className="kf-switch-pose__btn"
-                      aria-pressed={presentation === 'cutaway'}
-                      onClick={() => {
-                        setIsPressed(false);
-                        controllerRef.current?.reset();
-                        setPresentation('cutaway');
-                      }}
-                    >
-                      Cutaway
-                    </button>
-                    <button
-                      type="button"
-                      className="kf-switch-pose__btn"
-                      aria-pressed={presentation === 'assembled'}
-                      onClick={() => setPresentation('assembled')}
-                    >
-                      Assembled
-                    </button>
+
+              <div className="kf-switch-dock">
+                {interactive && (
+                  <div className="kf-switch-specimen__bar">
+                    <div className="kf-switch-pose" role="group" aria-label="Switch presentation">
+                      <button
+                        type="button"
+                        className="kf-switch-pose__btn"
+                        aria-pressed={presentation === 'cutaway'}
+                        onClick={() => {
+                          setIsPressed(false);
+                          controllerRef.current?.reset();
+                          setPresentation('cutaway');
+                        }}
+                      >
+                        Cutaway
+                      </button>
+                      <button
+                        type="button"
+                        className="kf-switch-pose__btn"
+                        aria-pressed={presentation === 'assembled'}
+                        onClick={() => setPresentation('assembled')}
+                      >
+                        Assembled
+                      </button>
+                    </div>
+                    <span className="kf-switch-specimen__hint">
+                      {presentation === 'assembled' ? 'Hold below to actuate' : 'Drag to inspect internals'}
+                    </span>
                   </div>
-                  <span className="kf-switch-specimen__hint">
-                    {presentation === 'assembled' ? 'Ready to actuate' : 'Inspect internals'}
-                  </span>
-                </div>
-              )}
+                )}
+
+                {controlsReady ? (
+                  <Suspense fallback={<div className="kf-switch-interactive-slot" aria-busy="true" />}>
+                    <SwitchLabInteractive
+                      activeSwitch={activeSwitch}
+                      interactive={interactive}
+                      isPressed={isPressed}
+                      onPressChange={setIsPressed}
+                      onEnsureAssembled={ensureAssembled}
+                      controllerRef={controllerRef}
+                      curveDomRef={curveDomRef}
+                    />
+                  </Suspense>
+                ) : (
+                  <div className="kf-switch-interactive-slot">
+                    <Button variant="secondary" compact onClick={() => setControlsReady(true)}>
+                      Open switch actuation &amp; sound preview
+                    </Button>
+                  </div>
+                )}
+              </div>
+
               <figcaption className="kf-switch-specimen__caption">
                 <span>{activeSwitch.name} — {activeSwitch.stemColorName} stem</span>
-                <span>{interactive ? '3D switch preview · Drag to orbit' : 'Studio macro render'}</span>
+                <span>{interactive ? 'Live 3D · Drag to orbit' : 'Studio macro render'}</span>
               </figcaption>
             </figure>
           </div>
 
           <div className="kf-switch-lab__detail">
-            <div className="kf-switch-lab__tabs">
-              <SegmentedControl
-                ariaLabel="Switch profile selector"
-                value={activeId}
-                onChange={handleSelectSwitch}
-                options={SWITCH_PROFILES.map((sw) => ({ id: sw.id, label: sw.name }))}
-              />
-            </div>
-
             <div className="kf-switch-panel kf-switch-panel--dark" role="tabpanel" aria-live="polite">
               <div className="kf-switch-panel__top">
                 <span className="kf-switch-panel__id">
                   <span className="kf-switch-panel__code">{activeSwitch.code}</span>
                   <span className="kf-switch-panel__archetype">{activeSwitch.archetype}</span>
                 </span>
-                <span className="kf-switch-panel__disclosure">Conceptual target · Not lab tested</span>
               </div>
 
               <h3 className="kf-h1 kf-switch-panel__title">{activeSwitch.name}</h3>
@@ -216,35 +244,24 @@ export const SwitchLab: React.FC<SwitchLabProps> = ({
                 </div>
               </div>
 
+              {controlsReady && (
+                <div className="kf-switch-curve-slot">
+                  <Suspense fallback={null}>
+                    <SwitchLabCurve activeSwitch={activeSwitch} curveDomRef={curveDomRef} />
+                  </Suspense>
+                </div>
+              )}
+
               <dl className="kf-switch-notes">
                 <div><dt>Housing</dt><dd>{activeSwitch.housingDesc}</dd></div>
                 <div><dt>Best suited for</dt><dd>{activeSwitch.bestFor}</dd></div>
               </dl>
 
-              {controlsReady ? (
-                <Suspense fallback={<div className="kf-switch-interactive-slot" aria-busy="true" />}>
-                  <SwitchLabInteractive
-                    activeSwitch={activeSwitch}
-                    interactive={interactive}
-                    isPressed={isPressed}
-                    onPressChange={setIsPressed}
-                    onEnsureAssembled={ensureAssembled}
-                    controllerRef={controllerRef}
-                  />
-                </Suspense>
-              ) : (
-                <div className="kf-switch-interactive-slot">
-                  <Button variant="secondary" compact onClick={() => setControlsReady(true)}>
-                    Open switch curve &amp; sound preview
-                  </Button>
-                </div>
-              )}
-
               <div className="kf-switch-panel__footer">
                 <span className="kf-caption kf-switch-panel__status">
                   {selectedStudioSwitch === activeSwitch.id
                     ? 'Selected in Build Studio'
-                    : 'Not yet applied in Build Studio'}
+                    : 'Preview only until applied'}
                 </span>
                 <Button
                   variant="primary"

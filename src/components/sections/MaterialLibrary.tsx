@@ -16,7 +16,7 @@ export const MaterialLibrary: React.FC = () => {
         <header className="kf-section-head">
           <div className="kf-section-head__title">
             <p className="kf-eyebrow">
-              <span className="kf-eyebrow-index">06</span>
+              <span className="kf-eyebrow-index">05</span>
               <span className="kf-datum-tick" aria-hidden="true" />
               <span>Material Library</span>
             </p>
@@ -26,8 +26,8 @@ export const MaterialLibrary: React.FC = () => {
           </div>
           <div className="kf-section-head__summary">
             <p className="kf-body">
-              Four core materials chosen for feel, longevity, and visual restraint: bead-blasted
-              aluminium, brushed brass, matte Charcoal PBT, and acoustic elastomers.
+              Four materials chosen for tactile honesty, quiet durability, and restrained surface
+              contrast before you compose your build.
             </p>
           </div>
         </header>
@@ -36,12 +36,15 @@ export const MaterialLibrary: React.FC = () => {
           ref={ref}
           className={`kf-materials kf-reveal ${revealed ? 'kf-reveal--visible' : ''}`}
         >
-          {MATERIALS_LIBRARY.map((item) => (
-            <article key={item.id} className="kf-material-plate">
+          {MATERIALS_LIBRARY.map((item, idx) => (
+            <article
+              key={item.id}
+              className={`kf-material-plate kf-material-plate--${idx === 0 || idx === 3 ? 'wide' : 'focused'}`}
+            >
               <div className="kf-material-plate__visual">
                 <ResponsiveImage
                   shotId={item.shotId}
-                  sizes="(min-width: 768px) 48vw, 100vw"
+                  sizes="(min-width: 1024px) 52vw, 100vw"
                 />
               </div>
 

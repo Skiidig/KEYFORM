@@ -115,7 +115,7 @@ a {
 
 @media (min-width: 1024px) {
   .kf-section {
-    padding-block: var(--kf-sp-128);
+    padding-block: clamp(72px, 7.2vw, 108px);
   }
 }
 
@@ -125,7 +125,7 @@ a {
 
 @media (min-width: 1024px) {
   .kf-section--tight {
-    padding-block: var(--kf-sp-96);
+    padding-block: clamp(56px, 6vw, 88px);
   }
 }
 
@@ -271,9 +271,9 @@ a {
 .kf-section-head {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--kf-sp-24);
-  margin-bottom: var(--kf-sp-48);
-  padding-bottom: var(--kf-sp-32);
+  gap: var(--kf-sp-16);
+  margin-bottom: var(--kf-sp-32);
+  padding-bottom: var(--kf-sp-24);
   border-bottom: 1px solid var(--env-border);
 }
 
@@ -281,7 +281,9 @@ a {
   .kf-section-head {
     grid-template-columns: repeat(12, minmax(0, 1fr));
     align-items: end;
-    margin-bottom: var(--kf-sp-64);
+    gap: var(--kf-sp-24);
+    margin-bottom: clamp(32px, 3.6vw, 48px);
+    padding-bottom: var(--kf-sp-24);
   }
 
   .kf-section-head__title {
@@ -290,6 +292,18 @@ a {
 
   .kf-section-head__summary {
     grid-column: 8 / span 5;
+  }
+}
+
+/* Laptop height refinement (e.g. 1280x800): bring interactive stations cleanly into view */
+@media (min-width: 1024px) and (max-height: 840px) {
+  .kf-section {
+    padding-block: 56px 76px;
+  }
+
+  .kf-section-head {
+    margin-bottom: 24px;
+    padding-bottom: 18px;
   }
 }
 
