@@ -45,6 +45,7 @@ Desktop.ini
 *.mp4
 *.mov
 *.wav
+!public/audio/kf01-v2/**/*.wav
 *.flac
 raw-renders/
 renders-wip/
