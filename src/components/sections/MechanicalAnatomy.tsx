@@ -79,11 +79,6 @@ export const MechanicalAnatomy: React.FC = () => {
               <ViewportHost
                 station="mechanical-anatomy"
                 onModeChange={setMode}
-                activeControls={
-                  <button className="kf-viewport-host__action" type="button" onClick={() => setExploded((value) => !value)}>
-                    {exploded ? 'Assemble' : 'Explode'}
-                  </button>
-                }
                 state={viewportState}
                 fallback={fallback}
                 imgClassName="kf-anatomy__img"
@@ -100,9 +95,33 @@ export const MechanicalAnatomy: React.FC = () => {
                 </div>}
               </ViewportHost>
             </div>
-            <p className="kf-anatomy__footnote">
-              {mode === 'interactive-3d' ? 'Live assembly preview. Select a layer below to read its details.' : 'Exploded view render.'}
-            </p>
+            <div className="kf-anatomy__stage-bar">
+              {mode === 'interactive-3d' && (
+                <div className="kf-anatomy__pose-toggle" role="group" aria-label="Assembly view">
+                  <button
+                    type="button"
+                    className="kf-anatomy__pose-btn"
+                    aria-pressed={!exploded}
+                    onClick={() => setExploded(false)}
+                  >
+                    Assemble
+                  </button>
+                  <button
+                    type="button"
+                    className="kf-anatomy__pose-btn"
+                    aria-pressed={exploded}
+                    onClick={() => setExploded(true)}
+                  >
+                    Explode
+                  </button>
+                </div>
+              )}
+              <p className="kf-anatomy__footnote">
+                {mode === 'interactive-3d'
+                  ? 'Drag to orbit · Scroll to zoom · Select a layer to read details.'
+                  : 'Exploded view render. Open 3D to orbit or toggle assembly.'}
+              </p>
+            </div>
           </div>
 
           <div className="kf-anatomy__list-col">

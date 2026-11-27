@@ -1231,7 +1231,8 @@
 
 .kf-anatomy__stage {
   position: relative;
-  background: #dedfd9;
+  background: #f1f1ec;
+  border: 1px solid var(--env-border);
   overflow: hidden;
   aspect-ratio: 10 / 9;
 }
@@ -1251,6 +1252,7 @@
   position: absolute;
   left: 0;
   right: 0;
+  z-index: 3;
   height: 1.5px;
   background: var(--kf-forest);
   pointer-events: none;
@@ -1283,8 +1285,54 @@
   font-variant-numeric: tabular-nums;
 }
 
+.kf-anatomy__stage-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--kf-sp-12);
+  margin-top: 12px;
+}
+
+.kf-anatomy__pose-toggle {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3px;
+  padding: 3px;
+  background: var(--env-surface);
+  border: 1px solid var(--env-border);
+  border-radius: var(--kf-radius-sm);
+}
+
+.kf-anatomy__pose-btn {
+  min-height: 44px;
+  min-width: 88px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--env-muted-on-surface);
+  border-radius: var(--kf-radius-xs);
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-control);
+  font-weight: 500;
+  letter-spacing: var(--kf-track-control);
+  white-space: nowrap;
+  transition:
+    background-color var(--kf-dur-button) var(--kf-ease-mech),
+    color var(--kf-dur-button) var(--kf-ease-mech);
+}
+
+.kf-anatomy__pose-btn:hover {
+  color: var(--env-fg);
+}
+
+.kf-anatomy__pose-btn[aria-pressed='true'] {
+  background: var(--kf-forest);
+  color: var(--kf-porcelain);
+}
+
 .kf-anatomy__footnote {
-  margin: 10px 0 0;
+  margin: 0;
   font-family: var(--kf-font-sans);
   font-size: var(--kf-text-caption);
   line-height: var(--kf-lead-caption);
@@ -1502,8 +1550,8 @@
 
 .kf-switch-specimen__plate--seamless {
   padding: 0;
-  background: #0a0b0b;
-  border: 1px solid rgba(242, 241, 235, 0.12);
+  background: #080a09;
+  border: 1px solid rgba(242, 241, 235, 0.14);
   aspect-ratio: 1 / 1;
   overflow: hidden;
 }
@@ -1529,6 +1577,31 @@
   font-family: var(--kf-font-sans);
   font-size: var(--kf-text-caption);
   color: var(--kf-ah-muted);
+}
+
+.kf-switch-lab__tabs {
+  margin-bottom: 24px;
+}
+
+.kf-switch-lab__tabs .kf-segmented {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.kf-switch-lab__tabs .kf-segmented__btn {
+  padding: 6px 6px;
+  font-size: var(--kf-text-caption);
+  white-space: normal;
+  line-height: 1.25;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .kf-switch-lab__tabs .kf-segmented__btn {
+    padding: 0 14px;
+    font-size: var(--kf-text-control);
+    white-space: nowrap;
+  }
 }
 
 .kf-switch-panel {
@@ -1722,8 +1795,17 @@
 .kf-viewport__canvas {
   position: relative;
   aspect-ratio: 3 / 2;
-  background: #dedfd9;
+  background: #ece9e1;
   overflow: hidden;
+  transition: background-color var(--kf-dur-standard) var(--kf-ease-precision);
+}
+
+.kf-viewport__canvas--dark {
+  background: #080a09;
+}
+
+.kf-viewport__canvas--paper {
+  background: #f1f1ec;
 }
 
 .kf-viewport__canvas picture {
@@ -1754,26 +1836,43 @@
 @media (min-width: 640px) {
   .kf-viewport__hud {
     position: absolute;
-    left: var(--kf-sp-16);
-    right: var(--kf-sp-16);
-    bottom: var(--kf-sp-16);
+    left: var(--kf-sp-12);
+    right: var(--kf-sp-12);
+    bottom: var(--kf-sp-12);
+    z-index: 3;
+    padding: 5px 6px;
     background: var(--kf-hud-bg);
     border: 1px solid var(--kf-hud-border);
-    border-radius: var(--kf-radius-md);
+    border-radius: var(--kf-radius-sm);
     backdrop-filter: blur(12px);
     box-shadow: var(--kf-shadow-hud);
   }
 }
 
 .kf-hud-angles {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
   gap: 4px;
+}
+
+@media (min-width: 360px) {
+  .kf-hud-angles {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 640px) {
+  .kf-hud-angles {
+    display: flex;
+    flex-wrap: wrap;
+    width: auto;
+  }
 }
 
 .kf-hud-btn {
   min-height: 44px;
-  padding: 0 12px;
+  padding: 0 10px;
   background: transparent;
   color: var(--kf-ah-muted);
   border: 1px solid transparent;
@@ -1781,8 +1880,15 @@
   font-family: var(--kf-font-sans);
   font-size: var(--kf-text-caption);
   font-weight: 500;
+  white-space: nowrap;
   transition: color var(--kf-dur-button) var(--kf-ease-mech),
     background-color var(--kf-dur-button) var(--kf-ease-mech);
+}
+
+@media (min-width: 640px) {
+  .kf-hud-btn {
+    padding: 0 12px;
+  }
 }
 
 .kf-hud-btn:hover {

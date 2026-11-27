@@ -16,6 +16,7 @@ interface ViewportHostProps<K extends ViewportStationId> {
   priority?: boolean;
   children?: React.ReactNode;
   activeControls?: React.ReactNode;
+  resetTrigger?: number;
   onModeChange?: (mode: ViewportMode) => void;
 }
 
@@ -27,13 +28,14 @@ const failures: Record<Parameters<ViewportMount['fail']>[0], string> = {
 
 export function ViewportHost<K extends ViewportStationId>({
   station, state, fallback, className = '', imgClassName = '', imgStyle, priority = false,
-  children, activeControls, onModeChange,
+  children, activeControls, resetTrigger = 0, onModeChange,
 }: ViewportHostProps<K>) {
   const slot = useRef<HTMLDivElement>(null);
   const releaseRef = useRef<() => void>(undefined);
   const adapterRef = useRef<ViewportRuntimeAdapter<StationState[K]>>(undefined);
   const latestState = useRef(state);
   const mounted = useRef(false);
+  const lastReset = useRef(resetTrigger);
   const [mode, setMode] = useState<ViewportMode>('static-fallback');
   const [message, setMessage] = useState('');
 
@@ -41,6 +43,12 @@ export function ViewportHost<K extends ViewportStationId>({
     latestState.current = state;
     adapterRef.current?.update(state);
   }, [state]);
+
+  useEffect(() => {
+    if (resetTrigger === lastReset.current) return;
+    lastReset.current = resetTrigger;
+    adapterRef.current?.resetView?.();
+  }, [resetTrigger]);
 
   useLayoutEffect(() => {
     mounted.current = true;
@@ -99,6 +107,7 @@ export function ViewportHost<K extends ViewportStationId>({
   };
   const interactive = mode === 'interactive-3d';
   const loading = mode === 'loading-runtime';
+  const errored = mode === 'runtime-error';
 
   return (
     <div
@@ -106,9 +115,10 @@ export function ViewportHost<K extends ViewportStationId>({
       data-kf-viewport={station}
       data-kf-viewport-mode={mode}
       data-kf-preview-match={interactive ? undefined : fallback.match}
+      aria-busy={loading || undefined}
     >
       <div ref={slot} className="kf-viewport-host__canvas-slot" aria-hidden={!interactive} />
-      {!interactive && (
+      <div className="kf-viewport-host__photo" aria-hidden={interactive || undefined}>
         <ResponsiveImage
           key={fallback.shotId}
           shotId={fallback.shotId}
@@ -118,17 +128,46 @@ export function ViewportHost<K extends ViewportStationId>({
           style={imgStyle}
           priority={priority}
         />
-      )}
+      </div>
       {children}
       <div className="kf-viewport-host__controls">
         {interactive && activeControls}
-        <button className="kf-viewport-host__action" type="button"
-          onClick={interactive || loading ? () => releaseRef.current?.() : start}>
-          {interactive ? 'Close 3D' : loading ? 'Cancel 3D' : mode === 'runtime-error' ? 'Retry 3D' : 'View in 3D'}
+        {interactive && (
+          <button
+            className="kf-viewport-host__action kf-viewport-host__action--subtle kf-viewport-host__action--reset"
+            type="button"
+            onClick={() => adapterRef.current?.resetView?.()}
+            aria-label="Reset camera view"
+            title="Reset camera view"
+          >
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3.5 8a4.5 4.5 0 1 1 1.3 3.2M3.5 8V4.5M3.5 8H7" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span className="kf-viewport-host__reset-label">Reset view</span>
+          </button>
+        )}
+        <button
+          className={`kf-viewport-host__action ${!interactive && !loading ? 'kf-viewport-host__action--activate' : ''}`.trim()}
+          type="button"
+          onClick={interactive || loading ? () => releaseRef.current?.() : start}
+        >
+          {!interactive && !loading && (
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M8 1.8 13.5 5v6L8 14.2 2.5 11V5L8 1.8Zm0 0V8m0 0 5.5-3M8 8 2.5 5" stroke="currentColor" strokeWidth="1.35" strokeLinejoin="round" />
+            </svg>
+          )}
+          <span>{interactive ? 'Close 3D' : loading ? 'Cancel 3D' : errored ? 'Retry 3D' : 'View in 3D'}</span>
         </button>
       </div>
-      {(loading || mode === 'runtime-error') && (
-        <span className="kf-viewport-host__feedback" role="status">{message}</span>
+      {(loading || errored) && (
+        <div
+          className={`kf-viewport-host__feedback ${errored ? 'kf-viewport-host__feedback--error' : ''}`.trim()}
+          role="status"
+          aria-live="polite"
+        >
+          <span>{message}</span>
+          {loading && <span className="kf-viewport-host__progress" aria-hidden="true" />}
+        </div>
       )}
     </div>
   );

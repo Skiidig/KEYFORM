@@ -103,13 +103,13 @@ export const SwitchLab: React.FC<SwitchLabProps> = ({
                 <span>
                   {activeSwitch.name} — {activeSwitch.stemColorName} stem
                 </span>
-                <span>{mode === 'interactive-3d' ? '3D switch preview' : 'Studio macro render'}</span>
+                <span>{mode === 'interactive-3d' ? '3D switch preview · Drag to orbit' : 'Studio macro render'}</span>
               </figcaption>
             </figure>
           </div>
 
           <div className="kf-switch-lab__detail">
-            <div style={{ marginBottom: '24px' }}>
+            <div className="kf-switch-lab__tabs">
               <SegmentedControl
                 ariaLabel="Switch profile selector"
                 value={activeId}

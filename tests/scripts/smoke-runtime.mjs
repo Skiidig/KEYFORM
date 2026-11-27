@@ -217,6 +217,15 @@ try {
   await send('Input.dispatchKeyEvent', {type:'keyUp',key:'ArrowLeft',code:'ArrowLeft',windowsVirtualKeyCode:37,modifiers:8});
   await until(async () => (await stats()).draws > idle.draws, 'keyboard orbit render');
   passed('keyboard orbit invalidates the active viewport');
+  const afterOrbitDraws = (await stats()).draws;
+  await evaluate(() => document.querySelector('[data-kf-viewport="build-studio"] [aria-label="Reset camera view"]').click());
+  await until(async () => (await stats()).draws > afterOrbitDraws, 'camera reset render');
+  await delay(150);
+  const afterResetDraws = (await stats()).draws;
+  await delay(400);
+  assert.equal((await stats()).draws, afterResetDraws);
+  assert.equal((await stats()).raf, 0);
+  passed('camera reset restores framing and settles to zero idle frames');
 
   requests.clear();
   await toggle(stations.anatomy);
@@ -226,10 +235,15 @@ try {
   const anatomy = trace();
   assert.ok(anatomy.some(({url}) => url.includes('internal_b21.meshopt')));
   await capture(stations.anatomy, 'anatomy-active.png');
+  assert.equal(
+    await evaluate(() => [...document.querySelectorAll('#anatomy button')].find((b) => b.textContent === 'Explode')?.getAttribute('aria-pressed')),
+    'true',
+  );
   await evaluate(() => {
     const button = [...document.querySelectorAll('#anatomy button')].find((button) => button.textContent === 'Assemble');
     button.click();
   });
+  await until(() => evaluate(() => [...document.querySelectorAll('#anatomy button')].find((b) => b.textContent === 'Assemble')?.getAttribute('aria-pressed') === 'true'), 'assembly active state');
   await until(() => evaluate(() => [...document.querySelectorAll('#anatomy button')].some((button) => button.textContent === 'Explode')), 'assembly toggle');
   passed('serialized studio to anatomy handoff and assembly control');
 

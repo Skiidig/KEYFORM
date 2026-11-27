@@ -21,6 +21,10 @@ export class NativeStage {
   private disposed = false;
   private shadowDirty = true;
   private aspect = 1;
+  private width = 1;
+  private height = 1;
+  private bottomInsetPx = 0;
+  private userOrbited = false;
   private preset: CameraPresetId = 'threeQuarter';
   private profile?: StudioProfileId;
   private reduced: boolean;
@@ -41,7 +45,7 @@ export class NativeStage {
     renderer.toneMapping = THREE.AgXToneMapping;
     renderer.shadowMap.autoUpdate = false;
     renderer.domElement.className = 'kf-runtime-canvas';
-    renderer.domElement.setAttribute('aria-label', 'Interactive product preview. Use Shift and arrow keys to orbit.');
+    renderer.domElement.setAttribute('aria-label', 'Interactive product preview. Drag to orbit, scroll to zoom, or use Shift and arrow keys.');
     renderer.domElement.tabIndex = 0;
     renderer.domElement.addEventListener('webglcontextlost', this.contextLost);
     container.append(renderer.domElement);
@@ -55,13 +59,16 @@ export class NativeStage {
       const { clientWidth: width, clientHeight: height } = container;
       if (!width || !height || this.disposed) return;
       const aspect = width / height;
-      if (this.presented && aspect !== this.aspect) {
-        // Refit the canonical framing on orientation/viewport changes.
-        this.aspect = aspect;
+      const sizeChanged = aspect !== this.aspect || width !== this.width || height !== this.height;
+      this.width = width;
+      this.height = height;
+      this.aspect = aspect;
+      if (this.presented && sizeChanged && !this.userOrbited) {
+        // Refit the canonical framing on orientation/viewport changes unless user orbited manually.
         this.setCamera(this.preset, true);
       } else {
-        this.aspect = aspect;
         this.camera.aspect = aspect;
+        this.applyViewOffset();
         this.camera.updateProjectionMatrix();
       }
       renderer.setSize(width, height, false);
@@ -70,6 +77,39 @@ export class NativeStage {
     this.observer = new ResizeObserver(resize);
     this.observer.observe(container);
     resize();
+  }
+
+  private applyViewOffset(): void {
+    if (this.bottomInsetPx > 0 && this.height > this.bottomInsetPx + 40) {
+      this.camera.setViewOffset(
+        this.width,
+        this.height,
+        0,
+        Math.round(this.bottomInsetPx * 0.5),
+        this.width,
+        this.height,
+      );
+    } else {
+      this.camera.clearViewOffset();
+    }
+  }
+
+  setBottomInset(insetPx: number) {
+    const next = Math.max(0, Math.round(insetPx));
+    if (next === this.bottomInsetPx) return;
+    this.bottomInsetPx = next;
+    if (this.presented && !this.userOrbited) {
+      this.setCamera(this.preset, true);
+    } else {
+      this.applyViewOffset();
+      this.camera.updateProjectionMatrix();
+      this.invalidate();
+    }
+  }
+
+  resetView() {
+    this.userOrbited = false;
+    this.setCamera(this.preset, false);
   }
 
   async setQuality(tier: 'balanced' | 'standard') {
@@ -107,11 +147,25 @@ export class NativeStage {
 
   setCamera(preset: CameraPresetId, instant = false) {
     this.preset = preset;
+    this.userOrbited = false;
     this.controls.minDistance = preset === 'heroSwitch' ? 0.015 : 0.08;
     this.controls.maxDistance = preset === 'heroSwitch' ? 0.25 : 1.6;
-    this.transition.start(this.camera, this.controls.target, CAMERA_PRESETS[preset], this.aspect, {
+    const basePreset = CAMERA_PRESETS[preset];
+    // When a floating bottom HUD overlays the stage, solve against the usable open height
+    // and shift the frustum optical center cleanly into the open area above the HUD.
+    const solvePreset =
+      this.bottomInsetPx > 0 && this.height > this.bottomInsetPx + 40
+        ? {
+            ...basePreset,
+            fitHalfH: basePreset.fitHalfH * (this.height / (this.height - this.bottomInsetPx)),
+          }
+        : basePreset;
+    this.transition.start(this.camera, this.controls.target, solvePreset, this.aspect, {
       instant: instant || this.reduced,
     });
+    this.camera.aspect = this.aspect;
+    this.applyViewOffset();
+    this.camera.updateProjectionMatrix();
     if (!this.transition.isActive()) this.controls.update();
     this.invalidate();
   }
@@ -147,7 +201,12 @@ export class NativeStage {
   private render(now: number) {
     const cameraMoving = this.transition.isActive();
     this.transition.update(now, this.camera, this.controls.target);
-    if (cameraMoving) this.controls.update();
+    if (cameraMoving) {
+      this.camera.aspect = this.aspect;
+      this.applyViewOffset();
+      this.camera.updateProjectionMatrix();
+      this.controls.update();
+    }
     const previousPose = this.model.getExplodeProgress();
     const moving = this.model.update(now);
     const pose = this.model.getExplodeProgress();
@@ -166,7 +225,10 @@ export class NativeStage {
     if (moving || this.transition.isActive()) this.invalidate();
   }
 
-  private interrupt = () => this.transition.cancel();
+  private interrupt = () => {
+    this.userOrbited = true;
+    this.transition.cancel();
+  };
 
   private contextLost = (event: Event) => {
     event.preventDefault();

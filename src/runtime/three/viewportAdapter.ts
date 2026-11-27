@@ -33,6 +33,12 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
   let reduced = false;
   let revision = 0;
   let appliedEnclosure: BuildStudioViewportState['config']['enclosure'] | undefined;
+  let hudMedia: MediaQueryList | undefined;
+  let onHudMedia: ((e: MediaQueryListEvent) => void) | undefined;
+
+  const syncStudioInset = (target: NativeStage, matches: boolean) => {
+    target.setBottomInset(station === 'build-studio' && matches ? 72 : 0);
+  };
 
   const apply = async (target: NativeStage, instant: boolean) => {
     const version = revision;
@@ -75,6 +81,12 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
         failure = 'renderer';
         const target = createNativeStage(container, assets, { ...context, reducedMotion: reduced });
         stage = target;
+        if (station === 'build-studio') {
+          hudMedia = matchMedia('(min-width: 640px)');
+          syncStudioInset(target, hudMedia.matches);
+          onHudMedia = (e) => syncStudioInset(target, e.matches);
+          hudMedia.addEventListener('change', onHudMedia);
+        }
         failure = 'asset';
         await target.setQuality(matchMedia('(max-width: 767px)').matches ? 'balanced' : 'standard');
         context.progress('Loading 3D preview…');
@@ -110,7 +122,15 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
       reduced = value;
       stage?.setReducedMotion(value);
     },
+    resetView() {
+      stage?.resetView();
+    },
     dispose() {
+      if (hudMedia && onHudMedia) {
+        hudMedia.removeEventListener('change', onHudMedia);
+        hudMedia = undefined;
+        onHudMedia = undefined;
+      }
       stage?.dispose();
       stage = undefined;
       ready = false;

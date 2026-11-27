@@ -33,6 +33,7 @@ type StudioCategory = 'exterior' | 'keycaps' | 'internals';
 
 export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig }) => {
   const [cameraId, setCameraId] = useState<StudioCameraPresetId>('studio-three-quarter');
+  const [cameraResetCount, setCameraResetCount] = useState(0);
   const [mode, setMode] = useState<ViewportMode>('static-fallback');
   const interactive = mode === 'interactive-3d';
   const [activeCategory, setActiveCategory] = useState<StudioCategory>('exterior');
@@ -80,9 +81,18 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
     setCopyFeedback('');
   };
 
+  const handleSelectCamera = (nextCamera: StudioCameraPresetId) => {
+    if (nextCamera === cameraId && interactive) {
+      setCameraResetCount((count) => count + 1);
+      return;
+    }
+    setCameraId(nextCamera);
+  };
+
   const handleReset = () => {
     onChangeConfig(DEFAULT_BUILD_CONFIG);
     setCameraId('studio-three-quarter');
+    if (interactive) setCameraResetCount((count) => count + 1);
     setCopyFeedback('Reset to default Forest / Uniform Charcoal PBT build.');
   };
 
@@ -155,10 +165,19 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
           <div className="kf-studio__viewport-col">
             <div className="kf-viewport">
               <div style={{ position: 'relative' }}>
-                <div className="kf-viewport__canvas">
+                <div
+                  className={`kf-viewport__canvas ${
+                    cameraId === 'after-hours-front'
+                      ? 'kf-viewport__canvas--dark'
+                      : cameraId === 'exploded'
+                        ? 'kf-viewport__canvas--paper'
+                        : ''
+                  }`.trim()}
+                >
                   <ViewportHost
                     station="build-studio"
                     onModeChange={setMode}
+                    resetTrigger={cameraResetCount}
                     state={viewportState}
                     fallback={preview}
                     imgClassName="kf-viewport__img"
@@ -166,7 +185,7 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                 </div>
 
                 {/* Selective glassmorphism floats over stage on >= 640px; docks cleanly below on mobile */}
-                <div className="kf-viewport__hud" role="region" aria-label="Reference camera views">
+                <div className="kf-viewport__hud" role="region" aria-label="Camera views">
                   <div className="kf-hud-angles" role="group" aria-label="View angle">
                     {STUDIO_CAMERA_VIEWS.map((view) => (
                       <button
@@ -174,17 +193,17 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                         type="button"
                         className="kf-hud-btn"
                         aria-pressed={cameraId === view.id}
-                        onClick={() => setCameraId(view.id)}
+                        onClick={() => handleSelectCamera(view.id)}
                       >
                         {view.label}
                       </button>
                     ))}
                   </div>
                   <span
-                    className={`kf-hud-status kf-hud-status--${preview.match}`}
+                    className={`kf-hud-status kf-hud-status--${interactive ? 'matched' : preview.match}`}
                     aria-live="polite"
                   >
-                    {interactive ? 'Live enclosure preview' : preview.statusLabel}
+                    {interactive ? `${selectedEnclosure.name} · Live 3D` : preview.statusLabel}
                   </span>
                 </div>
               </div>
@@ -226,10 +245,10 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
               </div>
             </div>
 
-            {/* Transparent static preview disclosure */}
+            {/* Transparent static / live preview disclosure */}
             <p className="kf-viewport__note" aria-live="polite">
               <span
-                className={`kf-viewport__match-tag kf-viewport__match-tag--${preview.match}`}
+                className={`kf-viewport__match-tag kf-viewport__match-tag--${interactive ? 'matched' : preview.match}`}
               >
                 {interactive ? '3D preview' : preview.match === 'matched'
                   ? 'Studio preview'
@@ -238,7 +257,7 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                     : 'Reference view'}
               </span>{' '}
               {interactive
-                ? 'Enclosure finish and camera are live. Keycap, accent, switch and plate choices are reflected in the build summary.'
+                ? 'Enclosure finish and camera are live. Drag to orbit or scroll to zoom. Keycap, accent, switch, and plate choices are recorded in the build summary.'
                 : preview.detailNote}
             </p>
           </div>

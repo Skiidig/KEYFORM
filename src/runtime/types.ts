@@ -120,5 +120,6 @@ export interface ViewportRuntimeAdapter<TState> {
   mount(container: HTMLElement, initialState: TState, lifetime: ViewportMount): Promise<void>;
   update(nextState: TState): void;
   setReducedMotion(reduced: boolean): void;
+  resetView?(): void;
   dispose(): void;
 }

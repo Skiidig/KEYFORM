@@ -564,7 +564,7 @@ export function resolveBuildStudioPreview(
       alt: asset.defaultAlt,
       match: 'matched',
       statusLabel: `${enclosure.name} finish preview`,
-      detailNote: `Showing the matched ${enclosure.name} aluminium and Charcoal PBT studio render. Internal choices (${sw.name}, ${plate.name} plate) are saved in your build summary and will appear in interactive 3D once WebGL is added.`,
+      detailNote: `Showing the matched ${enclosure.name} aluminium and Charcoal PBT studio render. Open 3D to orbit or compare angles; switch (${sw.name}) and plate (${plate.name}) choices are saved in your build summary.`,
     };
   }
 
@@ -575,7 +575,7 @@ export function resolveBuildStudioPreview(
       alt: asset.defaultAlt,
       match: 'partial',
       statusLabel: `${enclosure.name} enclosure · Keycaps in spec`,
-      detailNote: `Showing the ${enclosure.name} aluminium enclosure with Charcoal PBT keycaps. Your ${keycaps.name} / ${accent.name} selection, ${sw.name} switches, and ${plate.name} plate are saved in the build summary; live keycap and internal rendering arrives with WebGL.`,
+      detailNote: `Showing the ${enclosure.name} aluminium enclosure with Charcoal PBT keycaps. Your ${keycaps.name} / ${accent.name}, ${sw.name}, and ${plate.name} selections are saved in the build summary.`,
     };
   }
 
@@ -587,7 +587,7 @@ export function resolveBuildStudioPreview(
     statusLabel: `Reference view · Forest finish`,
     detailNote:
       config.enclosure === 'forest' && hasUniformCharcoalCaps
-        ? `${camera.caption}. Static reference render; interactive 3D camera orbit and live component previews are reserved for the WebGL stage.`
-        : `${camera.caption}. Secondary angles remain in the Forest reference finish—switch back to Studio ¾ to preview ${enclosure.name}. All selections remain saved in your build code.`,
+        ? `${camera.caption}. Static reference render—open 3D to orbit or switch enclosures from any angle.`
+        : `${camera.caption}. Static secondary angles show the Forest reference finish—switch back to Studio ¾ or open 3D to view ${enclosure.name}.`,
   };
 }
