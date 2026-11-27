@@ -1,112 +1,114 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ResponsiveImage } from '../components/ui/ResponsiveImage';
 import { evaluateRuntimeAvailability } from './capabilities';
+import { acquireRendererLease } from './rendererLease';
 import type {
-  StaticFallbackDescriptor,
-  ViewportLoadProgress,
-  ViewportMode,
-  ViewportRuntimeAdapter,
-  ViewportStationId,
+  StationState, StaticFallbackDescriptor, ViewportMode, ViewportMount, ViewportRuntimeAdapter, ViewportStationId,
 } from './types';
 
-export interface ViewportHostProps<TState> {
-  station: ViewportStationId;
-  state: TState;
+interface ViewportHostProps<K extends ViewportStationId> {
+  station: K;
+  state: StationState[K];
   fallback: StaticFallbackDescriptor;
-  /** Optional future Three.js runtime adapter; omitted in KF-004A static foundation */
-  adapter?: ViewportRuntimeAdapter<TState>;
   className?: string;
   imgClassName?: string;
   imgStyle?: React.CSSProperties;
   priority?: boolean;
-  /** Optional overlay elements (e.g., stratum indicator or HUD) */
   children?: React.ReactNode;
+  activeControls?: React.ReactNode;
+  onModeChange?: (mode: ViewportMode) => void;
 }
 
-/**
- * Unified viewport host for Mechanical Anatomy, Switch Lab, and Build Studio.
- * Renders responsive KF-003B static production imagery immediately and provides
- * explicit loading, error, and adapter mount boundaries for future WebGL integration.
- */
-export function ViewportHost<TState>({
-  station,
-  state,
-  fallback,
-  adapter,
-  className = '',
-  imgClassName = '',
-  imgStyle,
-  priority = false,
-  children,
-}: ViewportHostProps<TState>) {
-  const canvasRef = useRef<HTMLDivElement | null>(null);
+const failures: Record<Parameters<ViewportMount['fail']>[0], string> = {
+  renderer: '3D preview is unavailable on this device.',
+  asset: '3D preview could not load.',
+  'context-lost': '3D preview lost its graphics connection.',
+};
+
+export function ViewportHost<K extends ViewportStationId>({
+  station, state, fallback, className = '', imgClassName = '', imgStyle, priority = false,
+  children, activeControls, onModeChange,
+}: ViewportHostProps<K>) {
+  const slot = useRef<HTMLDivElement>(null);
+  const releaseRef = useRef<() => void>(undefined);
+  const adapterRef = useRef<ViewportRuntimeAdapter<StationState[K]>>(undefined);
+  const latestState = useRef(state);
+  const mounted = useRef(false);
   const [mode, setMode] = useState<ViewportMode>('static-fallback');
-  const [progress, setProgress] = useState<ViewportLoadProgress>({ phase: 'idle' });
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    if (!adapter) {
-      setMode('static-fallback');
-      return;
-    }
+  useLayoutEffect(() => {
+    latestState.current = state;
+    adapterRef.current?.update(state);
+  }, [state]);
 
-    const availability = evaluateRuntimeAvailability(true);
-    if (!availability.available || !canvasRef.current) {
-      setMode('static-fallback');
-      return;
-    }
-
-    let cancelled = false;
-    setMode('loading-runtime');
-    setProgress({ phase: 'loading-glb', message: 'Initializing 3D viewport' });
-
-    adapter
-      .mount(canvasRef.current, state)
-      .then(() => {
-        if (cancelled) return;
-        adapter.setReducedMotion(availability.capability.reducedMotion);
-        setMode('interactive-3d');
-        setProgress({ phase: 'ready' });
-      })
-      .catch((err: unknown) => {
-        if (cancelled) return;
-        const msg = err instanceof Error ? err.message : 'Interactive 3D unavailable';
-        setErrorMessage(msg);
-        setMode('runtime-error');
-        setProgress({ phase: 'error', message: msg });
-      });
-
+  useLayoutEffect(() => {
+    mounted.current = true;
     return () => {
-      cancelled = true;
-      adapter.dispose();
+      mounted.current = false;
+      releaseRef.current?.();
     };
-    // Mount lifecycle is keyed strictly to adapter identity and station.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [adapter, station]);
+  }, []);
 
-  useEffect(() => {
-    if (adapter && mode === 'interactive-3d') {
-      adapter.update(state);
+  useEffect(() => onModeChange?.(mode), [mode, onModeChange]);
+
+  const start = async () => {
+    const availability = evaluateRuntimeAvailability(true);
+    const container = slot.current;
+    if (!availability.available || !container) {
+      setMessage(availability.reason);
+      setMode('runtime-error');
+      return;
     }
-  }, [adapter, mode, state]);
-
-  const showStaticFallback = mode !== 'interactive-3d';
+    const abort = new AbortController();
+    const media = matchMedia('(prefers-reduced-motion: reduce)');
+    const updateMotion = (event: MediaQueryListEvent) => adapterRef.current?.setReducedMotion(event.matches);
+    const release = acquireRendererLease(() => {
+      abort.abort();
+      media.removeEventListener('change', updateMotion);
+      adapterRef.current?.dispose();
+      adapterRef.current = undefined;
+      releaseRef.current = undefined;
+      if (mounted.current) setMode('static-fallback');
+    });
+    releaseRef.current = release;
+    media.addEventListener('change', updateMotion);
+    const fail: ViewportMount['fail'] = (code) => {
+      if (abort.signal.aborted) return;
+      release();
+      setMessage(failures[code]);
+      setMode('runtime-error');
+    };
+    setMessage('Preparing 3D preview…');
+    setMode('loading-runtime');
+    try {
+      const { createViewportAdapter } = await import('./three/viewportAdapter');
+      if (abort.signal.aborted) return;
+      const adapter = createViewportAdapter(station);
+      adapterRef.current = adapter;
+      await adapter.mount(container, latestState.current, {
+        signal: abort.signal,
+        reducedMotion: media.matches,
+        progress: (next) => { if (!abort.signal.aborted) setMessage(next); },
+        fail,
+      });
+      if (!abort.signal.aborted) setMode('interactive-3d');
+    } catch {
+      fail('asset');
+    }
+  };
+  const interactive = mode === 'interactive-3d';
+  const loading = mode === 'loading-runtime';
 
   return (
     <div
       className={`kf-viewport-host ${className}`.trim()}
       data-kf-viewport={station}
       data-kf-viewport-mode={mode}
-      data-kf-preview-match={fallback.match}
+      data-kf-preview-match={interactive ? undefined : fallback.match}
     >
-      {/* Future WebGL canvas mount target (inert and hidden while in static-fallback) */}
-      <div
-        ref={canvasRef}
-        className="kf-viewport-host__canvas-slot"
-        aria-hidden={showStaticFallback}
-      />
-
-      {showStaticFallback && (
+      <div ref={slot} className="kf-viewport-host__canvas-slot" aria-hidden={!interactive} />
+      {!interactive && (
         <ResponsiveImage
           key={fallback.shotId}
           shotId={fallback.shotId}
@@ -117,20 +119,17 @@ export function ViewportHost<TState>({
           priority={priority}
         />
       )}
-
-      {mode === 'loading-runtime' && (
-        <div className="kf-viewport-host__status-layer" role="status" aria-live="polite">
-          <span className="kf-micro">{progress.message ?? 'Loading 3D viewport…'}</span>
-        </div>
-      )}
-
-      {mode === 'runtime-error' && errorMessage && (
-        <div className="kf-viewport-host__error-bar" role="status" aria-live="polite">
-          <span>Static fallback active · {errorMessage}</span>
-        </div>
-      )}
-
       {children}
+      <div className="kf-viewport-host__controls">
+        {interactive && activeControls}
+        <button className="kf-viewport-host__action" type="button"
+          onClick={interactive || loading ? () => releaseRef.current?.() : start}>
+          {interactive ? 'Close 3D' : loading ? 'Cancel 3D' : mode === 'runtime-error' ? 'Retry 3D' : 'View in 3D'}
+        </button>
+      </div>
+      {(loading || mode === 'runtime-error') && (
+        <span className="kf-viewport-host__feedback" role="status">{message}</span>
+      )}
     </div>
   );
 }

@@ -18,6 +18,7 @@ import type {
   BuildStudioViewportState,
   EnclosureFinishId,
   StudioCameraPresetId,
+  ViewportMode,
 } from '../../runtime/types';
 import { Button } from '../ui/Button';
 import { SegmentedControl } from '../ui/SegmentedControl';
@@ -32,6 +33,8 @@ type StudioCategory = 'exterior' | 'keycaps' | 'internals';
 
 export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig }) => {
   const [cameraId, setCameraId] = useState<StudioCameraPresetId>('studio-three-quarter');
+  const [mode, setMode] = useState<ViewportMode>('static-fallback');
+  const interactive = mode === 'interactive-3d';
   const [activeCategory, setActiveCategory] = useState<StudioCategory>('exterior');
   const [copyFeedback, setCopyFeedback] = useState<string>('');
   const { ref, revealed } = useReveal<HTMLDivElement>();
@@ -71,7 +74,7 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
   const handleSelectEnclosure = (enclosure: EnclosureFinishId) => {
     onChangeConfig({ ...config, enclosure });
     // Ensure the user immediately sees the matched KF-003B enclosure render
-    if (cameraId !== 'studio-three-quarter') {
+    if (!interactive && mode !== 'loading-runtime' && cameraId !== 'studio-three-quarter') {
       setCameraId('studio-three-quarter');
     }
     setCopyFeedback('');
@@ -155,6 +158,7 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                 <div className="kf-viewport__canvas">
                   <ViewportHost
                     station="build-studio"
+                    onModeChange={setMode}
                     state={viewportState}
                     fallback={preview}
                     imgClassName="kf-viewport__img"
@@ -180,7 +184,7 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                     className={`kf-hud-status kf-hud-status--${preview.match}`}
                     aria-live="polite"
                   >
-                    {preview.statusLabel}
+                    {interactive ? 'Live enclosure preview' : preview.statusLabel}
                   </span>
                 </div>
               </div>
@@ -227,13 +231,15 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
               <span
                 className={`kf-viewport__match-tag kf-viewport__match-tag--${preview.match}`}
               >
-                {preview.match === 'matched'
+                {interactive ? '3D preview' : preview.match === 'matched'
                   ? 'Studio preview'
                   : preview.match === 'partial'
                     ? 'Partial preview'
                     : 'Reference view'}
               </span>{' '}
-              {preview.detailNote}
+              {interactive
+                ? 'Enclosure finish and camera are live. Keycap, accent, switch and plate choices are reflected in the build summary.'
+                : preview.detailNote}
             </p>
           </div>
 

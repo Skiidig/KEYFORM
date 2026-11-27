@@ -3,7 +3,7 @@ import { KF003B_ASSETS } from '../../assets/kf003bManifest';
 import { SWITCH_PROFILES, type SwitchProfile } from '../../data/kf01Data';
 import { useReveal } from '../../motion/useReveal';
 import { ViewportHost } from '../../runtime/ViewportHost';
-import type { StaticFallbackDescriptor, SwitchLabViewportState } from '../../runtime/types';
+import type { StaticFallbackDescriptor, SwitchLabViewportState, ViewportMode } from '../../runtime/types';
 import { Button } from '../ui/Button';
 import { SegmentedControl } from '../ui/SegmentedControl';
 
@@ -17,6 +17,7 @@ export const SwitchLab: React.FC<SwitchLabProps> = ({
   onApplyToStudio,
 }) => {
   const [activeId, setActiveId] = useState<SwitchProfile['id']>('linear-45');
+  const [mode, setMode] = useState<ViewportMode>('static-fallback');
   const [isPressed, setIsPressed] = useState(false);
   const { ref, revealed } = useReveal<HTMLDivElement>();
 
@@ -92,6 +93,7 @@ export const SwitchLab: React.FC<SwitchLabProps> = ({
               <div className="kf-switch-specimen__plate kf-switch-specimen__plate--seamless">
                 <ViewportHost
                   station="switch-lab"
+                  onModeChange={setMode}
                   state={viewportState}
                   fallback={fallback}
                   imgClassName="kf-switch-specimen__img"
@@ -101,7 +103,7 @@ export const SwitchLab: React.FC<SwitchLabProps> = ({
                 <span>
                   {activeSwitch.name} — {activeSwitch.stemColorName} stem
                 </span>
-                <span>Studio macro render</span>
+                <span>{mode === 'interactive-3d' ? '3D switch preview' : 'Studio macro render'}</span>
               </figcaption>
             </figure>
           </div>

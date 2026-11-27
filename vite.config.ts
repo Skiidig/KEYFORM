@@ -7,6 +7,7 @@ export default defineConfig({
     host: '127.0.0.1',
     port: 4185,
     strictPort: true,
+    watch: { ignored: ['**/.tmp/**'] },
   },
   preview: {
     host: '127.0.0.1',

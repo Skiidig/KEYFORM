@@ -103,10 +103,21 @@ export interface StaticFallbackDescriptor {
  * Simple adapter boundary that future KF-003C / KF-006 Three.js controllers
  * will implement without rewriting UI sections or product state.
  */
+export interface StationState {
+  'mechanical-anatomy': AnatomyViewportState;
+  'switch-lab': SwitchLabViewportState;
+  'build-studio': BuildStudioViewportState;
+}
+
+export interface ViewportMount {
+  signal: AbortSignal;
+  reducedMotion: boolean;
+  progress(message: string): void;
+  fail(code: 'context-lost' | 'asset' | 'renderer'): void;
+}
+
 export interface ViewportRuntimeAdapter<TState> {
-  readonly station: ViewportStationId;
-  readonly assetPartition: 'exterior' | 'internal' | 'hero_switch';
-  mount(container: HTMLElement, initialState: TState): Promise<void>;
+  mount(container: HTMLElement, initialState: TState, lifetime: ViewportMount): Promise<void>;
   update(nextState: TState): void;
   setReducedMotion(reduced: boolean): void;
   dispose(): void;

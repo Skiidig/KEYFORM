@@ -28,8 +28,9 @@ const server = createServer(async (request, response) => {
   }
   let entry;
   let size;
+  let pathname;
   try {
-    const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+    pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
     entry = resolve(root, '.' + (pathname === '/' ? '/index.html' : pathname));
     if (!entry.startsWith(resolve(root) + sep)) throw new Error('Outside dist');
     const info = await stat(entry);
@@ -43,6 +44,7 @@ const server = createServer(async (request, response) => {
     'Content-Type': contentTypes[extname(entry)] ?? 'application/octet-stream',
     'Content-Length': size,
     'X-Content-Type-Options': 'nosniff',
+    'Cache-Control': pathname.startsWith('/assets/kf01/') ? 'public, max-age=31536000, immutable' : 'no-cache',
   });
   if (request.method === 'HEAD') response.end();
   else createReadStream(entry).on('error', () => response.destroy()).pipe(response);

@@ -9,17 +9,21 @@
     "preview": "node tests/scripts/serve-dist.mjs",
     "typecheck": "tsc --noEmit",
     "verify:assets": "node tests/scripts/verify-assets.mjs",
-    "verify:browser": "node tests/scripts/smoke-production.mjs"
+    "verify:browser": "node tests/scripts/smoke-production.mjs",
+    "verify:runtime": "node tests/scripts/smoke-runtime.mjs",
+    "verify:mechanics": "node tests/scripts/verify-runtime.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.2.5",
     "@fontsource/ibm-plex-mono": "^5.2.5",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "three": "0.180.0"
   },
   "devDependencies": {
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
+    "@types/three": "0.180.0",
     "@vitejs/plugin-react": "^4.4.1",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",

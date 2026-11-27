@@ -3,10 +3,12 @@ import { KF003B_ASSETS } from '../../assets/kf003bManifest';
 import { ANATOMY_LAYERS } from '../../data/kf01Data';
 import { useReveal } from '../../motion/useReveal';
 import { ViewportHost } from '../../runtime/ViewportHost';
-import type { AnatomyViewportState, StaticFallbackDescriptor } from '../../runtime/types';
+import type { AnatomyViewportState, StaticFallbackDescriptor, ViewportMode } from '../../runtime/types';
 import { Button } from '../ui/Button';
 
 export const MechanicalAnatomy: React.FC = () => {
+  const [exploded, setExploded] = useState(true);
+  const [mode, setMode] = useState<ViewportMode>('static-fallback');
   const [activeIndex, setActiveIndex] = useState(0);
   const [techExpanded, setTechExpanded] = useState(false);
   const { ref, revealed } = useReveal<HTMLDivElement>();
@@ -16,9 +18,9 @@ export const MechanicalAnatomy: React.FC = () => {
   const viewportState = useMemo<AnatomyViewportState>(
     () => ({
       activeGroup: activeLayer.groupName,
-      exploded: true,
+      exploded,
     }),
-    [activeLayer.groupName],
+    [activeLayer.groupName, exploded],
   );
 
   const fallback = useMemo<StaticFallbackDescriptor>(
@@ -76,11 +78,17 @@ export const MechanicalAnatomy: React.FC = () => {
             <div className="kf-anatomy__stage">
               <ViewportHost
                 station="mechanical-anatomy"
+                onModeChange={setMode}
+                activeControls={
+                  <button className="kf-viewport-host__action" type="button" onClick={() => setExploded((value) => !value)}>
+                    {exploded ? 'Assemble' : 'Explode'}
+                  </button>
+                }
                 state={viewportState}
                 fallback={fallback}
                 imgClassName="kf-anatomy__img"
               >
-                <div
+                {mode !== 'interactive-3d' && <div
                   className="kf-anatomy__stratum-indicator"
                   style={{ top: `${activeLayer.stratumY}%` }}
                   aria-hidden="true"
@@ -89,11 +97,11 @@ export const MechanicalAnatomy: React.FC = () => {
                     <span className="kf-anatomy__stratum-index">{activeLayer.index} / 09</span>
                     <span>{activeLayer.shortRole}</span>
                   </span>
-                </div>
+                </div>}
               </ViewportHost>
             </div>
             <p className="kf-anatomy__footnote">
-              Exploded view render — interactive 3D layer separation reserved for the WebGL stage.
+              {mode === 'interactive-3d' ? 'Live assembly preview. Select a layer below to read its details.' : 'Exploded view render.'}
             </p>
           </div>
 
