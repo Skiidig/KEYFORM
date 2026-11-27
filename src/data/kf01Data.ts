@@ -259,8 +259,8 @@ export const SWITCH_PROFILES: SwitchProfile[] = [
     character:
       'Smooth, consistent travel from initial press to bottom-out, with no tactile bump to interrupt typing rhythm.',
     bestFor: 'Fluid daily typing and quiet, steady studio work',
-    pressDurationMs: 45,
-    returnDurationMs: 90,
+    pressDurationMs: 55,
+    returnDurationMs: 95,
   },
   {
     id: 'tactile-58',
@@ -277,7 +277,7 @@ export const SWITCH_PROFILES: SwitchProfile[] = [
     character:
       'A crisp tactile bump near the top of the keystroke for deliberate pacing and unmistakable key confirmation.',
     bestFor: 'Long-form writing, editing, and deliberate feedback',
-    pressDurationMs: 60,
+    pressDurationMs: 65,
     returnDurationMs: 105,
   },
   {
@@ -295,7 +295,7 @@ export const SWITCH_PROFILES: SwitchProfile[] = [
     character:
       'Cushioned guide rails soften both bottom-out and return so late-night work stays quiet without feeling mushy.',
     bestFor: 'Shared studios, late-night sessions, and open microphones',
-    pressDurationMs: 52,
+    pressDurationMs: 60,
     returnDurationMs: 115,
   },
 ];

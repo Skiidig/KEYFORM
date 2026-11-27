@@ -3,24 +3,34 @@ import { KF003B_ASSETS } from '../../assets/kf003bManifest';
 import { ANATOMY_LAYERS } from '../../data/kf01Data';
 import { useReveal } from '../../motion/useReveal';
 import { ViewportHost } from '../../runtime/ViewportHost';
-import type { AnatomyViewportState, StaticFallbackDescriptor, ViewportMode } from '../../runtime/types';
+import type { AnatomyViewportState, AssemblyGroupId, StaticFallbackDescriptor, ViewportMode } from '../../runtime/types';
 import { Button } from '../ui/Button';
+
+const EXTERIOR_GROUPS: ReadonlySet<AssemblyGroupId> = new Set([
+  'GRP_01_Keycaps',
+  'GRP_02_TopEnclosure',
+  'GRP_09_BottomChassis',
+]);
+const isInternalGroup = (group: AssemblyGroupId) => !EXTERIOR_GROUPS.has(group);
 
 export const MechanicalAnatomy: React.FC = () => {
   const [exploded, setExploded] = useState(true);
+  const [layerFocused, setLayerFocused] = useState(false);
   const [mode, setMode] = useState<ViewportMode>('static-fallback');
   const [activeIndex, setActiveIndex] = useState(0);
   const [techExpanded, setTechExpanded] = useState(false);
   const { ref, revealed } = useReveal<HTMLDivElement>();
 
   const activeLayer = ANATOMY_LAYERS[activeIndex];
+  const interactive = mode === 'interactive-3d';
 
   const viewportState = useMemo<AnatomyViewportState>(
     () => ({
       activeGroup: activeLayer.groupName,
       exploded,
+      focusedGroup: layerFocused ? activeLayer.groupName : null,
     }),
-    [activeLayer.groupName, exploded],
+    [activeLayer.groupName, exploded, layerFocused],
   );
 
   const fallback = useMemo<StaticFallbackDescriptor>(
@@ -30,18 +40,39 @@ export const MechanicalAnatomy: React.FC = () => {
       alt: KF003B_ASSETS.A05.defaultAlt,
       match: 'matched',
       statusLabel: `Layer ${activeLayer.index} / 09 · Static Exploded Stack`,
-      detailNote:
-        'Static KF-003B exploded stack; interactive 3D layer separation attaches via ViewportHost.',
+      detailNote: 'Static exploded stack.',
     }),
     [activeLayer.index],
   );
 
+  const selectLayer = (idx: number) => {
+    setActiveIndex(idx);
+    if (interactive) {
+      if (!exploded && isInternalGroup(ANATOMY_LAYERS[idx].groupName)) setExploded(true);
+      setLayerFocused(true);
+    }
+  };
+
   const handlePrev = () => {
-    setActiveIndex((idx) => (idx === 0 ? ANATOMY_LAYERS.length - 1 : idx - 1));
+    selectLayer(activeIndex === 0 ? ANATOMY_LAYERS.length - 1 : activeIndex - 1);
   };
 
   const handleNext = () => {
-    setActiveIndex((idx) => (idx === ANATOMY_LAYERS.length - 1 ? 0 : idx + 1));
+    selectLayer(activeIndex === ANATOMY_LAYERS.length - 1 ? 0 : activeIndex + 1);
+  };
+
+  const handleAssemble = () => {
+    setExploded(false);
+    setLayerFocused(false);
+  };
+
+  const handleToggleFocus = () => {
+    if (layerFocused) {
+      setLayerFocused(false);
+      return;
+    }
+    if (!exploded && isInternalGroup(activeLayer.groupName)) setExploded(true);
+    setLayerFocused(true);
   };
 
   return (
@@ -96,30 +127,42 @@ export const MechanicalAnatomy: React.FC = () => {
               </ViewportHost>
             </div>
             <div className="kf-anatomy__stage-bar">
-              {mode === 'interactive-3d' && (
-                <div className="kf-anatomy__pose-toggle" role="group" aria-label="Assembly view">
+              {interactive && (
+                <div className="kf-anatomy__stage-controls">
+                  <div className="kf-anatomy__pose-toggle" role="group" aria-label="Assembly view">
+                    <button
+                      type="button"
+                      className="kf-anatomy__pose-btn"
+                      aria-pressed={!exploded}
+                      onClick={handleAssemble}
+                    >
+                      Assemble
+                    </button>
+                    <button
+                      type="button"
+                      className="kf-anatomy__pose-btn"
+                      aria-pressed={exploded}
+                      onClick={() => setExploded(true)}
+                    >
+                      Explode
+                    </button>
+                  </div>
                   <button
                     type="button"
-                    className="kf-anatomy__pose-btn"
-                    aria-pressed={!exploded}
-                    onClick={() => setExploded(false)}
+                    className="kf-anatomy__focus-btn"
+                    aria-pressed={layerFocused}
+                    onClick={handleToggleFocus}
                   >
-                    Assemble
-                  </button>
-                  <button
-                    type="button"
-                    className="kf-anatomy__pose-btn"
-                    aria-pressed={exploded}
-                    onClick={() => setExploded(true)}
-                  >
-                    Explode
+                    {layerFocused ? 'Restore full view' : 'Focus layer'}
                   </button>
                 </div>
               )}
               <p className="kf-anatomy__footnote">
-                {mode === 'interactive-3d'
-                  ? 'Drag to orbit · Scroll to zoom · Select a layer to read details.'
-                  : 'Exploded view render. Open 3D to orbit or toggle assembly.'}
+                {interactive
+                  ? layerFocused
+                    ? `Focused: ${activeLayer.index} ${activeLayer.title} · Drag to orbit.`
+                    : 'Drag to orbit · Select a layer to focus it in 3D.'
+                  : 'Exploded view render. Open 3D to orbit or focus layers.'}
               </p>
             </div>
           </div>
@@ -209,7 +252,7 @@ export const MechanicalAnatomy: React.FC = () => {
                         type="button"
                         className="kf-layer-btn"
                         aria-current={isCurrent ? 'true' : undefined}
-                        onClick={() => setActiveIndex(idx)}
+                        onClick={() => selectLayer(idx)}
                       >
                         <span className="kf-layer-btn__num">{layer.index}</span>
                         <span className="kf-layer-btn__name">{layer.title}</span>

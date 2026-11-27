@@ -18,6 +18,7 @@ const contentTypes = {
   '.woff': 'font/woff',
   '.json': 'application/json; charset=utf-8',
   '.glb': 'model/gltf-binary',
+  '.wav': 'audio/wav',
 };
 
 await stat(resolve(root, 'index.html'));
@@ -44,7 +45,9 @@ const server = createServer(async (request, response) => {
     'Content-Type': contentTypes[extname(entry)] ?? 'application/octet-stream',
     'Content-Length': size,
     'X-Content-Type-Options': 'nosniff',
-    'Cache-Control': pathname.startsWith('/assets/kf01/') ? 'public, max-age=31536000, immutable' : 'no-cache',
+    'Cache-Control': pathname.startsWith('/assets/kf01/') || pathname.startsWith('/audio/kf01-v2/')
+      ? 'public, max-age=31536000, immutable'
+      : 'no-cache',
   });
   if (request.method === 'HEAD') response.end();
   else createReadStream(entry).on('error', () => response.destroy()).pipe(response);

@@ -58,11 +58,17 @@ export interface BuildConfigState {
 export interface AnatomyViewportState {
   activeGroup: AssemblyGroupId;
   exploded: boolean;
+  focusedGroup: AssemblyGroupId | null;
 }
+
+export type HeroSwitchPresentation = 'cutaway' | 'assembled';
+export type HeroSwitchActuationPhase = 'idle' | 'pressing' | 'bottomed' | 'releasing';
 
 export interface SwitchLabViewportState {
   switchProfile: SwitchProfileId;
   pressed: boolean;
+  presentation: HeroSwitchPresentation;
+  onTravelSample?: (travelMm: number, phase: HeroSwitchActuationPhase) => void;
 }
 
 export interface BuildStudioViewportState {

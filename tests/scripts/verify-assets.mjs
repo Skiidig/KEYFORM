@@ -20,7 +20,7 @@ const packagePath = new URL(inventory.manifest, dist).pathname.replace(/manifest
 const files = new Map();
 const mime = {
   '.avif': 'image/avif', '.webp': 'image/webp', '.png': 'image/png',
-  '.glb': 'model/gltf-binary', '.json': 'application/json',
+  '.glb': 'model/gltf-binary', '.json': 'application/json', '.wav': 'audio/wav',
 };
 
 for (const [path, expected] of Object.entries(inventory.files)) {
@@ -115,6 +115,38 @@ const entries = await readdir(new URL('./', new URL(inventory.manifest, dist)), 
 assert.equal(entries.filter((entry) => entry.isFile()).length, used.size, packagePath);
 for (const ext of ['.avif', '.webp']) assert.equal([...files.keys()].filter((url) => url.endsWith(ext)).length, 37);
 
+let audioBytes = 0;
+let audioFiles = 0;
+if (inventory.audioManifest) {
+  const audioManifestURL = new URL(inventory.audioManifest, base);
+  const audioManifestBytes = files.get(audioManifestURL.href);
+  assert.ok(audioManifestBytes, 'Audio manifest must be hosted');
+  const audioManifest = JSON.parse(audioManifestBytes);
+  assert.equal(audioManifest.version, 1);
+  assert.equal(audioManifest.sampleRate, 44100);
+  assert.equal(audioManifest.payloadFiles, 18);
+  assert.equal(audioManifest.payloadBytes, 341600);
+  const audioEntries = Object.entries(audioManifest.files);
+  assert.equal(audioEntries.length, 18);
+  for (const [rel, meta] of audioEntries) {
+    const wavURL = new URL(rel, audioManifestURL);
+    const wav = files.get(wavURL.href);
+    assert.ok(wav, rel);
+    assert.equal(wav.length, meta.bytes, rel);
+    assert.equal(sha256(wav), meta.sha256, rel);
+    assert.equal(meta.license, 'CC0-1.0', rel);
+    assert.equal(wav.toString('ascii', 0, 4), 'RIFF', rel);
+    assert.equal(wav.toString('ascii', 8, 12), 'WAVE', rel);
+    assert.equal(wav.readUInt16LE(20), 1, rel);
+    assert.equal(wav.readUInt16LE(22), 1, rel);
+    assert.equal(wav.readUInt32LE(24), 44100, rel);
+    assert.equal(wav.readUInt16LE(34), 16, rel);
+    audioBytes += wav.length;
+    audioFiles += 1;
+  }
+  assert.equal(audioBytes, 341600);
+}
+
 const missingURL = new URL('models/missing-asset.glb', manifestURL);
 const missing = await fetch(missingURL, { redirect: 'error' });
 assert.equal(missing.status, 404);
@@ -143,6 +175,8 @@ const evidence = {
   verifiedAssets: files.size,
   runtimeFiles: runtimeFiles.length,
   runtimeBytes: runtimeFiles.reduce((total, path) => total + files.get(path).length, 0),
+  audioFiles,
+  audioBytes,
   missingStatus: missing.status,
   bundle,
   distBytes,

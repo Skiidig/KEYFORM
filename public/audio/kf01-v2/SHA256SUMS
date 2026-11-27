@@ -1,0 +1,33 @@
+# SHA-256 — prepared sample assets (public/audio) and their source files
+1abacff0bd365cb8efc03e0b1d57d1ae0cc59f9e4434683e937f90d3a05839e1  asset:linear-45/down-01.wav
+b37c06f2a78aeb6e26c9cc22184c4ebf2d9bd85a870e69b3b96e42987400054b  asset:linear-45/down-02.wav
+f95352dc65a91024117a317f8764f1cadefededf510a12c27a37217aadf1debb  asset:linear-45/down-03.wav
+0743fd4f9cbcf51b31595155ffcd88986ad2df94f9df4c1a0306d5003617d3fa  asset:linear-45/down-04.wav
+e3a7e944c01c941f1ad170b3d9f6a27b32762d08692eff272397a7f0a56d9fdf  asset:linear-45/down-05.wav
+8e217b39ce4ac3dd8a806ce8d96740342756f53b9d5a002dd1d2c21e202da322  asset:shared/space-keychron-01.wav
+de5f935e7d97334d69af547eff69049e684f0eb8939ed868a9f64e16a194b75e  asset:silent-50/down-01.wav
+5ce66e2b04a6fe1726cf223def948cba8425dc7291bcbcc51cc42f1aabcbc3a1  asset:silent-50/down-02.wav
+76daf886fb1f9488e1666849418c3af2852d1ae290a67f0f21e58f0544116716  asset:silent-50/down-03.wav
+7082af9fcbf3afbc173d300248bddc2641a603f8c7dc1d3fe9076b07aa5fde27  asset:silent-50/down-04.wav
+ba0e085c37115018c49923d5983d72fff14de4f25f57d8036ccf45740c2a6807  asset:silent-50/down-05.wav
+c2214d62bedf61da1fc395a69c19a317490f2ae796a7c5d988b441ba0d5f187d  asset:tactile-58/down-01.wav
+74bec0441d6530c9cd6b06739c64f37ba9360d447ba708c05c068655f1071bcd  asset:tactile-58/down-02.wav
+7fac0ebdbf8c6b7d0e7597b29fe49ccfdc6f7d6d07a11178f71eaad717a52eab  asset:tactile-58/down-03.wav
+563749ca43ffa9554a44b706c5666941bb399f8f09bb552c7bdf259ea7f6c11c  asset:tactile-58/down-04.wav
+0ae4c085902a28ecc811b3cbdac38b31319db5caf8fb8dad5a7cc26dc72475a4  asset:tactile-58/down-05.wav
+ec6b363adbbce58a7d45c37498f7e7a510f865db70e3832a3298a0545729a5e8  asset:tactile-58/stabilized-enter-01.wav
+92510c8a7bd5f8e2ce3d7cbbf9815880ac016017bc198b8f3b7c6294b35487d6  asset:shared/up-foxfire-01.wav
+
+# source recordings (research/raw)
+0a149a20ad474ddfa5e345d1917072f5f52e51466633de38d9dd2d9b9deba3d4  source:research/raw/freesound/handygaber-499773-cherryred-hq.mp3
+97e355c1035c52edb5ccd2d108da3099c17d12c352bd7532ad6f711709eb833c  source:research/raw/freesound/sadiquecat-789630-space-hq.mp3
+0f70bd54f17941eeb8f2d7cb5b1d1b362c55f25322e0421448a9d04d072e5a16  source:research/raw/freesound/zrrion-665075-lubed-hq.mp3
+bd0bf47b42eadb6991f8e0ccc849af9a0d55d59d87297ab323348090332f3e73  source:research/raw/clatterbox/tactile/down-01.mp3
+ec4d29b88d66d478e269d15456a9bec695fd8efd03ecbe04ac3c9595733443b2  source:research/raw/clatterbox/tactile/down-02.mp3
+22c487818377e3bb7438e5001bc51b48a69e9a9943127d8054fa47cc9bc868cf  source:research/raw/clatterbox/tactile/down-03.mp3
+78fcafd0fb787180d4bc3d3e6be38deb7fe8223ab210efef8ccf1d04b9ff47a6  source:research/raw/clatterbox/tactile/down-04.mp3
+0be1fe122b8da67c0ce97ca2b098dc2626513f007341250ea7e6feed0a4a8d92  source:research/raw/clatterbox/tactile/down-05.mp3
+bc86b5849da5b66aae8a4be128c39de4d74370fde9b233e210132dd2c4a9169d  source:research/raw/clatterbox/tactile/enter-down-01.mp3
+a66a6563a1f8393e4dbd0cad3cccc14e646839bb1c8074d7685ee1592ee583af  source:research/raw/clatterbox/tactile/up-01.mp3
+
+# payload: 341600 bytes in 18 WAV files

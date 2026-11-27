@@ -33,6 +33,8 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
   let reduced = false;
   let revision = 0;
   let appliedEnclosure: BuildStudioViewportState['config']['enclosure'] | undefined;
+  let appliedSwitch: SwitchLabViewportState['switchProfile'] | undefined;
+  let appliedHeroPose: SwitchLabViewportState['presentation'] | undefined;
   let hudMedia: MediaQueryList | undefined;
   let onHudMedia: ((e: MediaQueryListEvent) => void) | undefined;
 
@@ -43,12 +45,22 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
   const apply = async (target: NativeStage, instant: boolean) => {
     const version = revision;
     if (station === 'switch-lab') {
-      const { switchProfile } = current as SwitchLabViewportState;
-      target.model.applyHeroSwitchVariant(switchVariants[switchProfile]);
+      const { switchProfile, pressed, presentation, onTravelSample } = current as SwitchLabViewportState;
+      target.setHeroTravelListener(onTravelSample ?? null);
+      if (switchProfile !== appliedSwitch) {
+        target.model.applyHeroSwitchVariant(switchVariants[switchProfile]);
+        appliedSwitch = switchProfile;
+      }
       target.setView('hero_switch', 'afterHours', 'heroSwitch', instant);
+      if (presentation !== appliedHeroPose || instant) {
+        target.setHeroPresentation(presentation, instant);
+        appliedHeroPose = presentation;
+      }
+      target.setHeroPressed(pressed, instant);
     } else if (station === 'mechanical-anatomy') {
-      const { exploded } = current as StationState['mechanical-anatomy'];
+      const { exploded, focusedGroup } = current as StationState['mechanical-anatomy'];
       target.setView(exploded ? 'exploded' : 'combined', 'formFunction', exploded ? 'exploded' : 'threeQuarter', instant);
+      target.setFocusedGroup(exploded ? focusedGroup : null);
     } else {
       const { config, cameraPreset } = current as BuildStudioViewportState;
       if (config.enclosure !== appliedEnclosure) {

@@ -112,6 +112,27 @@ export class NativeStage {
     this.setCamera(this.preset, false);
   }
 
+  setFocusedGroup(groupId: string | null) {
+    if (this.model.getFocusedAssemblyGroup() === groupId) return;
+    this.model.setFocusedAssemblyGroup(groupId);
+    this.invalidate();
+  }
+
+  setHeroPresentation(pose: 'cutaway' | 'assembled', instant = false) {
+    this.model.setHeroSwitchPresentation(pose, instant || this.reduced);
+    this.shadowDirty = true;
+    this.invalidate();
+  }
+
+  setHeroPressed(pressed: boolean, instant = false) {
+    this.model.setHeroSwitchPressed(pressed, instant || this.reduced);
+    this.invalidate();
+  }
+
+  setHeroTravelListener(listener: ((travelMm: number, phase: 'idle' | 'pressing' | 'bottomed' | 'releasing') => void) | null) {
+    this.model.setHeroTravelListener(listener);
+  }
+
   async setQuality(tier: 'balanced' | 'standard') {
     this.tier = tier;
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, tier === 'balanced' ? 1 : 1.5));
@@ -175,6 +196,11 @@ export class NativeStage {
     if (!value) return;
     if (this.transition.isActive()) this.setCamera(this.preset, true);
     this.model.setExplodeTarget(this.model.getViewMode() === 'exploded' ? 1 : 0, true);
+    if (this.model.getViewMode() === 'hero_switch') {
+      const state = this.model.getHeroSwitchMechanicalState();
+      this.model.setHeroSwitchPresentation(state.pose, true);
+      this.model.setHeroSwitchPressed(state.phase === 'pressing' || state.phase === 'bottomed', true);
+    }
     this.shadowDirty = true;
     this.invalidate();
   }
@@ -208,9 +234,10 @@ export class NativeStage {
       this.controls.update();
     }
     const previousPose = this.model.getExplodeProgress();
+    const previousHeroPose = this.model.getHeroPoseProgress();
     const moving = this.model.update(now);
     const pose = this.model.getExplodeProgress();
-    this.shadowDirty ||= pose !== previousPose;
+    this.shadowDirty ||= pose !== previousPose || this.model.getHeroPoseProgress() !== previousHeroPose;
     this.ground.updateLayout({
       isHero: this.model.getViewMode() === 'hero_switch',
       explodeProgress: pose,

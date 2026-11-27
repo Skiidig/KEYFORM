@@ -158,6 +158,47 @@ interface KeyRuntime {
 const KEYPRESS_DOWN_MS = 45;
 const KEYPRESS_UP_MS = 90;
 
+/**
+ * Validated standalone Hero Switch (HERO_MX_Root) mechanical geometry datums (m, glTF +Y up).
+ * Measured directly from kf01_hero_switch_b21.reference.glb:
+ *  - Lower housing rim top: 0.00489 m; spring seat floor: 0.00060..0.00300 m.
+ *  - Upper housing cutaway t.y: 0.00980 m -> assembled seated t.y: 0.00489 m (lid top 0.01005 m).
+ *  - Moving stem cutaway t.y: 0.01820 m -> assembled rest t.y: 0.00850 m (cross top 0.01570 m;
+ *    center post bottom 0.00612 m rest, 0.00212 m at 4.0 mm bottom-out, clearing 0.00060 m floor).
+ *  - HERO_MX_MoldedStemGuides sits at t=[0,0,0] inside the lower housing and MUST remain stationary.
+ *  - Spring local Y spans [0.00464, 0.01012] m (5.48 mm free height); assembled base pins at Y=0.00100 m.
+ */
+const HERO_UPPER_NODES = new Set([
+  'HERO_MX_PolycarbonateUpper',
+  'HERO_MX_UpperCornerHooks',
+  'HERO_MX_UpperReinforcingRibs',
+]);
+const HERO_STEM_NODES = new Set([
+  'HERO_MX_POMCrossStem',
+  'HERO_MX_POMSliderRunners',
+  'HERO_MX_StemCenterPost',
+]);
+const HERO_SPRING_NODE = 'HERO_MX_VariablePitchSpring';
+const HERO_GUIDES_NODE = 'HERO_MX_MoldedStemGuides';
+const HERO_UPPER_ASSEMBLED_Y = 0.00489;
+const HERO_STEM_ASSEMBLED_Y = 0.0085;
+const HERO_SPRING_LOCAL_MIN_Y = 0.00464;
+const HERO_SPRING_FREE_HEIGHT_M = 0.00548;
+const HERO_SPRING_SEATED_BASE_Y = 0.001;
+const HERO_POSE_MS = 220;
+
+export const HERO_SWITCH_TRAVEL_SPECS: Record<
+  HeroSwitchVariantId,
+  { travelM: number; pretravelM: number; downMs: number; upMs: number }
+> = {
+  linear45: { travelM: 0.004, pretravelM: 0.002, downMs: 55, upMs: 95 },
+  tactile58: { travelM: 0.0038, pretravelM: 0.002, downMs: 65, upMs: 105 },
+  silent50: { travelM: 0.0037, pretravelM: 0.0019, downMs: 60, upMs: 115 },
+};
+
+export type HeroSwitchPose = 'cutaway' | 'assembled';
+export type HeroSwitchPhase = 'idle' | 'pressing' | 'bottomed' | 'releasing';
+
 function evalPiecewiseKeyframes(keyframes: MotionKeyframe[], tRaw: number): Vec3 {
   const t = Math.max(0, Math.min(1, tRaw));
   if (keyframes.length === 0) return [0, 0, 0];
@@ -269,6 +310,29 @@ export class ProductionScene {
   private keycapMaterials = new Map<string, THREE.MeshStandardMaterial>();
   private heroLidMaterials: THREE.MeshPhysicalMaterial[] = [];
   private heroStemMaterials: THREE.MeshStandardMaterial[] = [];
+  private heroUpperParts: Array<{ node: THREE.Object3D; cutawayY: number }> = [];
+  private heroStemParts: Array<{ node: THREE.Object3D; cutawayY: number }> = [];
+  private heroSpringPart: { node: THREE.Object3D; cutawayY: number; cutawayScaleY: number } | null = null;
+  private heroGuidesPart: { node: THREE.Object3D; restY: number } | null = null;
+  private heroPoseCurrent = 0; // 0 = cutaway, 1 = assembled
+  private heroPoseTarget = 0;
+  private heroPoseStartMs = 0;
+  private heroPoseStartVal = 0;
+  private heroPoseInstant = false;
+  private heroPressCurrent = 0; // 0..1 normalized travel
+  private heroPressTarget = 0;
+  private heroPressStartMs = 0;
+  private heroPressStartVal = 0;
+  private heroPressInstant = false;
+  private heroPhase: HeroSwitchPhase = 'idle';
+  private heroTravelListener: ((travelMm: number, phase: HeroSwitchPhase) => void) | null = null;
+
+  private focusedGroupId: string | null = null;
+  private focusGhostMaterial: THREE.MeshStandardMaterial | null = null;
+  private focusOrigMaterials = new Map<
+    THREE.Mesh,
+    { material: THREE.Material | THREE.Material[]; castShadow: boolean }
+  >();
 
   private currentCasePreset: EnclosurePresetId = 'forest';
   private currentHeroVariant: HeroSwitchVariantId = 'linear45';
@@ -687,10 +751,29 @@ export class ProductionScene {
   private indexHeroSwitch(root: THREE.Object3D) {
     this.heroLidMaterials = [];
     this.heroStemMaterials = [];
+    this.heroUpperParts = [];
+    this.heroStemParts = [];
+    this.heroSpringPart = null;
+    this.heroGuidesPart = null;
     const seenLid = new Set<string>();
     const seenStem = new Set<string>();
 
     root.traverse((node) => {
+      const partId = typeof node.userData?.heroPart === 'string' ? node.userData.heroPart : node.name;
+      if (HERO_UPPER_NODES.has(partId)) {
+        this.heroUpperParts.push({ node, cutawayY: node.position.y });
+      } else if (HERO_STEM_NODES.has(partId)) {
+        this.heroStemParts.push({ node, cutawayY: node.position.y });
+      } else if (partId === HERO_SPRING_NODE) {
+        this.heroSpringPart = {
+          node,
+          cutawayY: node.position.y,
+          cutawayScaleY: node.scale.y || 1,
+        };
+      } else if (partId === HERO_GUIDES_NODE) {
+        this.heroGuidesPart = { node, restY: node.position.y };
+      }
+
       const mesh = node as THREE.Mesh;
       if (!mesh.isMesh) return;
       mesh.castShadow = true;
@@ -707,6 +790,7 @@ export class ProductionScene {
         }
       }
     });
+    this.applyHeroSwitchTransforms();
   }
 
   /**
@@ -806,8 +890,80 @@ export class ProductionScene {
     if (this.internalScene) {
       this.internalScene.visible = mode === 'combined' || mode === 'exploded';
     }
+    if (mode !== 'exploded' && mode !== 'combined') {
+      this.setFocusedAssemblyGroup(null);
+    }
     this.clearSelection();
     this.rebuildPickables();
+  }
+
+  private restoreFocusMaterials() {
+    for (const [mesh, saved] of this.focusOrigMaterials.entries()) {
+      mesh.material = saved.material;
+      mesh.castShadow = saved.castShadow;
+    }
+    this.focusOrigMaterials.clear();
+  }
+
+  /**
+   * Non-destructive Mechanical Anatomy layer emphasis.
+   * Keeps the focused assembly group in its 100% calibrated B3 materials while
+   * swapping non-focused groups onto a dedicated translucent ghost material so
+   * shared materials (MAT_Case_Anodized, MAT_Silicone, MAT_Keycap_PBT) are never mutated.
+   */
+  setFocusedAssemblyGroup(groupId: string | null) {
+    this.restoreFocusMaterials();
+    if (!groupId || !this.groupNodes.has(groupId)) {
+      this.focusedGroupId = null;
+      return;
+    }
+    this.focusedGroupId = groupId;
+    if (!this.focusGhostMaterial) {
+      this.focusGhostMaterial = new THREE.MeshStandardMaterial({
+        name: 'KF01_AnatomyFocusGhost',
+        color: new THREE.Color('#B5B8B2'),
+        roughness: 0.78,
+        metalness: 0.04,
+        transparent: true,
+        opacity: 0.2,
+        depthWrite: false,
+      });
+    }
+    for (const [id, entry] of this.groupNodes.entries()) {
+      if (id === groupId) continue;
+      entry.node.traverse((obj) => {
+        const mesh = obj as THREE.Mesh;
+        if (!mesh.isMesh || mesh.name.startsWith('KF003C_')) return;
+        if (!mesh.visible && !(mesh as THREE.InstancedMesh).isInstancedMesh) return;
+        this.focusOrigMaterials.set(mesh, {
+          material: mesh.material,
+          castShadow: mesh.castShadow,
+        });
+        mesh.material = this.focusGhostMaterial!;
+        mesh.castShadow = false;
+      });
+    }
+  }
+
+  getFocusedAssemblyGroup(): string | null {
+    return this.focusedGroupId;
+  }
+
+  getAssemblyGroupFocusReport() {
+    let focusedVisibleMeshes = 0;
+    if (this.focusedGroupId) {
+      const entry = this.groupNodes.get(this.focusedGroupId);
+      entry?.node.traverse((obj) => {
+        const mesh = obj as THREE.Mesh;
+        if (mesh.isMesh && mesh.visible && !mesh.name.startsWith('KF003C_')) focusedVisibleMeshes += 1;
+      });
+    }
+    return {
+      focusedGroupId: this.focusedGroupId,
+      dimmedMeshCount: this.focusOrigMaterials.size,
+      focusedVisibleMeshes,
+      resolvedGroups: [...this.groupNodes.keys()].sort(),
+    };
   }
 
   getViewMode(): ViewMode {
@@ -926,7 +1082,17 @@ export class ProductionScene {
   applyHeroSwitchVariant(variantId: HeroSwitchVariantId) {
     const variant = this.manifest.hero_switch.variants[variantId];
     if (!variant) return;
+    const changed = this.currentHeroVariant !== variantId;
     this.currentHeroVariant = variantId;
+    if (changed && (this.heroPressTarget > 0 || this.heroPressCurrent > 0)) {
+      // Policy: variant change during a press cleanly releases and restores exact rest transforms.
+      this.heroPressTarget = 0;
+      this.heroPressCurrent = 0;
+      this.heroPressStartVal = 0;
+      this.heroPhase = 'idle';
+      this.applyHeroSwitchTransforms();
+      this.heroTravelListener?.(0, 'idle');
+    }
     const [lr, lg, lb] = variant.lid_pbr.base_color_linear;
     for (const mat of this.heroLidMaterials) {
       mat.color.setRGB(lr, lg, lb, THREE.LinearSRGBColorSpace);
@@ -945,6 +1111,124 @@ export class ProductionScene {
       mat.envMapIntensity = 1.02;
       mat.needsUpdate = true;
     }
+  }
+
+  setHeroTravelListener(listener: ((travelMm: number, phase: HeroSwitchPhase) => void) | null) {
+    this.heroTravelListener = listener;
+  }
+
+  setHeroSwitchPresentation(pose: HeroSwitchPose, instant = false, now = performance.now()) {
+    const nextTarget = pose === 'assembled' ? 1 : 0;
+    if (pose === 'cutaway' && (this.heroPressTarget > 0 || this.heroPressCurrent > 0)) {
+      this.heroPressTarget = 0;
+      this.heroPressCurrent = 0;
+      this.heroPressStartVal = 0;
+      this.heroPhase = 'idle';
+      this.heroTravelListener?.(0, 'idle');
+    }
+    this.heroPoseTarget = nextTarget;
+    this.heroPoseInstant = instant;
+    this.heroPoseStartVal = this.heroPoseCurrent;
+    this.heroPoseStartMs = now;
+    if (instant) {
+      this.heroPoseCurrent = nextTarget;
+      this.applyHeroSwitchTransforms();
+    }
+  }
+
+  setHeroSwitchPressed(pressed: boolean, instant = false, now = performance.now()) {
+    const nextTarget = pressed ? 1 : 0;
+    if (pressed && this.heroPoseTarget < 1) {
+      // Actuation always runs on the assembled switch, never on floating cutaway parts.
+      this.heroPoseTarget = 1;
+      this.heroPoseCurrent = 1;
+      this.heroPoseStartVal = 1;
+      this.heroPoseInstant = true;
+    }
+    if (nextTarget === this.heroPressTarget && !instant) return;
+    this.heroPressTarget = nextTarget;
+    this.heroPressInstant = instant;
+    this.heroPressStartVal = this.heroPressCurrent;
+    this.heroPressStartMs = now;
+    if (instant) {
+      this.heroPressCurrent = nextTarget;
+      this.heroPhase = nextTarget >= 1 ? 'bottomed' : 'idle';
+      this.applyHeroSwitchTransforms();
+      const spec = HERO_SWITCH_TRAVEL_SPECS[this.currentHeroVariant];
+      this.heroTravelListener?.(this.heroPressCurrent * spec.travelM * 1000, this.heroPhase);
+    } else {
+      this.heroPhase = pressed ? 'pressing' : 'releasing';
+      const spec = HERO_SWITCH_TRAVEL_SPECS[this.currentHeroVariant];
+      this.heroTravelListener?.(this.heroPressCurrent * spec.travelM * 1000, this.heroPhase);
+    }
+  }
+
+  /** Deterministic travel setter (0..variant total travel mm) for regression tests. */
+  setHeroSwitchTravelMm(mm: number) {
+    const spec = HERO_SWITCH_TRAVEL_SPECS[this.currentHeroVariant];
+    const maxMm = spec.travelM * 1000;
+    const clamped = Math.max(0, Math.min(maxMm, mm));
+    this.heroPoseTarget = 1;
+    this.heroPoseCurrent = 1;
+    this.heroPressTarget = clamped / maxMm;
+    this.heroPressCurrent = this.heroPressTarget;
+    this.heroPhase = clamped >= maxMm - 1e-4 ? 'bottomed' : clamped <= 1e-4 ? 'idle' : 'pressing';
+    this.applyHeroSwitchTransforms();
+    this.heroTravelListener?.(clamped, this.heroPhase);
+  }
+
+  getHeroPoseProgress(): number {
+    return this.heroPoseCurrent;
+  }
+
+  getHeroSwitchMechanicalState() {
+    const spec = HERO_SWITCH_TRAVEL_SPECS[this.currentHeroVariant];
+    const firstStem = this.heroStemParts[0];
+    const firstUpper = this.heroUpperParts[0];
+    const assembledStemRestY = firstStem
+      ? THREE.MathUtils.lerp(firstStem.cutawayY, HERO_STEM_ASSEMBLED_Y, this.heroPoseCurrent)
+      : 0;
+    return {
+      variant: this.currentHeroVariant,
+      pose: (this.heroPoseTarget >= 0.5 ? 'assembled' : 'cutaway') as HeroSwitchPose,
+      poseProgress: Number(this.heroPoseCurrent.toFixed(4)),
+      pressProgress: Number(this.heroPressCurrent.toFixed(4)),
+      phase: this.heroPhase,
+      travelMm: Number((this.heroPressCurrent * spec.travelM * 1000).toFixed(4)),
+      totalTravelMm: Number((spec.travelM * 1000).toFixed(4)),
+      stemDeltaY: firstStem ? Number((firstStem.node.position.y - assembledStemRestY).toFixed(6)) : 0,
+      stemCutawayDeltaY: firstStem ? Number((firstStem.node.position.y - firstStem.cutawayY).toFixed(6)) : 0,
+      upperDeltaY: firstUpper ? Number((firstUpper.node.position.y - firstUpper.cutawayY).toFixed(6)) : 0,
+      springScaleY: this.heroSpringPart ? Number(this.heroSpringPart.node.scale.y.toFixed(6)) : 1,
+      guidesDeltaY: this.heroGuidesPart
+        ? Number((this.heroGuidesPart.node.position.y - this.heroGuidesPart.restY).toFixed(6))
+        : 0,
+      stemNodeCount: this.heroStemParts.length,
+      upperNodeCount: this.heroUpperParts.length,
+    };
+  }
+
+  private applyHeroSwitchTransforms() {
+    const spec = HERO_SWITCH_TRAVEL_SPECS[this.currentHeroVariant];
+    const p = this.heroPoseCurrent;
+    const pressM = p >= 0.99 ? this.heroPressCurrent * spec.travelM : 0;
+
+    for (const part of this.heroUpperParts) {
+      part.node.position.y = THREE.MathUtils.lerp(part.cutawayY, HERO_UPPER_ASSEMBLED_Y, p);
+    }
+    for (const part of this.heroStemParts) {
+      const restY = THREE.MathUtils.lerp(part.cutawayY, HERO_STEM_ASSEMBLED_Y, p);
+      part.node.position.y = restY - pressM;
+    }
+    if (this.heroSpringPart) {
+      const scaleY = p >= 0.99
+        ? this.heroSpringPart.cutawayScaleY * Math.max(0.35, 1.0 - pressM / HERO_SPRING_FREE_HEIGHT_M)
+        : this.heroSpringPart.cutawayScaleY;
+      const seatedY = HERO_SPRING_SEATED_BASE_Y - HERO_SPRING_LOCAL_MIN_Y * scaleY;
+      this.heroSpringPart.node.scale.y = scaleY;
+      this.heroSpringPart.node.position.y = THREE.MathUtils.lerp(this.heroSpringPart.cutawayY, seatedY, p);
+    }
+    this.heroRoot.updateMatrixWorld(true);
   }
 
   pressKey(keyId: string, now = performance.now(), hold = false): boolean {
@@ -1077,6 +1361,36 @@ export class ProductionScene {
 
       kr.pressValue = v;
       this.applyKeyDisplacement(kr, v * kr.spec.press.travel_max_m);
+    }
+
+    let heroChanged = false;
+    if (!this.heroPoseInstant && this.heroPoseCurrent !== this.heroPoseTarget) {
+      const u = Math.min(1, Math.max(0, (now - this.heroPoseStartMs) / HERO_POSE_MS));
+      const eased = 1 - Math.pow(1 - u, 3);
+      this.heroPoseCurrent =
+        u >= 1 ? this.heroPoseTarget : THREE.MathUtils.lerp(this.heroPoseStartVal, this.heroPoseTarget, eased);
+      heroChanged = true;
+      if (u < 1) active = true;
+    }
+    if (!this.heroPressInstant && (this.heroPhase === 'pressing' || this.heroPhase === 'releasing')) {
+      const spec = HERO_SWITCH_TRAVEL_SPECS[this.currentHeroVariant];
+      const dur = this.heroPressTarget > this.heroPressStartVal ? spec.downMs : spec.upMs;
+      const u = Math.min(1, Math.max(0, (now - this.heroPressStartMs) / Math.max(1, dur)));
+      const eased = 1 - Math.pow(1 - u, 3);
+      const done = u >= 1;
+      this.heroPressCurrent = done
+        ? this.heroPressTarget
+        : THREE.MathUtils.lerp(this.heroPressStartVal, this.heroPressTarget, eased);
+      heroChanged = true;
+      if (done) {
+        this.heroPhase = this.heroPressTarget >= 1 ? 'bottomed' : 'idle';
+      } else {
+        active = true;
+      }
+      this.heroTravelListener?.(this.heroPressCurrent * spec.travelM * 1000, this.heroPhase);
+    }
+    if (heroChanged) {
+      this.applyHeroSwitchTransforms();
     }
 
     if (active) {
@@ -1651,14 +1965,18 @@ export class ProductionScene {
 
   /** Release the mask before the exterior partition is replaced or the scene is disposed. */
   detachLegendMask(): void {
+    const savedFocus = this.focusedGroupId;
+    this.restoreFocusMaterials();
     if (!this.legend) {
       this.legendTier = null;
+      if (savedFocus) this.setFocusedAssemblyGroup(savedFocus);
       return;
     }
     this.legend.dispose();
     this.legend = null;
     this.legendInventory = null;
     this.legendTier = null;
+    if (savedFocus && !this.disposed) this.setFocusedAssemblyGroup(savedFocus);
   }
 
   /** Machine-readable legend state for regression and benchmark reporting. */
@@ -1872,6 +2190,11 @@ export class ProductionScene {
   dispose() {
     if (this.disposed) return;
     this.disposed = true;
+    this.heroTravelListener = null;
+    this.restoreFocusMaterials();
+    this.focusGhostMaterial?.dispose();
+    this.focusGhostMaterial = null;
+    this.focusedGroupId = null;
     this.detachLegendMask();
     this.unloadMacroEncoder();
     this.clearSelection();

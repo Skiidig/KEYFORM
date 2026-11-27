@@ -333,6 +333,83 @@
     "assets/kf01/kf01-kf004b-b3.1/manifest.json": {
       "bytes": 245910,
       "sha256": "430ea532e0736648d67037dd701dfc83d8e37820f9ceef3a160db92291152b91"
+    },
+    "audio/kf01-v2/manifest.json": {
+      "bytes": 20083,
+      "sha256": "144f05df767dc1193dfaccce2b797a53588c1634c7c3eb2d2495ced56cf3eaae"
+    },
+    "audio/kf01-v2/linear-45/down-01.wav": {
+      "bytes": 21212,
+      "sha256": "1abacff0bd365cb8efc03e0b1d57d1ae0cc59f9e4434683e937f90d3a05839e1"
+    },
+    "audio/kf01-v2/linear-45/down-02.wav": {
+      "bytes": 21048,
+      "sha256": "b37c06f2a78aeb6e26c9cc22184c4ebf2d9bd85a870e69b3b96e42987400054b"
+    },
+    "audio/kf01-v2/linear-45/down-03.wav": {
+      "bytes": 21212,
+      "sha256": "f95352dc65a91024117a317f8764f1cadefededf510a12c27a37217aadf1debb"
+    },
+    "audio/kf01-v2/linear-45/down-04.wav": {
+      "bytes": 21108,
+      "sha256": "0743fd4f9cbcf51b31595155ffcd88986ad2df94f9df4c1a0306d5003617d3fa"
+    },
+    "audio/kf01-v2/linear-45/down-05.wav": {
+      "bytes": 21078,
+      "sha256": "e3a7e944c01c941f1ad170b3d9f6a27b32762d08692eff272397a7f0a56d9fdf"
+    },
+    "audio/kf01-v2/shared/space-keychron-01.wav": {
+      "bytes": 26174,
+      "sha256": "8e217b39ce4ac3dd8a806ce8d96740342756f53b9d5a002dd1d2c21e202da322"
+    },
+    "audio/kf01-v2/silent-50/down-01.wav": {
+      "bytes": 19390,
+      "sha256": "de5f935e7d97334d69af547eff69049e684f0eb8939ed868a9f64e16a194b75e"
+    },
+    "audio/kf01-v2/silent-50/down-02.wav": {
+      "bytes": 19584,
+      "sha256": "5ce66e2b04a6fe1726cf223def948cba8425dc7291bcbcc51cc42f1aabcbc3a1"
+    },
+    "audio/kf01-v2/silent-50/down-03.wav": {
+      "bytes": 18768,
+      "sha256": "76daf886fb1f9488e1666849418c3af2852d1ae290a67f0f21e58f0544116716"
+    },
+    "audio/kf01-v2/silent-50/down-04.wav": {
+      "bytes": 21040,
+      "sha256": "7082af9fcbf3afbc173d300248bddc2641a603f8c7dc1d3fe9076b07aa5fde27"
+    },
+    "audio/kf01-v2/silent-50/down-05.wav": {
+      "bytes": 21212,
+      "sha256": "ba0e085c37115018c49923d5983d72fff14de4f25f57d8036ccf45740c2a6807"
+    },
+    "audio/kf01-v2/tactile-58/down-01.wav": {
+      "bytes": 12304,
+      "sha256": "c2214d62bedf61da1fc395a69c19a317490f2ae796a7c5d988b441ba0d5f187d"
+    },
+    "audio/kf01-v2/tactile-58/down-02.wav": {
+      "bytes": 17148,
+      "sha256": "74bec0441d6530c9cd6b06739c64f37ba9360d447ba708c05c068655f1071bcd"
+    },
+    "audio/kf01-v2/tactile-58/down-03.wav": {
+      "bytes": 15446,
+      "sha256": "7fac0ebdbf8c6b7d0e7597b29fe49ccfdc6f7d6d07a11178f71eaad717a52eab"
+    },
+    "audio/kf01-v2/tactile-58/down-04.wav": {
+      "bytes": 13512,
+      "sha256": "563749ca43ffa9554a44b706c5666941bb399f8f09bb552c7bdf259ea7f6c11c"
+    },
+    "audio/kf01-v2/tactile-58/down-05.wav": {
+      "bytes": 17358,
+      "sha256": "0ae4c085902a28ecc811b3cbdac38b31319db5caf8fb8dad5a7cc26dc72475a4"
+    },
+    "audio/kf01-v2/tactile-58/stabilized-enter-01.wav": {
+      "bytes": 15880,
+      "sha256": "ec6b363adbbce58a7d45c37498f7e7a510f865db70e3832a3298a0545729a5e8"
+    },
+    "audio/kf01-v2/shared/up-foxfire-01.wav": {
+      "bytes": 18126,
+      "sha256": "92510c8a7bd5f8e2ce3d7cbbf9815880ac016017bc198b8f3b7c6294b35487d6"
     }
-  }
+  },
+  "audioManifest": "audio/kf01-v2/manifest.json"
 }
