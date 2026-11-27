@@ -3,6 +3,8 @@
 > **Status:** Preliminary Foundation (KF-001)  
 > **Scope:** Client-only experimental product showcase and interactive 3D configurator. No backend, database, authentication, or checkout.
 
+KF-004B adopts the [current roadmap](ROADMAP.md) for stack and release gates. The R3F, Tailwind, and single-GLB options below describe the KF-001 proposal. Production uses plain CSS, native Three.js adapters in P1, and the independently loaded B3 partitions.
+
 ## 1. Website Information Architecture
 
 The experience is structured as a single cohesive vertical editorial flow anchored by two interactive technical stations (**Interactive Mechanical Anatomy** and **Build Studio**).

@@ -1,0 +1,280 @@
+/* ==========================================================================
+   KEYFORM — Motion Design Foundation (KF-004A)
+   Direction: Cinematic industrial precision · Zero bounce/elastic easing
+   ========================================================================== */
+
+:root {
+  /* --- Canonical Motion Duration Tokens --- */
+  --kf-dur-instant: 80ms;
+  --kf-dur-fast: 140ms;
+  --kf-dur-standard: 220ms;
+  --kf-dur-panel: 260ms;
+  --kf-dur-camera: 420ms;
+  --kf-dur-cinematic: 500ms;
+
+  /* --- Canonical Motion Easing Tokens (No bounce/elastic) --- */
+  --kf-ease-precision: cubic-bezier(0.2, 0.75, 0.25, 1);
+  --kf-ease-mechanical: cubic-bezier(0.4, 0, 0.2, 1);
+  --kf-ease-cinematic: cubic-bezier(0.65, 0, 0.25, 1);
+  --kf-ease-linear: linear;
+
+  /* --- Semantic Aliases for Existing Component Styles --- */
+  --kf-ease-mech: var(--kf-ease-precision);
+  --kf-dur-button: var(--kf-dur-fast);
+  --kf-dur-material: var(--kf-dur-standard);
+  --kf-dur-reveal: var(--kf-dur-standard);
+}
+
+/* --- Restrained Below-the-Fold Editorial Grid Settle (Never on Hero LCP or interactive workspaces) --- */
+.kf-reveal {
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity var(--kf-dur-reveal) var(--kf-ease-precision),
+    transform var(--kf-dur-reveal) var(--kf-ease-precision);
+}
+
+.kf-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Subtle precision crossfade for static image swaps (Build Studio / Switch Lab) */
+@keyframes kf-media-settle {
+  from {
+    opacity: 0.72;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.kf-viewport-host {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.kf-viewport-host__photo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.kf-viewport-host__canvas-slot {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity var(--kf-dur-standard) var(--kf-ease-precision);
+}
+
+.kf-viewport-host[data-kf-viewport-mode='interactive-3d'] .kf-viewport-host__canvas-slot {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.kf-runtime-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.kf-runtime-canvas:active {
+  cursor: grabbing;
+}
+
+.kf-viewport-host__controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  left: 8px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  z-index: 4;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .kf-viewport-host__controls {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    gap: 8px;
+  }
+}
+
+.kf-viewport-host__action {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 11px;
+  background: var(--kf-hud-bg);
+  color: var(--kf-chalk);
+  border: 1px solid var(--kf-hud-border);
+  border-radius: var(--kf-radius-sm);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--kf-shadow-subtle);
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-caption);
+  font-weight: 500;
+  letter-spacing: var(--kf-track-control);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--kf-dur-button) var(--kf-ease-mech),
+    border-color var(--kf-dur-button) var(--kf-ease-mech),
+    color var(--kf-dur-button) var(--kf-ease-mech);
+}
+
+@media (min-width: 480px) {
+  .kf-viewport-host__action {
+    padding: 0 13px;
+  }
+}
+
+@media (max-width: 479px) {
+  .kf-viewport-host__action--reset {
+    padding: 0;
+  }
+
+  .kf-viewport-host__reset-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+
+.kf-viewport-host__action:hover {
+  background: rgba(16, 18, 17, 0.92);
+  border-color: rgba(242, 241, 235, 0.34);
+}
+
+.kf-viewport-host__action--activate {
+  border-color: rgba(242, 241, 235, 0.24);
+}
+
+.kf-viewport-host__action--activate:hover {
+  background: var(--kf-forest);
+  border-color: var(--kf-forest-border-dark);
+}
+
+.kf-viewport-host__action--subtle {
+  color: rgba(242, 241, 235, 0.86);
+}
+
+.kf-viewport-host__action--subtle:hover {
+  color: var(--kf-chalk);
+}
+
+.kf-viewport-host__action:focus-visible,
+.kf-runtime-canvas:focus-visible {
+  outline: 2px solid var(--kf-brass);
+  outline-offset: -3px;
+}
+
+.kf-viewport-host__feedback {
+  position: absolute;
+  z-index: 4;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: calc(100% - 140px);
+  padding: 9px 13px;
+  background: var(--kf-hud-bg);
+  color: var(--kf-chalk);
+  border: 1px solid var(--kf-hud-border);
+  border-radius: var(--kf-radius-sm);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--kf-shadow-subtle);
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-text-caption);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+@media (min-width: 640px) {
+  .kf-viewport-host__feedback {
+    top: 12px;
+    left: 12px;
+    max-width: calc(100% - 160px);
+  }
+}
+
+.kf-viewport-host__feedback--error {
+  border-left: 2px solid var(--kf-brass);
+}
+
+.kf-viewport-host__progress {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 96px;
+  height: 2px;
+  background: rgba(242, 241, 235, 0.16);
+  overflow: hidden;
+  border-radius: 1px;
+}
+
+.kf-viewport-host__progress::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 42%;
+  background: var(--kf-brass);
+  animation: kf-indeterminate 1.2s var(--kf-ease-mechanical) infinite;
+}
+
+@keyframes kf-indeterminate {
+  0% {
+    transform: translateX(-110%);
+  }
+  100% {
+    transform: translateX(260%);
+  }
+}
+
+.kf-viewport-host__img {
+  animation: kf-media-settle var(--kf-dur-standard) var(--kf-ease-precision);
+}
+
+/* --- Strict Reduced-Motion Compliance --- */
+@media (prefers-reduced-motion: reduce) {
+  .kf-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .kf-viewport-host__img {
+    animation: none;
+  }
+
+  .kf-viewport-host__canvas-slot {
+    transition: none;
+  }
+
+  .kf-viewport-host__progress::after {
+    animation: none;
+    width: 100%;
+    transform: none;
+    opacity: 0.65;
+  }
+}

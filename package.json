@@ -1,0 +1,39 @@
+{
+  "name": "keyform-frontend-foundation",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "node tests/scripts/serve-dist.mjs",
+    "typecheck": "tsc --noEmit",
+    "verify:assets": "node tests/scripts/verify-assets.mjs",
+    "verify:browser": "node tests/scripts/smoke-production.mjs",
+    "verify:runtime": "node tests/scripts/smoke-runtime.mjs",
+    "verify:mechanics": "node tests/scripts/verify-runtime.mjs",
+    "verify:kf005": "node tests/scripts/verify-kf005.mjs",
+    "verify:kf006a": "node tests/scripts/verify-kf006a.mjs",
+    "verify:kf008b": "node tests/scripts/verify-kf008b.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/manrope": "^5.2.5",
+    "@fontsource/ibm-plex-mono": "^5.2.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@types/three": "0.180.0",
+    "@vitejs/plugin-react": "^4.4.1",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}

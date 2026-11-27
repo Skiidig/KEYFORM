@@ -1,0 +1,1247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://keyform.local/schemas/kf01-production-manifest-1.2.schema.json",
+  "title": "KEYFORM KF-01 Production Delivery Manifest",
+  "description": "Versioned machine-readable product asset contract derived from approved KF-003A-R3 geometry and KF-003B production lookdev.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "asset_version",
+    "generated_at",
+    "product",
+    "source_masters",
+    "units_and_coordinates",
+    "partition_architecture",
+    "assets",
+    "assembly_groups",
+    "keys",
+    "encoder",
+    "hero_switch",
+    "materials",
+    "asset_variants",
+    "legend_atlas",
+    "production_candidates",
+    "runtime_integration"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.2.0"
+    },
+    "asset_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "product": {
+      "type": "object",
+      "required": [
+        "id",
+        "display_name",
+        "category",
+        "layout_name",
+        "layout_revision",
+        "layout_study_source",
+        "key_count",
+        "encoder_count",
+        "assembly_group_count",
+        "pitch_m",
+        "keycap_gap_m",
+        "footprint_m",
+        "keybed_footprint_m",
+        "typing_angle_deg",
+        "relocated_switch_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "layout_name": {
+          "type": "string"
+        },
+        "layout_revision": {
+          "type": "string"
+        },
+        "layout_study_source": {
+          "type": "string"
+        },
+        "key_count": {
+          "type": "integer",
+          "const": 81
+        },
+        "encoder_count": {
+          "type": "integer",
+          "const": 1
+        },
+        "assembly_group_count": {
+          "type": "integer",
+          "const": 9
+        },
+        "pitch_m": {
+          "type": "number"
+        },
+        "keycap_gap_m": {
+          "type": "number"
+        },
+        "footprint_m": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "keybed_footprint_m": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "typing_angle_deg": {
+          "type": "number"
+        },
+        "relocated_switch_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 8,
+          "maxItems": 8
+        }
+      }
+    },
+    "source_masters": {
+      "type": "object",
+      "required": [
+        "geometry_master",
+        "lookdev_master",
+        "layout_manifest",
+        "blender_version",
+        "gltf_exporter_version"
+      ],
+      "properties": {
+        "geometry_master": {
+          "$ref": "#/$defs/fileRef"
+        },
+        "lookdev_master": {
+          "$ref": "#/$defs/fileRef"
+        },
+        "layout_manifest": {
+          "$ref": "#/$defs/fileRef"
+        },
+        "blender_version": {
+          "type": "string"
+        },
+        "gltf_exporter_version": {
+          "type": "string"
+        }
+      }
+    },
+    "units_and_coordinates": {
+      "type": "object",
+      "required": [
+        "units",
+        "runtime_handedness",
+        "runtime_up_axis",
+        "runtime_axes",
+        "source_axes",
+        "blender_to_gltf_position_rule",
+        "blender_to_gltf_matrix_3x3",
+        "conversion_applied_once_by",
+        "runtime_root_scale",
+        "desk_plane_y_m",
+        "root_node",
+        "tilt_pivot_node",
+        "tilt_pivot_transform_gltf"
+      ],
+      "properties": {
+        "units": {
+          "type": "string",
+          "const": "meters"
+        },
+        "runtime_handedness": {
+          "type": "string",
+          "const": "right-handed"
+        },
+        "runtime_up_axis": {
+          "type": "string",
+          "const": "+Y"
+        },
+        "runtime_axes": {
+          "type": "object"
+        },
+        "source_axes": {
+          "type": "object"
+        },
+        "blender_to_gltf_position_rule": {
+          "type": "string"
+        },
+        "blender_to_gltf_matrix_3x3": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "conversion_applied_once_by": {
+          "type": "string"
+        },
+        "runtime_root_scale": {
+          "$ref": "#/$defs/vec3"
+        },
+        "desk_plane_y_m": {
+          "type": "number"
+        },
+        "root_node": {
+          "type": "string"
+        },
+        "tilt_pivot_node": {
+          "type": "string"
+        },
+        "tilt_pivot_transform_gltf": {
+          "type": "object",
+          "required": [
+            "translation_m",
+            "rotation_quat_xyzw",
+            "rotation_euler_deg_xyz",
+            "scale"
+          ],
+          "properties": {
+            "translation_m": {
+              "$ref": "#/$defs/vec3"
+            },
+            "rotation_quat_xyzw": {
+              "$ref": "#/$defs/quat"
+            },
+            "rotation_euler_deg_xyz": {
+              "$ref": "#/$defs/vec3"
+            },
+            "scale": {
+              "$ref": "#/$defs/vec3"
+            }
+          }
+        }
+      }
+    },
+    "partition_architecture": {
+      "type": "object",
+      "required": [
+        "strategy",
+        "zero_geometry_duplication",
+        "partitions",
+        "tradeoffs"
+      ],
+      "properties": {
+        "strategy": {
+          "type": "string"
+        },
+        "zero_geometry_duplication": {
+          "type": "boolean"
+        },
+        "partitions": {
+          "type": "object"
+        },
+        "tradeoffs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "required": [
+        "exterior",
+        "internal",
+        "hero_switch"
+      ],
+      "properties": {
+        "exterior": {
+          "$ref": "#/$defs/glbAsset"
+        },
+        "internal": {
+          "$ref": "#/$defs/glbAsset"
+        },
+        "hero_switch": {
+          "$ref": "#/$defs/glbAsset"
+        }
+      }
+    },
+    "assembly_groups": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "index",
+          "label",
+          "asset_partition",
+          "parent_node",
+          "coordinate_frame",
+          "assembled_offset_gltf_m",
+          "exploded_offset_gltf_m",
+          "interpolation",
+          "motion_keyframes",
+          "clearance_validation",
+          "contents"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^GRP_0[1-9]_"
+          },
+          "index": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9
+          },
+          "label": {
+            "type": "string"
+          },
+          "asset_partition": {
+            "type": "string",
+            "enum": [
+              "exterior",
+              "internal"
+            ]
+          },
+          "parent_node": {
+            "type": "string",
+            "enum": [
+              "KF01_TiltPivot_6p5deg",
+              "KF01_Root"
+            ]
+          },
+          "coordinate_frame": {
+            "type": "string"
+          },
+          "assembled_offset_gltf_m": {
+            "$ref": "#/$defs/vec3"
+          },
+          "exploded_offset_gltf_m": {
+            "$ref": "#/$defs/vec3"
+          },
+          "interpolation": {
+            "type": "string",
+            "enum": [
+              "LINEAR",
+              "PIECEWISE_LINEAR",
+              "STATIC"
+            ]
+          },
+          "motion_keyframes": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "t",
+                "source_frame",
+                "offset_gltf_m"
+              ],
+              "properties": {
+                "t": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "source_frame": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 101
+                },
+                "offset_gltf_m": {
+                  "$ref": "#/$defs/vec3"
+                }
+              }
+            }
+          },
+          "child_motion_overrides": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "node",
+                "parent_node",
+                "interpolation",
+                "motion_keyframes",
+                "note"
+              ],
+              "properties": {
+                "node": {
+                  "type": "string"
+                },
+                "parent_node": {
+                  "type": "string"
+                },
+                "interpolation": {
+                  "type": "string"
+                },
+                "motion_keyframes": {
+                  "type": "array"
+                },
+                "note": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "clearance_validation": {
+            "type": "string"
+          },
+          "contents": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "keys": {
+      "type": "array",
+      "minItems": 81,
+      "maxItems": 81,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "row",
+          "profile",
+          "width_u",
+          "width_m",
+          "depth_m",
+          "labels",
+          "display_label",
+          "dom_code",
+          "semantic_finish_role",
+          "default_material_slot",
+          "assembled_transform_gltf",
+          "press",
+          "geometry_refs",
+          "material_slots"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "row": {
+            "type": "string"
+          },
+          "profile": {
+            "type": "string",
+            "enum": [
+              "R1",
+              "R2",
+              "R3",
+              "R4"
+            ]
+          },
+          "is_convex_space": {
+            "type": "boolean"
+          },
+          "width_u": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "width_m": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "depth_m": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "display_label": {
+            "type": "string"
+          },
+          "dom_code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "semantic_finish_role": {
+            "type": "string",
+            "enum": [
+              "alpha",
+              "modifier",
+              "accent_optional"
+            ]
+          },
+          "default_material_slot": {
+            "type": "string"
+          },
+          "stabilizer_span_m": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "alt_a_offset_m": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "assembled_transform_gltf": {
+            "type": "object",
+            "required": [
+              "parent_group",
+              "local_translation_m",
+              "world_translation_m",
+              "rotation_quat_xyzw"
+            ],
+            "properties": {
+              "parent_group": {
+                "type": "string",
+                "const": "GRP_01_Keycaps"
+              },
+              "local_translation_m": {
+                "$ref": "#/$defs/vec3"
+              },
+              "world_translation_m": {
+                "$ref": "#/$defs/vec3"
+              },
+              "rotation_quat_xyzw": {
+                "$ref": "#/$defs/quat"
+              }
+            }
+          },
+          "press": {
+            "type": "object",
+            "required": [
+              "coordinate_frame",
+              "axis_local_gltf",
+              "travel_min_m",
+              "travel_max_m",
+              "pretravel_nominal_m",
+              "spring_compression_divisor_m",
+              "driven_nodes"
+            ],
+            "properties": {
+              "coordinate_frame": {
+                "type": "string"
+              },
+              "axis_local_gltf": {
+                "$ref": "#/$defs/vec3"
+              },
+              "travel_min_m": {
+                "type": "number"
+              },
+              "travel_max_m": {
+                "type": "number"
+              },
+              "pretravel_nominal_m": {
+                "type": "number"
+              },
+              "spring_compression_divisor_m": {
+                "type": "number"
+              },
+              "driven_nodes": {
+                "type": "object",
+                "required": [
+                  "cap",
+                  "switch_stem",
+                  "switch_spring",
+                  "stabilizer_sliders"
+                ],
+                "properties": {
+                  "cap": {
+                    "type": "string"
+                  },
+                  "switch_stem": {
+                    "type": "string"
+                  },
+                  "switch_spring": {
+                    "type": "string"
+                  },
+                  "stabilizer_sliders": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "geometry_refs": {
+            "type": "object",
+            "required": [
+              "cap_node",
+              "cap_mesh",
+              "mount_node",
+              "mount_mesh",
+              "legend_nodes",
+              "switch_root_node",
+              "switch_part_nodes",
+              "socket_node",
+              "legend_rendering"
+            ],
+            "properties": {
+              "cap_node": {
+                "type": "string"
+              },
+              "cap_mesh": {
+                "type": "string"
+              },
+              "mount_node": {
+                "type": "string"
+              },
+              "mount_mesh": {
+                "type": "string"
+              },
+              "legend_nodes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 0
+              },
+              "switch_root_node": {
+                "type": "string"
+              },
+              "switch_part_nodes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "socket_node": {
+                "type": "string"
+              },
+              "legend_rendering": {
+                "enum": [
+                  "cap_mask",
+                  "blank"
+                ]
+              }
+            }
+          },
+          "material_slots": {
+            "type": "object",
+            "required": [
+              "cap_shell",
+              "cap_mount",
+              "legends"
+            ],
+            "properties": {
+              "cap_shell": {
+                "type": "string"
+              },
+              "cap_mount": {
+                "type": "string"
+              },
+              "legends": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "encoder": {
+      "type": "object",
+      "required": [
+        "id",
+        "knob_node",
+        "knob_mesh",
+        "knob_mark_node",
+        "input_node",
+        "shaft_node",
+        "knob_diameter_m",
+        "knob_height_m",
+        "assembled_transform_gltf",
+        "rotation",
+        "push",
+        "material_slots"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "const": "Encoder"
+        },
+        "knob_node": {
+          "type": "string"
+        },
+        "knob_mesh": {
+          "type": "string"
+        },
+        "knob_mark_node": {
+          "type": "string"
+        },
+        "input_node": {
+          "type": "string"
+        },
+        "shaft_node": {
+          "type": "string"
+        },
+        "knob_diameter_m": {
+          "type": "number"
+        },
+        "knob_height_m": {
+          "type": "number"
+        },
+        "assembled_transform_gltf": {
+          "type": "object",
+          "required": [
+            "keybed_local_translation_m",
+            "world_translation_m",
+            "rotation_quat_xyzw"
+          ],
+          "properties": {
+            "keybed_local_translation_m": {
+              "$ref": "#/$defs/vec3"
+            },
+            "world_translation_m": {
+              "$ref": "#/$defs/vec3"
+            },
+            "rotation_quat_xyzw": {
+              "$ref": "#/$defs/quat"
+            }
+          }
+        },
+        "rotation": {
+          "type": "object",
+          "required": [
+            "axis_local_gltf",
+            "detents_per_revolution",
+            "step_deg",
+            "step_rad",
+            "continuous"
+          ],
+          "properties": {
+            "axis_local_gltf": {
+              "$ref": "#/$defs/vec3"
+            },
+            "detents_per_revolution": {
+              "type": "integer"
+            },
+            "step_deg": {
+              "type": "number"
+            },
+            "step_rad": {
+              "type": "number"
+            },
+            "continuous": {
+              "type": "boolean"
+            }
+          }
+        },
+        "push": {
+          "type": "object",
+          "required": [
+            "axis_local_gltf",
+            "travel_min_m",
+            "travel_max_m"
+          ],
+          "properties": {
+            "axis_local_gltf": {
+              "$ref": "#/$defs/vec3"
+            },
+            "travel_min_m": {
+              "type": "number"
+            },
+            "travel_max_m": {
+              "type": "number"
+            }
+          }
+        },
+        "material_slots": {
+          "type": "object",
+          "required": [
+            "knurl_barrel",
+            "top_face",
+            "reference_mark"
+          ],
+          "properties": {
+            "knurl_barrel": {
+              "type": "string"
+            },
+            "top_face": {
+              "type": "string"
+            },
+            "reference_mark": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "hero_switch": {
+      "type": "object",
+      "required": [
+        "root_node",
+        "asset_key",
+        "pose_note",
+        "distinct_from_installed_switches",
+        "parts",
+        "variants"
+      ],
+      "properties": {
+        "root_node": {
+          "type": "string"
+        },
+        "asset_key": {
+          "type": "string"
+        },
+        "pose_note": {
+          "type": "string"
+        },
+        "distinct_from_installed_switches": {
+          "type": "boolean",
+          "const": true
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "variants": {
+          "type": "object"
+        }
+      }
+    },
+    "materials": {
+      "type": "object",
+      "required": [
+        "default_colorway_policy",
+        "charcoal_pbt_resolution",
+        "enclosure_presets",
+        "slots"
+      ],
+      "properties": {
+        "default_colorway_policy": {
+          "type": "string"
+        },
+        "charcoal_pbt_resolution": {
+          "type": "object"
+        },
+        "enclosure_presets": {
+          "type": "object"
+        },
+        "slots": {
+          "type": "object"
+        }
+      }
+    },
+    "asset_variants": {
+      "type": "object",
+      "required": [
+        "exterior",
+        "internal",
+        "hero_switch"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "exterior": {
+          "type": "object",
+          "required": [
+            "meshopt"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "meshopt": {
+              "$ref": "#/$defs/candidatePayload",
+              "required": [
+                "requires"
+              ]
+            }
+          }
+        },
+        "internal": {
+          "type": "object",
+          "required": [
+            "meshopt"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "meshopt": {
+              "$ref": "#/$defs/candidatePayload",
+              "required": [
+                "requires"
+              ]
+            }
+          }
+        },
+        "hero_switch": {
+          "type": "object",
+          "required": [
+            "uncompressed"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "uncompressed": {
+              "$ref": "#/$defs/candidatePayload",
+              "not": {
+                "required": [
+                  "requires"
+                ]
+              }
+            }
+          }
+        },
+        "encoder_macro": {
+          "type": "object",
+          "required": [
+            "meshopt"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "meshopt": {
+              "$ref": "#/$defs/candidatePayload",
+              "required": [
+                "requires"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "legend_atlas": {
+      "type": "object",
+      "required": [
+        "schema",
+        "canonical_keys",
+        "labeled_keys",
+        "blank_keys",
+        "original_glyph_sources",
+        "tiers"
+      ],
+      "properties": {
+        "schema": {
+          "const": "kf01-legend-mask/1"
+        },
+        "canonical_keys": {
+          "const": 81
+        },
+        "labeled_keys": {
+          "const": 80
+        },
+        "blank_keys": {
+          "const": [
+            "Space"
+          ]
+        },
+        "original_glyph_sources": {
+          "const": 101
+        },
+        "tiers": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "required": [
+              "tier",
+              "resolution",
+              "mapping",
+              "mapping_sha256",
+              "file",
+              "bytes",
+              "sha256",
+              "mapping_bytes"
+            ],
+            "properties": {
+              "tier": {
+                "enum": [
+                  "mobile",
+                  "desktop"
+                ]
+              },
+              "resolution": {
+                "enum": [
+                  1024,
+                  2048
+                ]
+              },
+              "sha256": {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "mapping_sha256": {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "file": {
+                "type": "string",
+                "pattern": "^textures/[a-z0-9_.-]+\\.png$"
+              },
+              "mapping": {
+                "type": "string",
+                "pattern": "^textures/[a-z0-9_.-]+\\.json$"
+              },
+              "mapping_bytes": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "production_candidates": {
+      "type": "object",
+      "required": [
+        "cap_families",
+        "installed_spring",
+        "encoder"
+      ]
+    },
+    "runtime_integration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "milestone",
+        "runtime_baseline",
+        "derived_from_asset_version",
+        "source_manifest_sha256",
+        "url_resolution",
+        "decoder",
+        "fallback",
+        "legend_adapter",
+        "optional_asset_keys"
+      ],
+      "properties": {
+        "milestone": {
+          "type": "string"
+        },
+        "runtime_baseline": {
+          "type": "string"
+        },
+        "derived_from_asset_version": {
+          "type": "string"
+        },
+        "source_manifest_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "url_resolution": {
+          "const": "manifest-relative"
+        },
+        "decoder": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required",
+            "implementation",
+            "three_version"
+          ],
+          "properties": {
+            "required": {
+              "const": "EXT_meshopt_compression"
+            },
+            "implementation": {
+              "const": "three/addons/libs/meshopt_decoder.module.js"
+            },
+            "three_version": {
+              "const": "0.180.0"
+            }
+          }
+        },
+        "fallback": {
+          "const": "static-photography"
+        },
+        "legend_adapter": {
+          "const": "kf01-legend-mask/1"
+        },
+        "macro_asset_key": {
+          "const": "encoder_macro"
+        },
+        "optional_asset_keys": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "const": "encoder_macro"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "vec3": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "quat": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "fileRef": {
+      "type": "object",
+      "required": [
+        "filename",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "glbAsset": {
+      "type": "object",
+      "required": [
+        "filename",
+        "relative_path",
+        "bytes",
+        "sha256",
+        "groups",
+        "node_count",
+        "mesh_count",
+        "primitive_count",
+        "triangle_count",
+        "material_names",
+        "bounds_gltf_m",
+        "dependencies"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string"
+        },
+        "relative_path": {
+          "type": "string",
+          "pattern": "^models/[a-z0-9_.-]+\\.glb$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "node_count": {
+          "type": "integer"
+        },
+        "mesh_count": {
+          "type": "integer"
+        },
+        "primitive_count": {
+          "type": "integer"
+        },
+        "triangle_count": {
+          "type": "integer"
+        },
+        "material_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bounds_gltf_m": {
+          "type": "object",
+          "required": [
+            "min",
+            "max",
+            "size"
+          ],
+          "properties": {
+            "min": {
+              "$ref": "#/$defs/vec3"
+            },
+            "max": {
+              "$ref": "#/$defs/vec3"
+            },
+            "size": {
+              "$ref": "#/$defs/vec3"
+            }
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^models/[a-z0-9_.-]+\\.glb$"
+          }
+        }
+      }
+    },
+    "candidatePayload": {
+      "type": "object",
+      "required": [
+        "filename",
+        "relative_path",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string"
+        },
+        "relative_path": {
+          "type": "string",
+          "pattern": "^models/[a-z0-9_.-]+\\.glb$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "requires": {
+          "const": "EXT_meshopt_compression"
+        }
+      }
+    }
+  }
+}

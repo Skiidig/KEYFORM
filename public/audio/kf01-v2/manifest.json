@@ -1,0 +1,434 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-26T18:26:38.864Z",
+  "sampleRate": 44100,
+  "profileNotes": {
+    "linear-45": "Recorded Cherry MX Red linear board (Corsair K95).",
+    "tactile-58": "Recorded tactile one-shots (StavSounds) with a real Enter-key recording for the stabilized class.",
+    "silent-50": "PROVISIONAL: lubed Gateron Yellow linear recording used as a dampened acoustic interpretation. Not a measured or recorded silent switch."
+  },
+  "banks": {
+    "linear-45|standard|down": [
+      "linear-45/down-01.wav",
+      "linear-45/down-02.wav",
+      "linear-45/down-03.wav",
+      "linear-45/down-04.wav",
+      "linear-45/down-05.wav"
+    ],
+    "linear-45|stabilized|down": [
+      "linear-45/down-01.wav",
+      "linear-45/down-02.wav",
+      "linear-45/down-03.wav",
+      "linear-45/down-04.wav",
+      "linear-45/down-05.wav"
+    ],
+    "linear-45|spacebar|down": [
+      "shared/space-keychron-01.wav"
+    ],
+    "silent-50|standard|down": [
+      "silent-50/down-01.wav",
+      "silent-50/down-02.wav",
+      "silent-50/down-03.wav",
+      "silent-50/down-04.wav",
+      "silent-50/down-05.wav"
+    ],
+    "silent-50|stabilized|down": [
+      "silent-50/down-01.wav",
+      "silent-50/down-02.wav",
+      "silent-50/down-03.wav",
+      "silent-50/down-04.wav",
+      "silent-50/down-05.wav"
+    ],
+    "silent-50|spacebar|down": [
+      "shared/space-keychron-01.wav"
+    ],
+    "tactile-58|standard|down": [
+      "tactile-58/down-01.wav",
+      "tactile-58/down-02.wav",
+      "tactile-58/down-03.wav",
+      "tactile-58/down-04.wav",
+      "tactile-58/down-05.wav"
+    ],
+    "tactile-58|stabilized|down": [
+      "tactile-58/stabilized-enter-01.wav"
+    ],
+    "tactile-58|spacebar|down": [
+      "shared/space-keychron-01.wav"
+    ],
+    "linear-45|standard|up": [
+      "shared/up-foxfire-01.wav"
+    ],
+    "linear-45|stabilized|up": [
+      "shared/up-foxfire-01.wav"
+    ],
+    "linear-45|spacebar|up": [
+      "shared/up-foxfire-01.wav"
+    ],
+    "tactile-58|standard|up": [
+      "shared/up-foxfire-01.wav"
+    ],
+    "tactile-58|stabilized|up": [
+      "shared/up-foxfire-01.wav"
+    ],
+    "tactile-58|spacebar|up": [
+      "shared/up-foxfire-01.wav"
+    ],
+    "silent-50|standard|up": [
+      "shared/up-foxfire-01.wav"
+    ],
+    "silent-50|stabilized|up": [
+      "shared/up-foxfire-01.wav"
+    ],
+    "silent-50|spacebar|up": [
+      "shared/up-foxfire-01.wav"
+    ]
+  },
+  "files": {
+    "linear-45/down-01.wav": {
+      "bytes": 21212,
+      "sha256": "1abacff0bd365cb8efc03e0b1d57d1ae0cc59f9e4434683e937f90d3a05839e1",
+      "durationSec": 0.24,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "handygaber-499773",
+      "sourceUrl": "https://freesound.org/people/handygaber/sounds/499773/",
+      "author": "handygaber",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "499773_3236898-hq.mp3 (Freesound HQ preview)",
+      "recording": "Corsair K95, Cherry MX Red (linear), 24-bit/96 kHz source",
+      "sourceSha256": "0a149a20ad474ddfa5e345d1917072f5f52e51466633de38d9dd2d9b9deba3d4",
+      "modifications": "decoded; 52.013s start; 0.240s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "linear-45/down-02.wav": {
+      "bytes": 21048,
+      "sha256": "b37c06f2a78aeb6e26c9cc22184c4ebf2d9bd85a870e69b3b96e42987400054b",
+      "durationSec": 0.2381,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "handygaber-499773",
+      "sourceUrl": "https://freesound.org/people/handygaber/sounds/499773/",
+      "author": "handygaber",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "499773_3236898-hq.mp3 (Freesound HQ preview)",
+      "recording": "Corsair K95, Cherry MX Red (linear), 24-bit/96 kHz source",
+      "sourceSha256": "0a149a20ad474ddfa5e345d1917072f5f52e51466633de38d9dd2d9b9deba3d4",
+      "modifications": "decoded; 60.702s start; 0.240s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "linear-45/down-03.wav": {
+      "bytes": 21212,
+      "sha256": "f95352dc65a91024117a317f8764f1cadefededf510a12c27a37217aadf1debb",
+      "durationSec": 0.24,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "handygaber-499773",
+      "sourceUrl": "https://freesound.org/people/handygaber/sounds/499773/",
+      "author": "handygaber",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "499773_3236898-hq.mp3 (Freesound HQ preview)",
+      "recording": "Corsair K95, Cherry MX Red (linear), 24-bit/96 kHz source",
+      "sourceSha256": "0a149a20ad474ddfa5e345d1917072f5f52e51466633de38d9dd2d9b9deba3d4",
+      "modifications": "decoded; 65.067s start; 0.240s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "linear-45/down-04.wav": {
+      "bytes": 21108,
+      "sha256": "0743fd4f9cbcf51b31595155ffcd88986ad2df94f9df4c1a0306d5003617d3fa",
+      "durationSec": 0.2388,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "handygaber-499773",
+      "sourceUrl": "https://freesound.org/people/handygaber/sounds/499773/",
+      "author": "handygaber",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "499773_3236898-hq.mp3 (Freesound HQ preview)",
+      "recording": "Corsair K95, Cherry MX Red (linear), 24-bit/96 kHz source",
+      "sourceSha256": "0a149a20ad474ddfa5e345d1917072f5f52e51466633de38d9dd2d9b9deba3d4",
+      "modifications": "decoded; 84.371s start; 0.240s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "linear-45/down-05.wav": {
+      "bytes": 21078,
+      "sha256": "e3a7e944c01c941f1ad170b3d9f6a27b32762d08692eff272397a7f0a56d9fdf",
+      "durationSec": 0.2385,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "handygaber-499773",
+      "sourceUrl": "https://freesound.org/people/handygaber/sounds/499773/",
+      "author": "handygaber",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "499773_3236898-hq.mp3 (Freesound HQ preview)",
+      "recording": "Corsair K95, Cherry MX Red (linear), 24-bit/96 kHz source",
+      "sourceSha256": "0a149a20ad474ddfa5e345d1917072f5f52e51466633de38d9dd2d9b9deba3d4",
+      "modifications": "decoded; 89.037s start; 0.240s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "shared/space-keychron-01.wav": {
+      "bytes": 26174,
+      "sha256": "8e217b39ce4ac3dd8a806ce8d96740342756f53b9d5a002dd1d2c21e202da322",
+      "durationSec": 0.2963,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "sadiquecat-789630",
+      "sourceUrl": "https://freesound.org/people/Sadiquecat/sounds/789630/",
+      "author": "Sadiquecat",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "789630_5287430-hq.mp3 (Freesound HQ preview)",
+      "recording": "Keychron K10 spacebar, linear switches, Zoom H2n",
+      "sourceSha256": "97e355c1035c52edb5ccd2d108da3099c17d12c352bd7532ad6f711709eb833c",
+      "modifications": "decoded; 0.000s start; 0.300s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.85; 44.1 kHz 16-bit PCM WAV"
+    },
+    "silent-50/down-01.wav": {
+      "bytes": 19390,
+      "sha256": "de5f935e7d97334d69af547eff69049e684f0eb8939ed868a9f64e16a194b75e",
+      "durationSec": 0.2193,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "zrrion-665075",
+      "sourceUrl": "https://freesound.org/people/zrrion/sounds/665075/",
+      "author": "zrrion",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "665075_2686637-hq.mp3 (Freesound HQ preview)",
+      "recording": "Technics board, lubed Gateron Yellow (linear), wax + Krytox 205g0",
+      "sourceSha256": "0f70bd54f17941eeb8f2d7cb5b1d1b362c55f25322e0421448a9d04d072e5a16",
+      "modifications": "decoded; 5.553s start; 0.240s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "silent-50/down-02.wav": {
+      "bytes": 19584,
+      "sha256": "5ce66e2b04a6fe1726cf223def948cba8425dc7291bcbcc51cc42f1aabcbc3a1",
+      "durationSec": 0.2215,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "zrrion-665075",
+      "sourceUrl": "https://freesound.org/people/zrrion/sounds/665075/",
+      "author": "zrrion",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "665075_2686637-hq.mp3 (Freesound HQ preview)",
+      "recording": "Technics board, lubed Gateron Yellow (linear), wax + Krytox 205g0",
+      "sourceSha256": "0f70bd54f17941eeb8f2d7cb5b1d1b362c55f25322e0421448a9d04d072e5a16",
+      "modifications": "decoded; 24.646s start; 0.240s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "silent-50/down-03.wav": {
+      "bytes": 18768,
+      "sha256": "76daf886fb1f9488e1666849418c3af2852d1ae290a67f0f21e58f0544116716",
+      "durationSec": 0.2123,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "zrrion-665075",
+      "sourceUrl": "https://freesound.org/people/zrrion/sounds/665075/",
+      "author": "zrrion",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "665075_2686637-hq.mp3 (Freesound HQ preview)",
+      "recording": "Technics board, lubed Gateron Yellow (linear), wax + Krytox 205g0",
+      "sourceSha256": "0f70bd54f17941eeb8f2d7cb5b1d1b362c55f25322e0421448a9d04d072e5a16",
+      "modifications": "decoded; 27.417s start; 0.240s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "silent-50/down-04.wav": {
+      "bytes": 21040,
+      "sha256": "7082af9fcbf3afbc173d300248bddc2641a603f8c7dc1d3fe9076b07aa5fde27",
+      "durationSec": 0.238,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "zrrion-665075",
+      "sourceUrl": "https://freesound.org/people/zrrion/sounds/665075/",
+      "author": "zrrion",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "665075_2686637-hq.mp3 (Freesound HQ preview)",
+      "recording": "Technics board, lubed Gateron Yellow (linear), wax + Krytox 205g0",
+      "sourceSha256": "0f70bd54f17941eeb8f2d7cb5b1d1b362c55f25322e0421448a9d04d072e5a16",
+      "modifications": "decoded; 38.277s start; 0.240s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "silent-50/down-05.wav": {
+      "bytes": 21212,
+      "sha256": "ba0e085c37115018c49923d5983d72fff14de4f25f57d8036ccf45740c2a6807",
+      "durationSec": 0.24,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "zrrion-665075",
+      "sourceUrl": "https://freesound.org/people/zrrion/sounds/665075/",
+      "author": "zrrion",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "665075_2686637-hq.mp3 (Freesound HQ preview)",
+      "recording": "Technics board, lubed Gateron Yellow (linear), wax + Krytox 205g0",
+      "sourceSha256": "0f70bd54f17941eeb8f2d7cb5b1d1b362c55f25322e0421448a9d04d072e5a16",
+      "modifications": "decoded; 42.787s start; 0.240s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "tactile-58/down-01.wav": {
+      "bytes": 12304,
+      "sha256": "c2214d62bedf61da1fc395a69c19a317490f2ae796a7c5d988b441ba0d5f187d",
+      "durationSec": 0.139,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "stavsounds-pack-42151",
+      "sourceUrl": "https://freesound.org/people/StavSounds/packs/42151/",
+      "author": "StavSounds",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "Freesound sounds 766628–766632 (HQ previews)",
+      "recording": "StavSounds mechanical keyboard one-shots (tactile character)",
+      "sourceSha256": "bd0bf47b42eadb6991f8e0ccc849af9a0d55d59d87297ab323348090332f3e73",
+      "modifications": "decoded; 0.000s start; 0.260s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "tactile-58/down-02.wav": {
+      "bytes": 17148,
+      "sha256": "74bec0441d6530c9cd6b06739c64f37ba9360d447ba708c05c068655f1071bcd",
+      "durationSec": 0.1939,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "stavsounds-pack-42151",
+      "sourceUrl": "https://freesound.org/people/StavSounds/packs/42151/",
+      "author": "StavSounds",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "Freesound sounds 766628–766632 (HQ previews)",
+      "recording": "StavSounds mechanical keyboard one-shots (tactile character)",
+      "sourceSha256": "ec4d29b88d66d478e269d15456a9bec695fd8efd03ecbe04ac3c9595733443b2",
+      "modifications": "decoded; 0.000s start; 0.260s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "tactile-58/down-03.wav": {
+      "bytes": 15446,
+      "sha256": "7fac0ebdbf8c6b7d0e7597b29fe49ccfdc6f7d6d07a11178f71eaad717a52eab",
+      "durationSec": 0.1746,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "stavsounds-pack-42151",
+      "sourceUrl": "https://freesound.org/people/StavSounds/packs/42151/",
+      "author": "StavSounds",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "Freesound sounds 766628–766632 (HQ previews)",
+      "recording": "StavSounds mechanical keyboard one-shots (tactile character)",
+      "sourceSha256": "22c487818377e3bb7438e5001bc51b48a69e9a9943127d8054fa47cc9bc868cf",
+      "modifications": "decoded; 0.000s start; 0.260s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "tactile-58/down-04.wav": {
+      "bytes": 13512,
+      "sha256": "563749ca43ffa9554a44b706c5666941bb399f8f09bb552c7bdf259ea7f6c11c",
+      "durationSec": 0.1527,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "stavsounds-pack-42151",
+      "sourceUrl": "https://freesound.org/people/StavSounds/packs/42151/",
+      "author": "StavSounds",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "Freesound sounds 766628–766632 (HQ previews)",
+      "recording": "StavSounds mechanical keyboard one-shots (tactile character)",
+      "sourceSha256": "78fcafd0fb787180d4bc3d3e6be38deb7fe8223ab210efef8ccf1d04b9ff47a6",
+      "modifications": "decoded; 0.000s start; 0.260s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "tactile-58/down-05.wav": {
+      "bytes": 17358,
+      "sha256": "0ae4c085902a28ecc811b3cbdac38b31319db5caf8fb8dad5a7cc26dc72475a4",
+      "durationSec": 0.1963,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "stavsounds-pack-42151",
+      "sourceUrl": "https://freesound.org/people/StavSounds/packs/42151/",
+      "author": "StavSounds",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "Freesound sounds 766628–766632 (HQ previews)",
+      "recording": "StavSounds mechanical keyboard one-shots (tactile character)",
+      "sourceSha256": "0be1fe122b8da67c0ce97ca2b098dc2626513f007341250ea7e6feed0a4a8d92",
+      "modifications": "decoded; 0.000s start; 0.260s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "tactile-58/stabilized-enter-01.wav": {
+      "bytes": 15880,
+      "sha256": "ec6b363adbbce58a7d45c37498f7e7a510f865db70e3832a3298a0545729a5e8",
+      "durationSec": 0.1795,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "alpinemesh-627647",
+      "sourceUrl": "https://freesound.org/people/alpinemesh/sounds/627647/",
+      "author": "alpinemesh",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "627647_enter-key.mp3 (Freesound HQ preview)",
+      "recording": "Corsair K70 RGB, Enter key (stabilized key)",
+      "sourceSha256": "bc86b5849da5b66aae8a4be128c39de4d74370fde9b233e210132dd2c4a9169d",
+      "modifications": "decoded; 0.000s start; 0.183s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.8; 44.1 kHz 16-bit PCM WAV"
+    },
+    "shared/up-foxfire-01.wav": {
+      "bytes": 18126,
+      "sha256": "92510c8a7bd5f8e2ce3d7cbbf9815880ac016017bc198b8f3b7c6294b35487d6",
+      "durationSec": 0.205,
+      "sampleRate": 44100,
+      "channels": 1,
+      "sourceId": "foxfire-570755",
+      "sourceUrl": "https://freesound.org/people/Foxfire-/sounds/570755/",
+      "author": "Foxfire-",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "570755_key-release.mp3 (Freesound HQ preview)",
+      "recording": "Cherry MX Brown key release, dedicated release recording",
+      "sourceSha256": "a66a6563a1f8393e4dbd0cad3cccc14e646839bb1c8074d7685ee1592ee583af",
+      "modifications": "decoded; 0.130s start; 0.205s window; mono downmix; DC removal; 2 ms/20 ms fades; peak 0.35; 44.1 kHz 16-bit PCM WAV"
+    }
+  },
+  "sources": [
+    {
+      "id": "handygaber-499773",
+      "url": "https://freesound.org/people/handygaber/sounds/499773/",
+      "author": "handygaber",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "499773_3236898-hq.mp3 (Freesound HQ preview)",
+      "recording": "Corsair K95, Cherry MX Red (linear), 24-bit/96 kHz source"
+    },
+    {
+      "id": "zrrion-665075",
+      "url": "https://freesound.org/people/zrrion/sounds/665075/",
+      "author": "zrrion",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "665075_2686637-hq.mp3 (Freesound HQ preview)",
+      "recording": "Technics board, lubed Gateron Yellow (linear), wax + Krytox 205g0"
+    },
+    {
+      "id": "stavsounds-pack-42151",
+      "url": "https://freesound.org/people/StavSounds/packs/42151/",
+      "author": "StavSounds",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "Freesound sounds 766628–766632 (HQ previews)",
+      "recording": "StavSounds mechanical keyboard one-shots (tactile character)"
+    },
+    {
+      "id": "alpinemesh-627647",
+      "url": "https://freesound.org/people/alpinemesh/sounds/627647/",
+      "author": "alpinemesh",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "627647_enter-key.mp3 (Freesound HQ preview)",
+      "recording": "Corsair K70 RGB, Enter key (stabilized key)"
+    },
+    {
+      "id": "foxfire-570755",
+      "url": "https://freesound.org/people/Foxfire-/sounds/570755/",
+      "author": "Foxfire-",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "570755_key-release.mp3 (Freesound HQ preview)",
+      "recording": "Cherry MX Brown key release, dedicated release recording"
+    },
+    {
+      "id": "sadiquecat-789630",
+      "url": "https://freesound.org/people/Sadiquecat/sounds/789630/",
+      "author": "Sadiquecat",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original": "789630_5287430-hq.mp3 (Freesound HQ preview)",
+      "recording": "Keychron K10 spacebar, linear switches, Zoom H2n"
+    }
+  ],
+  "payloadBytes": 341600,
+  "payloadFiles": 18
+}

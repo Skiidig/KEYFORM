@@ -1,0 +1,2840 @@
+{
+  "source": "kf01_exterior_baseline.glb",
+  "resolution": 2048,
+  "file": "textures/kf01_legends_b21_2048.png",
+  "fileBytes": 29142,
+  "estimatedR8BytesWithMips": 5592405,
+  "packing": {
+    "grid": 9,
+    "cellPitchPx": 227,
+    "zeroGuardPx": 24,
+    "supersamplesPerAxis": 4,
+    "maxSampleMip": 4
+  },
+  "canonicalKeyCount": 81,
+  "legendMeshCount": 101,
+  "legendTriangleCount": 92907,
+  "keys": {
+    "0": {
+      "labels": [
+        "0",
+        ")"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_0_1",
+        "KF01_Legend_0_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_0_1": 432,
+        "KF01_Legend_0_2": 864
+      },
+      "capNode": "KF01_Cap_0",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.60009765625,
+        0.24951171875,
+        0.0185546875,
+        0.05517578125
+      ],
+      "localBoundsXZ": [
+        -0.005314599851518869,
+        -0.003397300036996603,
+        -0.0030519998274743556,
+        0.0033306001111865044
+      ],
+      "crownMinY": 0.008544853715598584,
+      "maskPixelCount": 785,
+      "textureBoundsPx": [
+        1229,
+        511,
+        38,
+        113
+      ],
+      "blank": false
+    },
+    "1": {
+      "labels": [
+        "1",
+        "!"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_1_1",
+        "KF01_Legend_1_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_1_1": 1062,
+        "KF01_Legend_1_2": 18
+      },
+      "capNode": "KF01_Cap_1",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.603515625,
+        0.138671875,
+        0.01220703125,
+        0.0546875
+      ],
+      "localBoundsXZ": [
+        -0.005125799810886383,
+        -0.0033884501442313195,
+        -0.0036299995720386505,
+        0.003300000111013651
+      ],
+      "crownMinY": 0.008545118211209774,
+      "maskPixelCount": 438,
+      "textureBoundsPx": [
+        1236,
+        284,
+        25,
+        112
+      ],
+      "blank": false
+    },
+    "2": {
+      "labels": [
+        "2",
+        "@"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_2_1",
+        "KF01_Legend_2_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_2_1": 2196,
+        "KF01_Legend_2_2": 783
+      },
+      "capNode": "KF01_Cap_2",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.7060546875,
+        0.13818359375,
+        0.0283203125,
+        0.0556640625
+      ],
+      "localBoundsXZ": [
+        -0.005234399939328432,
+        -0.0035005501829087735,
+        -0.0017560495637357234,
+        0.003300000111013651
+      ],
+      "crownMinY": 0.008545118211209774,
+      "maskPixelCount": 1487,
+      "textureBoundsPx": [
+        1446,
+        283,
+        58,
+        114
+      ],
+      "blank": false
+    },
+    "3": {
+      "labels": [
+        "3",
+        "#"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_3_1",
+        "KF01_Legend_3_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_3_1": 288,
+        "KF01_Legend_3_2": 1305
+      },
+      "capNode": "KF01_Cap_3",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.8212890625,
+        0.1396484375,
+        0.02001953125,
+        0.05322265625
+      ],
+      "localBoundsXZ": [
+        -0.005347049923986196,
+        -0.003170150228217244,
+        -0.0029271998085081577,
+        0.0033306001111865044
+      ],
+      "crownMinY": 0.008544853715598584,
+      "maskPixelCount": 938,
+      "textureBoundsPx": [
+        1682,
+        286,
+        41,
+        109
+      ],
+      "blank": false
+    },
+    "4": {
+      "labels": [
+        "4",
+        "$"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_4_1",
+        "KF01_Legend_4_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_4_1": 1422,
+        "KF01_Legend_4_2": 135
+      },
+      "capNode": "KF01_Cap_4",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.9326171875,
+        0.138671875,
+        0.0185546875,
+        0.0546875
+      ],
+      "localBoundsXZ": [
+        -0.005312599836289882,
+        -0.0033884501442313195,
+        -0.003048599801585078,
+        0.003300000111013651
+      ],
+      "crownMinY": 0.008545118211209774,
+      "maskPixelCount": 988,
+      "textureBoundsPx": [
+        1910,
+        284,
+        38,
+        112
+      ],
+      "blank": false
+    },
+    "5": {
+      "labels": [
+        "5",
+        "%"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_5_1",
+        "KF01_Legend_5_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_5_1": 1746,
+        "KF01_Legend_5_2": 684
+      },
+      "capNode": "KF01_Cap_5",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.044921875,
+        0.24951171875,
+        0.02099609375,
+        0.0546875
+      ],
+      "localBoundsXZ": [
+        -0.005276249850541353,
+        -0.0033884501442313195,
+        -0.0027177495524287223,
+        0.0033306001111865044
+      ],
+      "crownMinY": 0.008544853715598584,
+      "maskPixelCount": 955,
+      "textureBoundsPx": [
+        92,
+        511,
+        43,
+        112
+      ],
+      "blank": false
+    },
+    "6": {
+      "labels": [
+        "6",
+        "^"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_6_1",
+        "KF01_Legend_6_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_6_1": 45,
+        "KF01_Legend_6_2": 1089
+      },
+      "capNode": "KF01_Cap_6",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.1572265625,
+        0.24951171875,
+        0.01806640625,
+        0.0546875
+      ],
+      "localBoundsXZ": [
+        -0.005273299886286258,
+        -0.0033619004659354687,
+        -0.0030689997240900993,
+        0.0033306001111865044
+      ],
+      "crownMinY": 0.008544853715598584,
+      "maskPixelCount": 700,
+      "textureBoundsPx": [
+        322,
+        511,
+        37,
+        112
+      ],
+      "blank": false
+    },
+    "7": {
+      "labels": [
+        "7",
+        "&"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_7_1",
+        "KF01_Legend_7_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_7_1": 1800,
+        "KF01_Legend_7_2": 36
+      },
+      "capNode": "KF01_Cap_7",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.26708984375,
+        0.25,
+        0.02001953125,
+        0.05419921875
+      ],
+      "localBoundsXZ": [
+        -0.005267399957776069,
+        -0.0033235499992966652,
+        -0.0028209996983408927,
+        0.0033306001111865044
+      ],
+      "crownMinY": 0.008544853715598584,
+      "maskPixelCount": 909,
+      "textureBoundsPx": [
+        547,
+        512,
+        41,
+        111
+      ],
+      "blank": false
+    },
+    "8": {
+      "labels": [
+        "8",
+        "*"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_8_1",
+        "KF01_Legend_8_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_8_1": 2034,
+        "KF01_Legend_8_2": 1746
+      },
+      "capNode": "KF01_Cap_8",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.37841796875,
+        0.2490234375,
+        0.0185546875,
+        0.0556640625
+      ],
+      "localBoundsXZ": [
+        -0.005320361478626728,
+        -0.00349170029014349,
+        -0.0030587998792529106,
+        0.0033306001111865044
+      ],
+      "crownMinY": 0.008544853715598584,
+      "maskPixelCount": 837,
+      "textureBoundsPx": [
+        775,
+        510,
+        38,
+        114
+      ],
+      "blank": false
+    },
+    "9": {
+      "labels": [
+        "9",
+        "("
+      ],
+      "sourceNodes": [
+        "KF01_Legend_9_1",
+        "KF01_Legend_9_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_9_1": 432,
+        "KF01_Legend_9_2": 1197
+      },
+      "capNode": "KF01_Cap_9",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.48974609375,
+        0.24951171875,
+        0.017578125,
+        0.05517578125
+      ],
+      "localBoundsXZ": [
+        -0.005227599887549877,
+        -0.003397300036996603,
+        -0.003082599827647209,
+        0.0033306001111865044
+      ],
+      "crownMinY": 0.008544853715598584,
+      "maskPixelCount": 746,
+      "textureBoundsPx": [
+        1003,
+        511,
+        36,
+        113
+      ],
+      "blank": false
+    },
+    "Esc": {
+      "labels": [
+        "Esc"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Esc_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Esc_1": 2142
+      },
+      "capNode": "KF01_Cap_Esc",
+      "family": "MESH_Cap_R1_1u_accent",
+      "uvRect": [
+        0.0390625,
+        0.044921875,
+        0.0322265625,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.0051512500628829,
+        -0.0037572999842464924,
+        -0.0012367999754846096,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.009015749967098237,
+      "maskPixelCount": 718,
+      "textureBoundsPx": [
+        80,
+        92,
+        66,
+        43
+      ],
+      "blank": false
+    },
+    "F1": {
+      "labels": [
+        "F1"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F1_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F1_1": 90
+      },
+      "capNode": "KF01_Cap_F1",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.15576171875,
+        0.044921875,
+        0.02099609375,
+        0.0205078125
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037572999842464924,
+        -0.0026121499124914407,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.009020455940067769,
+      "maskPixelCount": 428,
+      "textureBoundsPx": [
+        319,
+        92,
+        43,
+        42
+      ],
+      "blank": false
+    },
+    "F2": {
+      "labels": [
+        "F2"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F2_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F2_1": 855
+      },
+      "capNode": "KF01_Cap_F2",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.2646484375,
+        0.044921875,
+        0.0244140625,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037811499912291766,
+        -0.0021722497060894966,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.009020455940067769,
+      "maskPixelCount": 551,
+      "textureBoundsPx": [
+        542,
+        92,
+        50,
+        43
+      ],
+      "blank": false
+    },
+    "F3": {
+      "labels": [
+        "F3"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F3_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F3_1": 1377
+      },
+      "capNode": "KF01_Cap_F3",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.3759765625,
+        0.044921875,
+        0.0234375,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037811499912291766,
+        -0.0022835499715059995,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.009015750898420811,
+      "maskPixelCount": 568,
+      "textureBoundsPx": [
+        770,
+        92,
+        48,
+        43
+      ],
+      "blank": false
+    },
+    "F4": {
+      "labels": [
+        "F4"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F4_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F4_1": 207
+      },
+      "capNode": "KF01_Cap_F4",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.486328125,
+        0.044921875,
+        0.0244140625,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037811499912291766,
+        -0.002158999779820442,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.009020455940067769,
+      "maskPixelCount": 574,
+      "textureBoundsPx": [
+        996,
+        92,
+        50,
+        43
+      ],
+      "blank": false
+    },
+    "F5": {
+      "labels": [
+        "F5"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F5_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F5_1": 756
+      },
+      "capNode": "KF01_Cap_F5",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.59765625,
+        0.044921875,
+        0.02392578125,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037572999842464924,
+        -0.0022464498054236173,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.009015750898420811,
+      "maskPixelCount": 543,
+      "textureBoundsPx": [
+        1224,
+        92,
+        49,
+        43
+      ],
+      "blank": false
+    },
+    "F6": {
+      "labels": [
+        "F6"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F6_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F6_1": 1161
+      },
+      "capNode": "KF01_Cap_F6",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.7080078125,
+        0.044921875,
+        0.0244140625,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037811499912291766,
+        -0.0021749000173062086,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.009015749035775662,
+      "maskPixelCount": 585,
+      "textureBoundsPx": [
+        1450,
+        92,
+        50,
+        43
+      ],
+      "blank": false
+    },
+    "F7": {
+      "labels": [
+        "F7"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F7_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F7_1": 108
+      },
+      "capNode": "KF01_Cap_F7",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.81884765625,
+        0.044921875,
+        0.02490234375,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037572999842464924,
+        -0.002108649920299649,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.009015748104453087,
+      "maskPixelCount": 529,
+      "textureBoundsPx": [
+        1677,
+        92,
+        51,
+        43
+      ],
+      "blank": false
+    },
+    "F8": {
+      "labels": [
+        "F8"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F8_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F8_1": 1818
+      },
+      "capNode": "KF01_Cap_F8",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.9296875,
+        0.044921875,
+        0.0244140625,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037811499912291766,
+        -0.0021669497821480035,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.009015750898420811,
+      "maskPixelCount": 698,
+      "textureBoundsPx": [
+        1904,
+        92,
+        50,
+        43
+      ],
+      "blank": false
+    },
+    "F9": {
+      "labels": [
+        "F9"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F9_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F9_1": 1269
+      },
+      "capNode": "KF01_Cap_F9",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.04296875,
+        0.15576171875,
+        0.0244140625,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037811499912291766,
+        -0.0021854998651891946,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.009015750898420811,
+      "maskPixelCount": 596,
+      "textureBoundsPx": [
+        88,
+        319,
+        50,
+        43
+      ],
+      "blank": false
+    },
+    "F10": {
+      "labels": [
+        "F10"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F10_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F10_1": 954
+      },
+      "capNode": "KF01_Cap_F10",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.1484375,
+        0.15576171875,
+        0.03515625,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037811499912291766,
+        -0.0008366500135511159,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.009015749967098237,
+      "maskPixelCount": 800,
+      "textureBoundsPx": [
+        304,
+        319,
+        72,
+        43
+      ],
+      "blank": false
+    },
+    "F11": {
+      "labels": [
+        "F11"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F11_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F11_1": 108
+      },
+      "capNode": "KF01_Cap_F11",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.26123046875,
+        0.15576171875,
+        0.03173828125,
+        0.0205078125
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037572999842464924,
+        -0.0012871498350054025,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.009020455940067769,
+      "maskPixelCount": 588,
+      "textureBoundsPx": [
+        535,
+        319,
+        65,
+        42
+      ],
+      "blank": false
+    },
+    "F12": {
+      "labels": [
+        "F12"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F12_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F12_1": 873
+      },
+      "capNode": "KF01_Cap_F12",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.3701171875,
+        0.15576171875,
+        0.03515625,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037811499912291766,
+        -0.0008472500942647457,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.009020455940067769,
+      "maskPixelCount": 741,
+      "textureBoundsPx": [
+        758,
+        319,
+        72,
+        43
+      ],
+      "blank": false
+    },
+    "Grave": {
+      "labels": [
+        "`",
+        "~"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Grave_1",
+        "KF01_Legend_Grave_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Grave_1": 864,
+        "KF01_Legend_Grave_2": 18
+      },
+      "capNode": "KF01_Cap_Grave",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.4892578125,
+        0.14990234375,
+        0.0185546875,
+        0.0322265625
+      ],
+      "localBoundsXZ": [
+        -0.005276249850541353,
+        -0.002367750171944499,
+        -0.002997999881953001,
+        0.0015762000236660243
+      ],
+      "crownMinY": 0.008633053688704968,
+      "maskPixelCount": 197,
+      "textureBoundsPx": [
+        1002,
+        307,
+        38,
+        66
+      ],
+      "blank": false
+    },
+    "Minus": {
+      "labels": [
+        "-",
+        "_"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Minus_1",
+        "KF01_Legend_Minus_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Minus_1": 18,
+        "KF01_Legend_Minus_2": 18
+      },
+      "capNode": "KF01_Cap_Minus",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.71142578125,
+        0.26123046875,
+        0.01806640625,
+        0.03125
+      ],
+      "localBoundsXZ": [
+        -0.005367699673771858,
+        -0.0011287500508129597,
+        -0.0031572998143732547,
+        0.0027084000300616026
+      ],
+      "crownMinY": 0.008563180281221867,
+      "maskPixelCount": 198,
+      "textureBoundsPx": [
+        1457,
+        535,
+        37,
+        64
+      ],
+      "blank": false
+    },
+    "Equal": {
+      "labels": [
+        "=",
+        "+"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Equal_1",
+        "KF01_Legend_Equal_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Equal_1": 90,
+        "KF01_Legend_Equal_2": 36
+      },
+      "capNode": "KF01_Cap_Equal",
+      "family": "MESH_Cap_R1_1u_alpha",
+      "uvRect": [
+        0.82177734375,
+        0.25390625,
+        0.01904296875,
+        0.04638671875
+      ],
+      "localBoundsXZ": [
+        -0.005184800027310848,
+        -0.003087550297752023,
+        -0.002854799722880125,
+        0.002609800210595131
+      ],
+      "crownMinY": 0.008566693229973317,
+      "maskPixelCount": 528,
+      "textureBoundsPx": [
+        1683,
+        520,
+        39,
+        95
+      ],
+      "blank": false
+    },
+    "Backspace": {
+      "labels": [
+        "Backspace"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Backspace_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Backspace_1": 8667
+      },
+      "capNode": "KF01_Cap_Backspace",
+      "family": "MESH_Cap_R1_2u_modifier",
+      "uvRect": [
+        0.8984375,
+        0.26416015625,
+        0.08740234375,
+        0.025390625
+      ],
+      "localBoundsXZ": [
+        -0.014676250180602073,
+        -0.0037572999842464924,
+        -0.003302050159871578,
+        -0.0006404999751597642
+      ],
+      "crownMinY": 0.008911692364513875,
+      "maskPixelCount": 2192,
+      "textureBoundsPx": [
+        1840,
+        541,
+        179,
+        52
+      ],
+      "blank": false
+    },
+    "Delete": {
+      "labels": [
+        "Del"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Delete_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Delete_1": 1395
+      },
+      "capNode": "KF01_Cap_Delete",
+      "family": "MESH_Cap_R1_1u_modifier",
+      "uvRect": [
+        0.0380859375,
+        0.37744140625,
+        0.0341796875,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037572999842464924,
+        -0.0009850497465580701,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.009015747173130513,
+      "maskPixelCount": 822,
+      "textureBoundsPx": [
+        78,
+        773,
+        70,
+        43
+      ],
+      "blank": false
+    },
+    "Tab": {
+      "labels": [
+        "Tab"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Tab_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Tab_1": 2520
+      },
+      "capNode": "KF01_Cap_Tab",
+      "family": "MESH_Cap_R2_1.5u_modifier",
+      "uvRect": [
+        0.14697265625,
+        0.37744140625,
+        0.0380859375,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.010067450477182865,
+        -0.0037572999842464924,
+        -0.005445450415462256,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.00849281141012907,
+      "maskPixelCount": 759,
+      "textureBoundsPx": [
+        301,
+        773,
+        78,
+        43
+      ],
+      "blank": false
+    },
+    "Q": {
+      "labels": [
+        "Q"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Q_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Q_1": 1125
+      },
+      "capNode": "KF01_Cap_Q",
+      "family": "MESH_Cap_R2_1u_alpha",
+      "uvRect": [
+        0.26318359375,
+        0.37255859375,
+        0.02783203125,
+        0.03076171875
+      ],
+      "localBoundsXZ": [
+        -0.005185749976336956,
+        -0.0044721501305699345,
+        -0.0018029996301978826,
+        -0.0007426498798653483
+      ],
+      "crownMinY": 0.008443877859413624,
+      "maskPixelCount": 935,
+      "textureBoundsPx": [
+        539,
+        763,
+        57,
+        63
+      ],
+      "blank": false
+    },
+    "W": {
+      "labels": [
+        "W"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_W_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_W_1": 99
+      },
+      "capNode": "KF01_Cap_W",
+      "family": "MESH_Cap_R2_1u_alpha",
+      "uvRect": [
+        0.36962890625,
+        0.37451171875,
+        0.03662109375,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005349999888241291,
+        -0.00443930005505681,
+        -0.0008503497686237096,
+        -0.0012280999092385172
+      ],
+      "crownMinY": 0.008493042378127575,
+      "maskPixelCount": 969,
+      "textureBoundsPx": [
+        757,
+        767,
+        75,
+        54
+      ],
+      "blank": false
+    },
+    "E": {
+      "labels": [
+        "E"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_E_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_E_1": 90
+      },
+      "capNode": "KF01_Cap_E",
+      "family": "MESH_Cap_R2_1u_alpha",
+      "uvRect": [
+        0.48974609375,
+        0.37451171875,
+        0.017578125,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005076249724626541,
+        -0.00443930005505681,
+        -0.0029308496616780757,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.008495657531917096,
+      "maskPixelCount": 618,
+      "textureBoundsPx": [
+        1003,
+        767,
+        36,
+        54
+      ],
+      "blank": false
+    },
+    "R": {
+      "labels": [
+        "R"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_R_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_R_1": 846
+      },
+      "capNode": "KF01_Cap_R",
+      "family": "MESH_Cap_R2_1u_alpha",
+      "uvRect": [
+        0.5986328125,
+        0.37451171875,
+        0.021484375,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005068950018286705,
+        -0.00443930005505681,
+        -0.002445399632304907,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.008495657531917096,
+      "maskPixelCount": 711,
+      "textureBoundsPx": [
+        1226,
+        767,
+        44,
+        54
+      ],
+      "blank": false
+    },
+    "T": {
+      "labels": [
+        "T"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_T_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_T_1": 54
+      },
+      "capNode": "KF01_Cap_T",
+      "family": "MESH_Cap_R2_1u_alpha",
+      "uvRect": [
+        0.708984375,
+        0.37451171875,
+        0.02294921875,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005287950056046247,
+        -0.00443930005505681,
+        -0.002507449697330594,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.008495657531917096,
+      "maskPixelCount": 462,
+      "textureBoundsPx": [
+        1452,
+        767,
+        47,
+        54
+      ],
+      "blank": false
+    },
+    "Y": {
+      "labels": [
+        "Y"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Y_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Y_1": 63
+      },
+      "capNode": "KF01_Cap_Y",
+      "family": "MESH_Cap_R2_1u_alpha",
+      "uvRect": [
+        0.8193359375,
+        0.37451171875,
+        0.02392578125,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005349999888241291,
+        -0.00443930005505681,
+        -0.002445399632304907,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.008495657531917096,
+      "maskPixelCount": 463,
+      "textureBoundsPx": [
+        1678,
+        767,
+        49,
+        54
+      ],
+      "blank": false
+    },
+    "U": {
+      "labels": [
+        "U"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_U_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_U_1": 684
+      },
+      "capNode": "KF01_Cap_U",
+      "family": "MESH_Cap_R2_1u_alpha",
+      "uvRect": [
+        0.93017578125,
+        0.37451171875,
+        0.0234375,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.00512734999731183,
+        -0.00443930005505681,
+        -0.0022847998064011335,
+        -0.0012171500004827976
+      ],
+      "crownMinY": 0.008491738526523114,
+      "maskPixelCount": 626,
+      "textureBoundsPx": [
+        1905,
+        767,
+        48,
+        54
+      ],
+      "blank": false
+    },
+    "I": {
+      "labels": [
+        "I"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_I_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_I_1": 18
+      },
+      "capNode": "KF01_Cap_I",
+      "family": "MESH_Cap_R2_1u_alpha",
+      "uvRect": [
+        0.05078125,
+        0.4853515625,
+        0.0087890625,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005072599871456623,
+        -0.00443930005505681,
+        -0.004014899825304747,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.008495657531917096,
+      "maskPixelCount": 252,
+      "textureBoundsPx": [
+        104,
+        994,
+        18,
+        54
+      ],
+      "blank": false
+    },
+    "O": {
+      "labels": [
+        "O"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_O_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_O_1": 864
+      },
+      "capNode": "KF01_Cap_O",
+      "family": "MESH_Cap_R2_1u_alpha",
+      "uvRect": [
+        0.15234375,
+        0.4853515625,
+        0.02783203125,
+        0.02685546875
+      ],
+      "localBoundsXZ": [
+        -0.005185749976336956,
+        -0.0044721501305699345,
+        -0.0018102995693683624,
+        -0.0012171500004827976
+      ],
+      "crownMinY": 0.008491736663877964,
+      "maskPixelCount": 822,
+      "textureBoundsPx": [
+        312,
+        994,
+        57,
+        55
+      ],
+      "blank": false
+    },
+    "P": {
+      "labels": [
+        "P"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_P_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_P_1": 504
+      },
+      "capNode": "KF01_Cap_P",
+      "family": "MESH_Cap_R2_1u_alpha",
+      "uvRect": [
+        0.267578125,
+        0.4853515625,
+        0.0185546875,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005094499921798706,
+        -0.00443930005505681,
+        -0.0028249997287988662,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.008495657531917096,
+      "maskPixelCount": 584,
+      "textureBoundsPx": [
+        548,
+        994,
+        38,
+        54
+      ],
+      "blank": false
+    },
+    "LBracket": {
+      "labels": [
+        "[",
+        "{"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_LBracket_1",
+        "KF01_Legend_LBracket_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_LBracket_1": 945,
+        "KF01_Legend_LBracket_2": 54
+      },
+      "capNode": "KF01_Cap_LBracket",
+      "family": "MESH_Cap_R2_1u_alpha",
+      "uvRect": [
+        0.380859375,
+        0.4677734375,
+        0.01416015625,
+        0.0615234375
+      ],
+      "localBoundsXZ": [
+        -0.005267399957776069,
+        -0.003497600218653679,
+        -0.0035653997786343097,
+        0.004051400244608521
+      ],
+      "crownMinY": 0.008328701196610928,
+      "maskPixelCount": 673,
+      "textureBoundsPx": [
+        780,
+        958,
+        29,
+        126
+      ],
+      "blank": false
+    },
+    "RBracket": {
+      "labels": [
+        "]",
+        "}"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_RBracket_1",
+        "KF01_Legend_RBracket_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_RBracket_1": 945,
+        "KF01_Legend_RBracket_2": 54
+      },
+      "capNode": "KF01_Cap_RBracket",
+      "family": "MESH_Cap_R2_1u_alpha",
+      "uvRect": [
+        0.4921875,
+        0.4677734375,
+        0.0126953125,
+        0.0615234375
+      ],
+      "localBoundsXZ": [
+        -0.0053023999914526936,
+        -0.003497600218653679,
+        -0.003750250080227852,
+        0.004051400244608521
+      ],
+      "crownMinY": 0.008328701196610928,
+      "maskPixelCount": 722,
+      "textureBoundsPx": [
+        1008,
+        958,
+        26,
+        126
+      ],
+      "blank": false
+    },
+    "Backslash": {
+      "labels": [
+        "\\",
+        "|"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Backslash_1",
+        "KF01_Legend_Backslash_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Backslash_1": 18,
+        "KF01_Legend_Backslash_2": 18
+      },
+      "capNode": "KF01_Cap_Backslash",
+      "family": "MESH_Cap_R2_1.5u_alpha",
+      "uvRect": [
+        0.60302734375,
+        0.47119140625,
+        0.01318359375,
+        0.0546875
+      ],
+      "localBoundsXZ": [
+        -0.010085300205647945,
+        -0.0033619004659354687,
+        -0.008480900304019452,
+        0.0033306001111865044
+      ],
+      "crownMinY": 0.008326756595075131,
+      "maskPixelCount": 385,
+      "textureBoundsPx": [
+        1235,
+        965,
+        27,
+        112
+      ],
+      "blank": false
+    },
+    "PgUp": {
+      "labels": [
+        "PgUp"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_PgUp_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_PgUp_1": 4212
+      },
+      "capNode": "KF01_Cap_PgUp",
+      "family": "MESH_Cap_R2_1u_modifier",
+      "uvRect": [
+        0.6953125,
+        0.48583984375,
+        0.0498046875,
+        0.025390625
+      ],
+      "localBoundsXZ": [
+        -0.005164499989151954,
+        -0.0037572999842464924,
+        0.0009388496525585652,
+        -0.0006404999751597642
+      ],
+      "crownMinY": 0.008434436111152173,
+      "maskPixelCount": 1338,
+      "textureBoundsPx": [
+        1424,
+        995,
+        102,
+        52
+      ],
+      "blank": false
+    },
+    "Caps": {
+      "labels": [
+        "Caps"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Caps_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Caps_1": 4320
+      },
+      "capNode": "KF01_Cap_Caps",
+      "family": "MESH_Cap_R3_1.75u_modifier",
+      "uvRect": [
+        0.8076171875,
+        0.48583984375,
+        0.04736328125,
+        0.02587890625
+      ],
+      "localBoundsXZ": [
+        -0.012366549706459045,
+        -0.0037811499912291766,
+        -0.006546750070154667,
+        -0.0006404999751597642
+      ],
+      "crownMinY": 0.00811509863883257,
+      "maskPixelCount": 1085,
+      "textureBoundsPx": [
+        1654,
+        995,
+        97,
+        53
+      ],
+      "blank": false
+    },
+    "A": {
+      "labels": [
+        "A"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_A_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_A_1": 99
+      },
+      "capNode": "KF01_Cap_A",
+      "family": "MESH_Cap_R3_1u_alpha",
+      "uvRect": [
+        0.92919921875,
+        0.4853515625,
+        0.02587890625,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005349999888241291,
+        -0.004453900399059057,
+        -0.002215449569374323,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.008133656172454358,
+      "maskPixelCount": 655,
+      "textureBoundsPx": [
+        1903,
+        994,
+        53,
+        54
+      ],
+      "blank": false
+    },
+    "S": {
+      "labels": [
+        "S"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_S_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_S_1": 1080
+      },
+      "capNode": "KF01_Cap_S",
+      "family": "MESH_Cap_R3_1u_alpha",
+      "uvRect": [
+        0.04638671875,
+        0.59619140625,
+        0.017578125,
+        0.02685546875
+      ],
+      "localBoundsXZ": [
+        -0.005203999707847833,
+        -0.0044721501305699345,
+        -0.0030950995735824108,
+        -0.0012171500004827976
+      ],
+      "crownMinY": 0.008132033808529377,
+      "maskPixelCount": 541,
+      "textureBoundsPx": [
+        95,
+        1221,
+        36,
+        55
+      ],
+      "blank": false
+    },
+    "D": {
+      "labels": [
+        "D"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_D_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_D_1": 486
+      },
+      "capNode": "KF01_Cap_D",
+      "family": "MESH_Cap_R3_1u_alpha",
+      "uvRect": [
+        0.15380859375,
+        0.59619140625,
+        0.0244140625,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005072599871456623,
+        -0.00443930005505681,
+        -0.0020803996469825506,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.008133656172454358,
+      "maskPixelCount": 810,
+      "textureBoundsPx": [
+        315,
+        1221,
+        50,
+        54
+      ],
+      "blank": false
+    },
+    "F": {
+      "labels": [
+        "F"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_F_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_F_1": 72
+      },
+      "capNode": "KF01_Cap_F",
+      "family": "MESH_Cap_R3_1u_alpha",
+      "uvRect": [
+        0.2685546875,
+        0.59619140625,
+        0.0166015625,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005072599871456623,
+        -0.00443930005505681,
+        -0.0030439997665584087,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.008133656172454358,
+      "maskPixelCount": 498,
+      "textureBoundsPx": [
+        550,
+        1221,
+        34,
+        54
+      ],
+      "blank": false
+    },
+    "G": {
+      "labels": [
+        "G"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_G_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_G_1": 900
+      },
+      "capNode": "KF01_Cap_G",
+      "family": "MESH_Cap_R3_1u_alpha",
+      "uvRect": [
+        0.37548828125,
+        0.59619140625,
+        0.0244140625,
+        0.02685546875
+      ],
+      "localBoundsXZ": [
+        -0.005167499779164791,
+        -0.0044721501305699345,
+        -0.0021935497518628835,
+        -0.0012171500004827976
+      ],
+      "crownMinY": 0.008132035671174527,
+      "maskPixelCount": 753,
+      "textureBoundsPx": [
+        769,
+        1221,
+        50,
+        55
+      ],
+      "blank": false
+    },
+    "H": {
+      "labels": [
+        "H"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_H_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_H_1": 90
+      },
+      "capNode": "KF01_Cap_H",
+      "family": "MESH_Cap_R3_1u_alpha",
+      "uvRect": [
+        0.4873046875,
+        0.59619140625,
+        0.02294921875,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005076249724626541,
+        -0.00443930005505681,
+        -0.0022665496092289686,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.008133656172454358,
+      "maskPixelCount": 726,
+      "textureBoundsPx": [
+        998,
+        1221,
+        47,
+        54
+      ],
+      "blank": false
+    },
+    "J": {
+      "labels": [
+        "J"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_J_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_J_1": 351
+      },
+      "capNode": "KF01_Cap_J",
+      "family": "MESH_Cap_R3_1u_alpha",
+      "uvRect": [
+        0.60302734375,
+        0.5927734375,
+        0.01318359375,
+        0.033203125
+      ],
+      "localBoundsXZ": [
+        -0.0055763000980019566,
+        -0.00443930005505681,
+        -0.004014899825304747,
+        -0.00041049991184845567
+      ],
+      "crownMinY": 0.0081099391117692,
+      "maskPixelCount": 425,
+      "textureBoundsPx": [
+        1235,
+        1214,
+        27,
+        68
+      ],
+      "blank": false
+    },
+    "K": {
+      "labels": [
+        "K"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_K_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_K_1": 81
+      },
+      "capNode": "KF01_Cap_K",
+      "family": "MESH_Cap_R3_1u_alpha",
+      "uvRect": [
+        0.708984375,
+        0.59619140625,
+        0.02294921875,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005076249724626541,
+        -0.00443930005505681,
+        -0.002259249670058489,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.008133656172454358,
+      "maskPixelCount": 680,
+      "textureBoundsPx": [
+        1452,
+        1221,
+        47,
+        54
+      ],
+      "blank": false
+    },
+    "L": {
+      "labels": [
+        "L"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_L_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_L_1": 36
+      },
+      "capNode": "KF01_Cap_L",
+      "family": "MESH_Cap_R3_1u_alpha",
+      "uvRect": [
+        0.822265625,
+        0.59619140625,
+        0.01806640625,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005079900043457746,
+        -0.00443930005505681,
+        -0.002897999818995595,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.008133654309809208,
+      "maskPixelCount": 366,
+      "textureBoundsPx": [
+        1684,
+        1221,
+        37,
+        54
+      ],
+      "blank": false
+    },
+    "Semicolon": {
+      "labels": [
+        ";",
+        ":"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Semicolon_1",
+        "KF01_Legend_Semicolon_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Semicolon_1": 828,
+        "KF01_Legend_Semicolon_2": 945
+      },
+      "capNode": "KF01_Cap_Semicolon",
+      "family": "MESH_Cap_R3_1u_alpha",
+      "uvRect": [
+        0.93701171875,
+        0.58349609375,
+        0.009765625,
+        0.05224609375
+      ],
+      "localBoundsXZ": [
+        -0.0052054497770965096,
+        -0.002701100090891123,
+        -0.004054999781399966,
+        0.003691000061482191
+      ],
+      "crownMinY": 0.008114714933931828,
+      "maskPixelCount": 206,
+      "textureBoundsPx": [
+        1919,
+        1195,
+        20,
+        107
+      ],
+      "blank": false
+    },
+    "Quote": {
+      "labels": [
+        "'",
+        "\""
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Quote_1",
+        "KF01_Legend_Quote_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Quote_1": 72,
+        "KF01_Legend_Quote_2": 36
+      },
+      "capNode": "KF01_Cap_Quote",
+      "family": "MESH_Cap_R3_1u_alpha",
+      "uvRect": [
+        0.04931640625,
+        0.69921875,
+        0.01220703125,
+        0.04248046875
+      ],
+      "localBoundsXZ": [
+        -0.005208399741351604,
+        -0.0034622001819312573,
+        -0.00374729965031147,
+        0.0017292000245302916
+      ],
+      "crownMinY": 0.008128228424489499,
+      "maskPixelCount": 210,
+      "textureBoundsPx": [
+        101,
+        1432,
+        25,
+        87
+      ],
+      "blank": false
+    },
+    "Enter": {
+      "labels": [
+        "Enter"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Enter_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Enter_1": 2457
+      },
+      "capNode": "KF01_Cap_Enter",
+      "family": "MESH_Cap_R3_2.25u_modifier",
+      "uvRect": [
+        0.14013671875,
+        0.7099609375,
+        0.0517578125,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.01705750044286251,
+        -0.0037572999842464924,
+        -0.010702399873733521,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.008132478980720044,
+      "maskPixelCount": 1151,
+      "textureBoundsPx": [
+        287,
+        1454,
+        106,
+        43
+      ],
+      "blank": false
+    },
+    "PgDn": {
+      "labels": [
+        "PgDn"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_PgDn_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_PgDn_1": 3807
+      },
+      "capNode": "KF01_Cap_PgDn",
+      "family": "MESH_Cap_R3_1u_modifier",
+      "uvRect": [
+        0.251953125,
+        0.70751953125,
+        0.05029296875,
+        0.025390625
+      ],
+      "localBoundsXZ": [
+        -0.005164499989151954,
+        -0.0037572999842464924,
+        0.0009838995881378651,
+        -0.0006404999751597642
+      ],
+      "crownMinY": 0.008115100501477719,
+      "maskPixelCount": 1349,
+      "textureBoundsPx": [
+        516,
+        1449,
+        103,
+        52
+      ],
+      "blank": false
+    },
+    "LShift": {
+      "labels": [
+        "Shift"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_LShift_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_LShift_1": 3033
+      },
+      "capNode": "KF01_Cap_LShift",
+      "family": "MESH_Cap_R4_2.25u_modifier",
+      "uvRect": [
+        0.3662109375,
+        0.7099609375,
+        0.04296875,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.017150250858068466,
+        -0.0037822296269237996,
+        -0.011894900688529015,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.007331249131262303,
+      "maskPixelCount": 1040,
+      "textureBoundsPx": [
+        750,
+        1454,
+        88,
+        43
+      ],
+      "blank": false
+    },
+    "Z": {
+      "labels": [
+        "Z"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Z_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Z_1": 54
+      },
+      "capNode": "KF01_Cap_Z",
+      "family": "MESH_Cap_R4_1u_alpha",
+      "uvRect": [
+        0.486328125,
+        0.70703125,
+        0.0244140625,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005291599909216165,
+        -0.00443930005505681,
+        -0.002346849638596177,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.007332323877513409,
+      "maskPixelCount": 688,
+      "textureBoundsPx": [
+        996,
+        1448,
+        50,
+        54
+      ],
+      "blank": false
+    },
+    "X": {
+      "labels": [
+        "X"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_X_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_X_1": 90
+      },
+      "capNode": "KF01_Cap_X",
+      "family": "MESH_Cap_R4_1u_alpha",
+      "uvRect": [
+        0.59619140625,
+        0.70703125,
+        0.02685546875,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005342699716240167,
+        -0.00443930005505681,
+        -0.002073099707812071,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.007331433533132077,
+      "maskPixelCount": 677,
+      "textureBoundsPx": [
+        1221,
+        1448,
+        55,
+        54
+      ],
+      "blank": false
+    },
+    "C": {
+      "labels": [
+        "C"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_C_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_C_1": 864
+      },
+      "capNode": "KF01_Cap_C",
+      "family": "MESH_Cap_R4_1u_alpha",
+      "uvRect": [
+        0.7080078125,
+        0.70703125,
+        0.0244140625,
+        0.02685546875
+      ],
+      "localBoundsXZ": [
+        -0.005174799951165914,
+        -0.0044721501305699345,
+        -0.002230049680545926,
+        -0.0012171500004827976
+      ],
+      "crownMinY": 0.007331275208294392,
+      "maskPixelCount": 615,
+      "textureBoundsPx": [
+        1450,
+        1448,
+        50,
+        55
+      ],
+      "blank": false
+    },
+    "V": {
+      "labels": [
+        "V"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_V_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_V_1": 45
+      },
+      "capNode": "KF01_Cap_V",
+      "family": "MESH_Cap_R4_1u_alpha",
+      "uvRect": [
+        0.8193359375,
+        0.70703125,
+        0.02392578125,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005349999888241291,
+        -0.00443930005505681,
+        -0.002445399632304907,
+        -0.0012280999092385172
+      ],
+      "crownMinY": 0.007332180453836918,
+      "maskPixelCount": 515,
+      "textureBoundsPx": [
+        1678,
+        1448,
+        49,
+        54
+      ],
+      "blank": false
+    },
+    "B": {
+      "labels": [
+        "B"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_B_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_B_1": 972
+      },
+      "capNode": "KF01_Cap_B",
+      "family": "MESH_Cap_R4_1u_alpha",
+      "uvRect": [
+        0.93212890625,
+        0.70703125,
+        0.02001953125,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005076249724626541,
+        -0.00443930005505681,
+        -0.002668049756065011,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.007331252856552601,
+      "maskPixelCount": 764,
+      "textureBoundsPx": [
+        1909,
+        1448,
+        41,
+        54
+      ],
+      "blank": false
+    },
+    "N": {
+      "labels": [
+        "N"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_N_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_N_1": 72
+      },
+      "capNode": "KF01_Cap_N",
+      "family": "MESH_Cap_R4_1u_alpha",
+      "uvRect": [
+        0.04296875,
+        0.81787109375,
+        0.02490234375,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005079900043457746,
+        -0.00443930005505681,
+        -0.002073099707812071,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.007331416769325734,
+      "maskPixelCount": 786,
+      "textureBoundsPx": [
+        88,
+        1675,
+        51,
+        54
+      ],
+      "blank": false
+    },
+    "M": {
+      "labels": [
+        "M"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_M_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_M_1": 117
+      },
+      "capNode": "KF01_Cap_M",
+      "family": "MESH_Cap_R4_1u_alpha",
+      "uvRect": [
+        0.15380859375,
+        0.81787109375,
+        0.02490234375,
+        0.0263671875
+      ],
+      "localBoundsXZ": [
+        -0.005083549896627664,
+        -0.00443930005505681,
+        -0.0020621496826410293,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.00733178929835558,
+      "maskPixelCount": 789,
+      "textureBoundsPx": [
+        315,
+        1675,
+        51,
+        54
+      ],
+      "blank": false
+    },
+    "Comma": {
+      "labels": [
+        ",",
+        "<"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Comma_1",
+        "KF01_Legend_Comma_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Comma_1": 45,
+        "KF01_Legend_Comma_2": 531
+      },
+      "capNode": "KF01_Cap_Comma",
+      "family": "MESH_Cap_R4_1u_alpha",
+      "uvRect": [
+        0.26806640625,
+        0.80322265625,
+        0.017578125,
+        0.0556640625
+      ],
+      "localBoundsXZ": [
+        -0.0051936000943183895,
+        -0.0031111502446234227,
+        -0.003089449705183506,
+        0.0037012001391500235
+      ],
+      "crownMinY": 0.007331664501130581,
+      "maskPixelCount": 316,
+      "textureBoundsPx": [
+        549,
+        1645,
+        36,
+        114
+      ],
+      "blank": false
+    },
+    "Period": {
+      "labels": [
+        ".",
+        ">"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Period_1",
+        "KF01_Legend_Period_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Period_1": 45,
+        "KF01_Legend_Period_2": 414
+      },
+      "capNode": "KF01_Cap_Period",
+      "family": "MESH_Cap_R4_1u_alpha",
+      "uvRect": [
+        0.37939453125,
+        0.8046875,
+        0.01708984375,
+        0.052734375
+      ],
+      "localBoundsXZ": [
+        -0.005187749991565942,
+        -0.0031111502446234227,
+        -0.003089449705183506,
+        0.0033306001111865044
+      ],
+      "crownMinY": 0.007331662638485432,
+      "maskPixelCount": 287,
+      "textureBoundsPx": [
+        777,
+        1648,
+        35,
+        108
+      ],
+      "blank": false
+    },
+    "Slash": {
+      "labels": [
+        "/",
+        "?"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Slash_1",
+        "KF01_Legend_Slash_2"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Slash_1": 1053,
+        "KF01_Legend_Slash_2": 18
+      },
+      "capNode": "KF01_Cap_Slash",
+      "family": "MESH_Cap_R4_1u_alpha",
+      "uvRect": [
+        0.4921875,
+        0.8037109375,
+        0.01318359375,
+        0.0546875
+      ],
+      "localBoundsXZ": [
+        -0.005322799681127071,
+        -0.0033884501442313195,
+        -0.003718399779498577,
+        0.0033306001111865044
+      ],
+      "crownMinY": 0.007331239818036557,
+      "maskPixelCount": 396,
+      "textureBoundsPx": [
+        1008,
+        1646,
+        27,
+        112
+      ],
+      "blank": false
+    },
+    "RShift": {
+      "labels": [
+        "Shift"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_RShift_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_RShift_1": 3033
+      },
+      "capNode": "KF01_Cap_RShift",
+      "family": "MESH_Cap_R4_1.75u_modifier",
+      "uvRect": [
+        0.587890625,
+        0.82080078125,
+        0.04296875,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.012387749402225017,
+        -0.0037822296269237996,
+        -0.007132399698346854,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.007331249131262303,
+      "maskPixelCount": 1040,
+      "textureBoundsPx": [
+        1204,
+        1681,
+        88,
+        43
+      ],
+      "blank": false
+    },
+    "Up": {
+      "labels": [
+        "↑"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Up"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Up": 288
+      },
+      "capNode": "KF01_Cap_Up",
+      "family": "MESH_Cap_R4_1u_modifier",
+      "uvRect": [
+        0.70947265625,
+        0.81640625,
+        0.02197265625,
+        0.029296875
+      ],
+      "localBoundsXZ": [
+        -0.0013300000116229058,
+        -0.0015999999720603228,
+        0.0013300000116229058,
+        0.0019999999910593033
+      ],
+      "crownMinY": 0.007368421940505505,
+      "maskPixelCount": 557,
+      "textureBoundsPx": [
+        1453,
+        1672,
+        45,
+        60
+      ],
+      "blank": false
+    },
+    "End": {
+      "labels": [
+        "End"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_End_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_End_1": 1287
+      },
+      "capNode": "KF01_Cap_End",
+      "family": "MESH_Cap_R4_1u_modifier",
+      "uvRect": [
+        0.8134765625,
+        0.82080078125,
+        0.03564453125,
+        0.0205078125
+      ],
+      "localBoundsXZ": [
+        -0.0051512500628829,
+        -0.0037572999842464924,
+        -0.0008048500042408704,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.007331277070939541,
+      "maskPixelCount": 865,
+      "textureBoundsPx": [
+        1666,
+        1681,
+        73,
+        42
+      ],
+      "blank": false
+    },
+    "LCtrl": {
+      "labels": [
+        "Ctrl"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_LCtrl_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_LCtrl_1": 1863
+      },
+      "capNode": "KF01_Cap_LCtrl",
+      "family": "MESH_Cap_R4_1.25u_modifier",
+      "uvRect": [
+        0.92236328125,
+        0.82080078125,
+        0.0390625,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.007604050113260746,
+        -0.0037811499912291766,
+        -0.002815100235491991,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.007331267757713795,
+      "maskPixelCount": 813,
+      "textureBoundsPx": [
+        1889,
+        1681,
+        80,
+        43
+      ],
+      "blank": false
+    },
+    "Super": {
+      "labels": [
+        "Super"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Super_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Super_1": 3636
+      },
+      "capNode": "KF01_Cap_Super",
+      "family": "MESH_Cap_R4_1.25u_modifier",
+      "uvRect": [
+        0.02783203125,
+        0.92919921875,
+        0.05517578125,
+        0.02587890625
+      ],
+      "localBoundsXZ": [
+        -0.007625250274688005,
+        -0.0037811499912291766,
+        -0.0008461502023041248,
+        -0.0006404999751597642
+      ],
+      "crownMinY": 0.007331247268617154,
+      "maskPixelCount": 1214,
+      "textureBoundsPx": [
+        57,
+        1903,
+        113,
+        53
+      ],
+      "blank": false
+    },
+    "LAlt": {
+      "labels": [
+        "Alt"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_LAlt_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_LAlt_1": 621
+      },
+      "capNode": "KF01_Cap_LAlt",
+      "family": "MESH_Cap_R4_1.25u_modifier",
+      "uvRect": [
+        0.14990234375,
+        0.931640625,
+        0.0322265625,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.007731250150501728,
+        -0.003767900064960122,
+        -0.003803550136834383,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.007331375791132451,
+      "maskPixelCount": 698,
+      "textureBoundsPx": [
+        307,
+        1908,
+        66,
+        43
+      ],
+      "blank": false
+    },
+    "Space": {
+      "labels": [],
+      "sourceNodes": [],
+      "glyphTriangleCounts": {},
+      "capNode": "KF01_Cap_Space",
+      "family": "MESH_Cap_Space_6.25u_modifier",
+      "uvRect": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "localBoundsXZ": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "crownMinY": 1,
+      "maskPixelCount": 0,
+      "blank": true
+    },
+    "RAlt": {
+      "labels": [
+        "Alt"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_RAlt_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_RAlt_1": 621
+      },
+      "capNode": "KF01_Cap_RAlt",
+      "family": "MESH_Cap_R4_1u_modifier",
+      "uvRect": [
+        0.37158203125,
+        0.931640625,
+        0.0322265625,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.005349999888241291,
+        -0.003767900064960122,
+        -0.001422299874573946,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.007331375791132451,
+      "maskPixelCount": 698,
+      "textureBoundsPx": [
+        761,
+        1908,
+        66,
+        43
+      ],
+      "blank": false
+    },
+    "Fn": {
+      "labels": [
+        "Fn"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Fn_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Fn_1": 567
+      },
+      "capNode": "KF01_Cap_Fn",
+      "family": "MESH_Cap_R4_1u_modifier",
+      "uvRect": [
+        0.48681640625,
+        0.931640625,
+        0.02392578125,
+        0.0205078125
+      ],
+      "localBoundsXZ": [
+        -0.0051485999844968315,
+        -0.0037572999842464924,
+        -0.0022437999598681926,
+        -0.0012499999595806002
+      ],
+      "crownMinY": 0.0073312789335846906,
+      "maskPixelCount": 487,
+      "textureBoundsPx": [
+        997,
+        1908,
+        49,
+        42
+      ],
+      "blank": false
+    },
+    "RCtrl": {
+      "labels": [
+        "Ctrl"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_RCtrl_1"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_RCtrl_1": 1863
+      },
+      "capNode": "KF01_Cap_RCtrl",
+      "family": "MESH_Cap_R4_1u_modifier",
+      "uvRect": [
+        0.58984375,
+        0.931640625,
+        0.0390625,
+        0.02099609375
+      ],
+      "localBoundsXZ": [
+        -0.005222799851000309,
+        -0.0037811499912291766,
+        -0.00043384997323155403,
+        -0.001226149952597916
+      ],
+      "crownMinY": 0.007331265895068646,
+      "maskPixelCount": 813,
+      "textureBoundsPx": [
+        1208,
+        1908,
+        80,
+        43
+      ],
+      "blank": false
+    },
+    "Left": {
+      "labels": [
+        "←"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Left"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Left": 288
+      },
+      "capNode": "KF01_Cap_Left",
+      "family": "MESH_Cap_R4_1u_modifier",
+      "uvRect": [
+        0.70556640625,
+        0.93115234375,
+        0.029296875,
+        0.02197265625
+      ],
+      "localBoundsXZ": [
+        -0.0015999999720603228,
+        -0.0013300000116229058,
+        0.0019999999910593033,
+        0.0013300000116229058
+      ],
+      "crownMinY": 0.007384504018723965,
+      "maskPixelCount": 557,
+      "textureBoundsPx": [
+        1445,
+        1907,
+        60,
+        45
+      ],
+      "blank": false
+    },
+    "Down": {
+      "labels": [
+        "↓"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Down"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Down": 288
+      },
+      "capNode": "KF01_Cap_Down",
+      "family": "MESH_Cap_R4_1u_modifier",
+      "uvRect": [
+        0.8203125,
+        0.92724609375,
+        0.02197265625,
+        0.029296875
+      ],
+      "localBoundsXZ": [
+        -0.0013300000116229058,
+        -0.0019999999910593033,
+        0.0013300000116229058,
+        0.0015999999720603228
+      ],
+      "crownMinY": 0.0073508273944258695,
+      "maskPixelCount": 557,
+      "textureBoundsPx": [
+        1680,
+        1899,
+        45,
+        60
+      ],
+      "blank": false
+    },
+    "Right": {
+      "labels": [
+        "→"
+      ],
+      "sourceNodes": [
+        "KF01_Legend_Right"
+      ],
+      "glyphTriangleCounts": {
+        "KF01_Legend_Right": 288
+      },
+      "capNode": "KF01_Cap_Right",
+      "family": "MESH_Cap_R4_1u_modifier",
+      "uvRect": [
+        0.92724609375,
+        0.93115234375,
+        0.029296875,
+        0.02197265625
+      ],
+      "localBoundsXZ": [
+        -0.0019999999910593033,
+        -0.0013300000116229058,
+        0.0015999999720603228,
+        0.0013300000116229058
+      ],
+      "crownMinY": 0.007384507744014264,
+      "maskPixelCount": 557,
+      "textureBoundsPx": [
+        1899,
+        1907,
+        60,
+        45
+      ],
+      "blank": false
+    }
+  },
+  "schema": "kf01-legend-mask/1",
+  "assetVersion": "kf01-kf004b-b3.1",
+  "sourceSha256": "6ece0486efd5bcbf329ff09df47b9e355ee09b9c9e80cb2ed99a633bcc446661",
+  "material": {
+    "id": "MAT_Legend_Light",
+    "linearColor": [
+      0.5948041081428528,
+      0.6350806355476379,
+      0.5752415060997009
+    ],
+    "roughness": 0.5649999976158142,
+    "metalness": 0
+  },
+  "textureSha256": "b4f4b9ba5a51044c1eca27daa266f0f3378fada18c23ccfbb5fe80161f9aed83",
+  "coveragePower": 1,
+  "previousAssetVersion": "kf01-kf003c-b2.1-candidate.1"
+}

@@ -1,0 +1,10 @@
+img-generate/
+.commandcode/
+.tmp/
+tests/
+docs/
+raw-renders/
+.vercel/
+*.log
+README.md
+AGENTS.md
