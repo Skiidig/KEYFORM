@@ -88,6 +88,11 @@ export function attachLegendMask(prod: LegendHost, inventory: Inventory, texture
   const capBase = new Map<THREE.Mesh, THREE.Color>();
   const pixelIds = new Map(prod.manifest.keys.map(({ id }, index) => [id, index + 1]));
 
+  type MaterialHooks = {
+    onBeforeCompile: THREE.MeshStandardMaterial['onBeforeCompile'];
+    customProgramCacheKey: THREE.MeshStandardMaterial['customProgramCacheKey'];
+  };
+
   type LegendUniformRefs = {
     kfLegendMask: { value: THREE.Texture };
     kfLegendColor: { value: THREE.Color };
@@ -97,23 +102,33 @@ export function attachLegendMask(prod: LegendHost, inventory: Inventory, texture
     kfLegendPbr: { value: THREE.Vector2 };
   };
 
+  const defaultLegendLinear: [number, number, number] = [
+    inventory.material.linearColor[0],
+    inventory.material.linearColor[1],
+    inventory.material.linearColor[2],
+  ];
+
   function patch(mat: THREE.MeshStandardMaterial) {
     if (materials.has(mat)) return;
     // Reuse a persistent uniform-holder object on mat.userData so Three.js r180's
     // per-material WebGLProgram cache always reads the active legend atlas texture
     // and resolution after 2048 <-> 1024 tier swaps (never a disposed texture).
-    let refs = mat.userData.kfLegendUniformRefs as LegendUniformRefs | undefined;
-    if (!refs) {
+    const existingRefs = mat.userData.kfLegendUniformRefs as LegendUniformRefs | undefined;
+    const ownerMatches = mat.userData.kfLegendOwnerUuid === mat.uuid;
+    let refs: LegendUniformRefs;
+    if (!existingRefs || !ownerMatches) {
       refs = {
         kfLegendMask: { value: texture },
-        kfLegendColor: color,
+        kfLegendColor: { value: color.value.clone() },
         kfLegendDebug: debugMask,
         kfLegendSize: { value: inventory.resolution },
         kfLegendMaxMip: { value: inventory.packing.maxSampleMip },
         kfLegendPbr: { value: new THREE.Vector2(inventory.material.roughness, inventory.material.metalness) },
       };
       mat.userData.kfLegendUniformRefs = refs;
+      mat.userData.kfLegendOwnerUuid = mat.uuid;
     } else {
+      refs = existingRefs;
       refs.kfLegendMask.value = texture;
       refs.kfLegendColor.value.copy(color.value);
       refs.kfLegendDebug.value = debugMask.value;
@@ -122,10 +137,13 @@ export function attachLegendMask(prod: LegendHost, inventory: Inventory, texture
       refs.kfLegendPbr.value.set(inventory.material.roughness, inventory.material.metalness);
     }
 
-    const original = { onBeforeCompile: mat.onBeforeCompile, customProgramCacheKey: mat.customProgramCacheKey };
+    const original: MaterialHooks = {
+      onBeforeCompile: mat.onBeforeCompile,
+      customProgramCacheKey: mat.customProgramCacheKey,
+    };
     materials.set(mat, original);
-    const cacheKey = mat.customProgramCacheKey();
-    mat.customProgramCacheKey = () => cacheKey + '|kf-b21-cap-mask-1';
+    const cacheKey = original.customProgramCacheKey.call(mat);
+    mat.customProgramCacheKey = () => cacheKey + '|kf-b21-cap-mask-2';
     const boundRefs = refs;
     mat.onBeforeCompile = function (shader, renderer) {
       original.onBeforeCompile.call(this, shader, renderer);
@@ -140,16 +158,19 @@ export function attachLegendMask(prod: LegendHost, inventory: Inventory, texture
         attribute vec4 kfLegendRect;
         attribute vec4 kfLegendBounds;
         attribute vec2 kfLegendCrownMin;
+        attribute vec3 kfLegendTint;
         varying vec4 vKfLegendRect;
         varying vec3 vKfLegendPosition;
         varying vec2 vKfLegendLocal;
         varying vec3 vKfLegendCrown;
+        varying vec3 vKfLegendTint;
       `).replace('#include <begin_vertex>', `
         #include <begin_vertex>
         vKfLegendRect = kfLegendRect;
         vKfLegendPosition = position;
         vKfLegendLocal = (position.xz - kfLegendBounds.xy) / (kfLegendBounds.zw - kfLegendBounds.xy);
         vKfLegendCrown = vec3(kfLegendCrownMin.x, normal.y, kfLegendCrownMin.y);
+        vKfLegendTint = kfLegendTint;
       `);
       shader.fragmentShader = shader.fragmentShader.replace('#include <common>', `
         #include <common>
@@ -163,6 +184,7 @@ export function attachLegendMask(prod: LegendHost, inventory: Inventory, texture
         varying vec3 vKfLegendPosition;
         varying vec2 vKfLegendLocal;
         varying vec3 vKfLegendCrown;
+        varying vec3 vKfLegendTint;
       `).replace('#include <color_fragment>', `
         #include <color_fragment>
         vec2 kfUv = vKfLegendRect.xy + vKfLegendRect.zw * vKfLegendLocal;
@@ -178,7 +200,7 @@ export function attachLegendMask(prod: LegendHost, inventory: Inventory, texture
           kfMask = textureGrad(kfLegendMask, kfUv, kfDx * kfGradientScale, kfDy * kfGradientScale).r;
           kfMask *= 1.0 - smoothstep(kfMaxFootprint, 2.0 * kfMaxFootprint, kfFootprint);
         }
-        diffuseColor.rgb = mix(diffuseColor.rgb, kfLegendColor, kfMask);
+        diffuseColor.rgb = mix(diffuseColor.rgb, vKfLegendTint, kfMask);
       `).replace('#include <roughnessmap_fragment>', `
         #include <roughnessmap_fragment>
         roughnessFactor = mix(roughnessFactor, kfLegendPbr.x, kfMask);
@@ -209,6 +231,7 @@ export function attachLegendMask(prod: LegendHost, inventory: Inventory, texture
     const rects = new Float32Array(count * 4);
     const bounds = new Float32Array(count * 4);
     const gates = new Float32Array(count * 2);
+    const tints = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       const id = ids[instanced ? i : 0];
       const entry = id ? inventory.keys[id] : undefined;
@@ -216,11 +239,17 @@ export function attachLegendMask(prod: LegendHost, inventory: Inventory, texture
       bounds.set(entry?.localBoundsXZ ?? [0, 0, 1, 1], i * 4);
       gates[i * 2] = entry?.crownMinY ?? 1;
       gates[i * 2 + 1] = id ? pixelIds.get(id)! : 0;
+      tints[i * 3] = defaultLegendLinear[0];
+      tints[i * 3 + 1] = defaultLegendLinear[1];
+      tints[i * 3 + 2] = defaultLegendLinear[2];
     }
     const Attribute = instanced ? THREE.InstancedBufferAttribute : THREE.BufferAttribute;
     target.setAttribute('kfLegendRect', new Attribute(rects, 4));
     target.setAttribute('kfLegendBounds', new Attribute(bounds, 4));
     target.setAttribute('kfLegendCrownMin', new Attribute(gates, 2));
+    const tintAttr = new Attribute(tints, 3);
+    if (instanced) tintAttr.setUsage(THREE.DynamicDrawUsage);
+    target.setAttribute('kfLegendTint', tintAttr);
     geometry.set(mesh, original);
     mesh.geometry = target;
     meshes.push(mesh);
@@ -275,6 +304,34 @@ export function attachLegendMask(prod: LegendHost, inventory: Inventory, texture
       const entry = keys.get(id);
       if (entry) patch(entry.mesh.material as THREE.MeshStandardMaterial);
       return result;
+    },
+    ensurePatched(id: string) {
+      const entry = keys.get(id);
+      if (entry) patch(entry.mesh.material as THREE.MeshStandardMaterial);
+    },
+    setKeyLegendTint(id: string, linearRgb: readonly [number, number, number] | null): boolean {
+      const entry = keys.get(id);
+      if (!entry) return false;
+      const attr = entry.mesh.geometry.getAttribute('kfLegendTint') as THREE.BufferAttribute | undefined;
+      if (!attr) return false;
+      const rgb = linearRgb ?? defaultLegendLinear;
+      if ((entry.mesh as THREE.InstancedMesh).isInstancedMesh) {
+        attr.setXYZ(entry.index, rgb[0], rgb[1], rgb[2]);
+      } else {
+        for (let i = 0; i < attr.count; i += 1) {
+          attr.setXYZ(i, rgb[0], rgb[1], rgb[2]);
+        }
+      }
+      attr.needsUpdate = true;
+      return true;
+    },
+    getKeyLegendTint(id: string): [number, number, number] | null {
+      const entry = keys.get(id);
+      if (!entry) return null;
+      const attr = entry.mesh.geometry.getAttribute('kfLegendTint') as THREE.BufferAttribute | undefined;
+      if (!attr) return null;
+      const idx = (entry.mesh as THREE.InstancedMesh).isInstancedMesh ? entry.index : 0;
+      return [attr.getX(idx), attr.getY(idx), attr.getZ(idx)];
     },
     setSharedCapColor(hex: string | null) {
       const overrides = prod.getKeyColorOverrides();

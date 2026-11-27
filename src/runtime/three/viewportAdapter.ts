@@ -4,6 +4,7 @@ import type {
   ViewportRuntimeAdapter, ViewportStationId,
 } from '../types';
 import { loadAssetPackage, type AssetPackage } from './assets';
+import type { BuildConfigApplier } from './buildConfigRuntime';
 import { NativeStage } from './NativeStage';
 
 const switchVariants = { 'linear-45': 'linear45', 'tactile-58': 'tactile58', 'silent-50': 'silent50' } as const;
@@ -32,7 +33,8 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
   let ready = false;
   let reduced = false;
   let revision = 0;
-  let appliedEnclosure: BuildStudioViewportState['config']['enclosure'] | undefined;
+  let buildConfigApplier: BuildConfigApplier | undefined;
+  let appliedCameraPreset: BuildStudioViewportState['cameraPreset'] | undefined;
   let appliedSwitch: SwitchLabViewportState['switchProfile'] | undefined;
   let appliedHeroPose: SwitchLabViewportState['presentation'] | undefined;
   let hudMedia: MediaQueryList | undefined;
@@ -63,19 +65,27 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
       target.setFocusedGroup(exploded ? focusedGroup : null);
     } else {
       const { config, cameraPreset } = current as BuildStudioViewportState;
-      if (config.enclosure !== appliedEnclosure) {
-        target.model.applyCasePreset(config.enclosure);
-        appliedEnclosure = config.enclosure;
+      const cameraChanged = instant || cameraPreset !== appliedCameraPreset;
+      const firstPass = buildConfigApplier?.apply(target.model, config, false);
+      if (firstPass?.anyVisualChange && !cameraChanged) {
+        target.invalidate();
       }
       if ((cameraPreset === 'rear-usb' || cameraPreset === 'exploded') && !target.model.isInternalLoaded()) {
         await target.model.loadInternal();
         if (lifetime.signal.aborted || version !== revision) return;
+        const internalPass = buildConfigApplier?.apply(target.model, config, false);
+        if (internalPass?.anyVisualChange && !cameraChanged) {
+          target.invalidate();
+        }
       }
-      switch (cameraPreset) {
-        case 'exploded': target.setView('exploded', 'formFunction', 'exploded', instant); break;
-        case 'rear-usb': target.setView('combined', 'atelier', 'rearUsbc', instant); break;
-        case 'after-hours-front': target.setView('exterior', 'afterHours', 'threeQuarter', instant); break;
-        default: target.setView('exterior', 'atelier', 'threeQuarter', instant);
+      if (cameraChanged) {
+        appliedCameraPreset = cameraPreset;
+        switch (cameraPreset) {
+          case 'exploded': target.setView('exploded', 'formFunction', 'exploded', instant); break;
+          case 'rear-usb': target.setView('combined', 'atelier', 'rearUsbc', instant); break;
+          case 'after-hours-front': target.setView('exterior', 'afterHours', 'threeQuarter', instant); break;
+          default: target.setView('exterior', 'atelier', 'threeQuarter', instant);
+        }
       }
     }
   };
@@ -88,8 +98,13 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
       context.progress('Checking 3D assets…');
       let failure: Parameters<ViewportMount['fail']>[0] = 'asset';
       try {
-        const assets = await loadAssetPackage(context.signal);
+        const [assets, studioConfigMod] = await Promise.all([
+          loadAssetPackage(context.signal),
+          station === 'build-studio' ? import('./buildConfigRuntime') : Promise.resolve(undefined),
+        ]);
         context.signal.throwIfAborted();
+        buildConfigApplier = studioConfigMod?.createBuildConfigApplier();
+        appliedCameraPreset = undefined;
         failure = 'renderer';
         const target = createNativeStage(container, assets, { ...context, reducedMotion: reduced });
         stage = target;
@@ -145,6 +160,8 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
       }
       stage?.dispose();
       stage = undefined;
+      buildConfigApplier = undefined;
+      appliedCameraPreset = undefined;
       ready = false;
     },
   };

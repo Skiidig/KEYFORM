@@ -27,6 +27,18 @@ export type AccentKeyId = 'matched' | 'ivory' | 'forest-accent' | 'brass-accent'
 export type SwitchProfileId = 'linear-45' | 'tactile-58' | 'silent-50';
 export type PlateMaterialId = 'aluminium' | 'fr4' | 'polycarbonate' | 'brass';
 
+/**
+ * Future Build Studio viewport interaction modes (KF-006B / KF-006C).
+ * Independent of Exterior / Keycaps / Internals configuration tabs.
+ */
+export type BuildStudioInteractionMode = 'configure' | 'customize' | 'typing' | 'inspect';
+
+/**
+ * Extension point for future per-key color overrides (KF-006B).
+ * Keys are canonical manifest key IDs (e.g. 'Esc', 'Enter', 'A'); values are sRGB hex strings.
+ */
+export type KeycapColorOverrides = Readonly<Record<string, string>>;
+
 export type StudioCameraPresetId =
   | 'studio-three-quarter'
   | 'after-hours-front'
@@ -53,6 +65,8 @@ export interface BuildConfigState {
   accent: AccentKeyId;
   switchProfile: SwitchProfileId;
   plate: PlateMaterialId;
+  /** Reserved for KF-006B per-key overrides; omitted in base KF-006A configurations. */
+  keyOverrides?: KeycapColorOverrides;
 }
 
 export interface AnatomyViewportState {
@@ -74,6 +88,8 @@ export interface SwitchLabViewportState {
 export interface BuildStudioViewportState {
   config: BuildConfigState;
   cameraPreset: StudioCameraPresetId;
+  /** Reserved for KF-006B / KF-006C interaction modes; defaults to 'configure'. */
+  interactionMode?: BuildStudioInteractionMode;
 }
 
 export interface RuntimeCapability {

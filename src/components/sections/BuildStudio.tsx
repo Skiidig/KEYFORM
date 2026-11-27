@@ -70,7 +70,13 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
     config.keycaps === DEFAULT_BUILD_CONFIG.keycaps &&
     config.accent === DEFAULT_BUILD_CONFIG.accent &&
     config.switchProfile === DEFAULT_BUILD_CONFIG.switchProfile &&
-    config.plate === DEFAULT_BUILD_CONFIG.plate;
+    config.plate === DEFAULT_BUILD_CONFIG.plate &&
+    (!config.keyOverrides || Object.keys(config.keyOverrides).length === 0);
+
+  const pairingAccentHex =
+    config.accent === 'matched' && config.keycaps !== 'charcoal-pbt'
+      ? (selectedKeycaps.secondaryHex ?? selectedKeycaps.swatchHex)
+      : selectedAccent.swatchHex;
 
   const handleSelectEnclosure = (enclosure: EnclosureFinishId) => {
     onChangeConfig({ ...config, enclosure });
@@ -229,7 +235,7 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                 <div className="kf-pairing-strip__item">
                   <span
                     className="kf-pairing-strip__dot"
-                    style={{ background: selectedAccent.swatchHex }}
+                    style={{ background: pairingAccentHex }}
                     aria-hidden="true"
                   />
                   <span className="kf-pairing-strip__text">{selectedAccent.name}</span>
@@ -257,7 +263,9 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                     : 'Reference view'}
               </span>{' '}
               {interactive
-                ? 'Enclosure finish and camera are live. Drag to orbit or scroll to zoom. Keycap, accent, switch, and plate choices are recorded in the build summary.'
+                ? cameraId === 'exploded' || cameraId === 'rear-usb'
+                  ? 'Enclosure, keycaps, Escape, switch finish (material preview), and plate are live. Drag to orbit.'
+                  : 'Enclosure, keycaps, and Escape are live. Drag to orbit or open Exploded for switch and plate finishes.'
                 : preview.detailNote}
             </p>
           </div>
@@ -348,7 +356,7 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                         }))}
                       />
                       <p className="kf-studio-hint">
-                        {selectedSwitch.nominalForce} target · {selectedSwitch.archetype} concept
+                        {selectedSwitch.nominalForce} target · {selectedSwitch.archetype} concept · Live material preview in Exploded 3D.
                       </p>
                     </div>
 

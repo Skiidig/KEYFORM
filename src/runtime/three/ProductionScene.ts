@@ -83,6 +83,29 @@ export type QualityTier = 'desktop' | 'mobile' | LookdevQualityTier;
 /** Encoder presentation. `macro` is only valid while the optional asset is mounted. */
 export type EncoderPresentation = 'standard' | 'macro';
 
+export interface InstalledSwitchMaterialSpec {
+  id: string;
+  stemLinear: readonly [number, number, number];
+  stemRoughness: number;
+  housingLinear: readonly [number, number, number];
+  housingRoughness: number;
+  housingClearcoat: number;
+  housingClearcoatRoughness: number;
+  housingEnvMapIntensity: number;
+}
+
+export interface PlateMaterialSpec {
+  id: string;
+  colorHex: string;
+  metalness: number;
+  roughness: number;
+  clearcoat?: number;
+  clearcoatRoughness?: number;
+  specularIntensity?: number;
+  ior?: number;
+  envMapIntensity: number;
+}
+
 export function resolveLookdevTier(tier: QualityTier): LookdevQualityTier {
   if (tier === 'mobile' || tier === 'balanced') return 'balanced';
   if (tier === 'high') return 'high';
@@ -308,6 +331,13 @@ export class ProductionScene {
   private caseMaterials: THREE.MeshStandardMaterial[] = [];
   private caseMarkMaterials: THREE.MeshStandardMaterial[] = [];
   private keycapMaterials = new Map<string, THREE.MeshStandardMaterial>();
+  private plateMaterials: THREE.MeshStandardMaterial[] = [];
+  private installedSwitchStemMaterial: THREE.MeshStandardMaterial | null = null;
+  private installedSwitchHousingMaterial: THREE.MeshPhysicalMaterial | null = null;
+  private activeInstalledSwitchSpec: InstalledSwitchMaterialSpec | null = null;
+  private activePlateSpec: PlateMaterialSpec | null = null;
+  private keycapSchemeColors: Map<string, string | null> | null = null;
+  private keycapSchemeTintResolver: ((hex: string | null) => readonly [number, number, number] | null) | null = null;
   private heroLidMaterials: THREE.MeshPhysicalMaterial[] = [];
   private heroStemMaterials: THREE.MeshStandardMaterial[] = [];
   private heroUpperParts: Array<{ node: THREE.Object3D; cutawayY: number }> = [];
@@ -684,6 +714,9 @@ export class ProductionScene {
     const grp05 = groupSpecById.get('GRP_05_AcousticAndGaskets');
     const gasketOverride = grp05?.child_motion_overrides?.find((c) => c.node === 'KF01_Gasket_TravelWithPlate');
 
+    this.plateMaterials = [];
+    const seenPlateMats = new Set<string>();
+
     // Reset internal links on keys before re-indexing
     for (const kr of this.keys.values()) {
       kr.stemNode = null;
@@ -698,6 +731,15 @@ export class ProductionScene {
       if (mesh.isMesh) {
         mesh.castShadow = true;
         mesh.receiveShadow = true;
+        if (ud.kf01Role === 'switch_plate') {
+          const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          for (const m of mats) {
+            if (m && m.name === 'MAT_Plate_Active' && !seenPlateMats.has(m.uuid)) {
+              seenPlateMats.add(m.uuid);
+              this.plateMaterials.push(m as THREE.MeshStandardMaterial);
+            }
+          }
+        }
       }
 
       if (ud.kf01Role === 'assembly_group' && typeof ud.assemblyGroup === 'string') {
@@ -839,6 +881,16 @@ export class ProductionScene {
       applyCalibrationToMaterial(sharedMat);
     }
 
+    if (partition === 'internal') {
+      this.isolateInstalledSwitchBatchMaterials(build.batches);
+      if (this.activeInstalledSwitchSpec) {
+        this.applyInstalledSwitchMaterial(this.activeInstalledSwitchSpec);
+      }
+      if (this.activePlateSpec) {
+        this.applyPlateMaterial(this.activePlateSpec);
+      }
+    }
+
     let suppressed = 0;
     let submitted = 0;
     let instances = 0;
@@ -970,6 +1022,10 @@ export class ProductionScene {
     return this.currentMode;
   }
 
+  isExteriorLoaded(): boolean {
+    return this.exteriorScene !== null;
+  }
+
   isInternalLoaded(): boolean {
     return this.internalScene !== null;
   }
@@ -1064,6 +1120,257 @@ export class ProductionScene {
 
   getCasePreset(): EnclosurePresetId {
     return this.currentCasePreset;
+  }
+
+  /**
+   * Isolate installed switch stem and opaque upper-housing materials strictly to
+   * `GRP_03_Switches` batches so switching profiles never leaks onto PCB stabilizer
+   * sliders/housings (`GRP_06_PCB_Assembly`) or the standalone Hero Switch.
+   */
+  private isolateInstalledSwitchBatchMaterials(batches: InstanceBatch[]): void {
+    for (const batch of batches) {
+      if (batch.assemblyGroup !== 'GRP_03_Switches') continue;
+      const role = batch.instances[0]?.semantic.role;
+      if (role === 'switch_stem') {
+        if (!this.installedSwitchStemMaterial) {
+          const src = Array.isArray(batch.mesh.material) ? batch.mesh.material[0] : batch.mesh.material;
+          if (src) {
+            const clone = src.clone() as THREE.MeshStandardMaterial;
+            clone.name = 'MAT_Switch_Stem_Installed';
+            this.installedSwitchStemMaterial = clone;
+          }
+        }
+        if (this.installedSwitchStemMaterial) {
+          batch.mesh.material = this.installedSwitchStemMaterial;
+        }
+      } else if (role === 'switch_lid') {
+        if (!this.installedSwitchHousingMaterial) {
+          const src = Array.isArray(batch.mesh.material) ? batch.mesh.material[0] : batch.mesh.material;
+          if (src) {
+            const clone = src.clone() as THREE.MeshPhysicalMaterial;
+            clone.name = 'MAT_Switch_Housing_Installed_Opaque';
+            clone.transmission = 0;
+            if (typeof clone.thickness === 'number') clone.thickness = 0;
+            clone.transparent = false;
+            clone.opacity = 1;
+            clone.depthWrite = true;
+            this.installedSwitchHousingMaterial = clone;
+          }
+        }
+        if (this.installedSwitchHousingMaterial) {
+          batch.mesh.material = this.installedSwitchHousingMaterial;
+        }
+      }
+    }
+  }
+
+  /**
+   * Apply representative material-only installed switch profile to `GRP_03_Switches`
+   * stems and opaque upper housings (preserving zero transmission and 4 mm travel).
+   */
+  applyInstalledSwitchMaterial(spec: InstalledSwitchMaterialSpec): void {
+    this.activeInstalledSwitchSpec = spec;
+    if (this.installedSwitchStemMaterial) {
+      const [sr, sg, sb] = spec.stemLinear;
+      this.installedSwitchStemMaterial.color.setRGB(sr, sg, sb, THREE.LinearSRGBColorSpace);
+      this.installedSwitchStemMaterial.roughness = spec.stemRoughness;
+      this.installedSwitchStemMaterial.metalness = 0;
+      this.installedSwitchStemMaterial.envMapIntensity = 1.02;
+      this.installedSwitchStemMaterial.needsUpdate = true;
+    }
+    if (this.installedSwitchHousingMaterial) {
+      const [hr, hg, hb] = spec.housingLinear;
+      const mat = this.installedSwitchHousingMaterial;
+      mat.color.setRGB(hr, hg, hb, THREE.LinearSRGBColorSpace);
+      mat.roughness = spec.housingRoughness;
+      mat.metalness = 0;
+      mat.transmission = 0;
+      mat.transparent = false;
+      mat.opacity = 1;
+      mat.depthWrite = true;
+      if ('clearcoat' in mat) {
+        mat.clearcoat = spec.housingClearcoat;
+        mat.clearcoatRoughness = spec.housingClearcoatRoughness;
+      }
+      mat.envMapIntensity = spec.housingEnvMapIntensity;
+      mat.needsUpdate = true;
+    }
+  }
+
+  /**
+   * Apply calibrated PBR material to `GRP_04_SwitchPlate` (`MAT_Plate_Active`).
+   * Keeps transmission disabled (polycarbonate uses an opaque frosted approximation).
+   */
+  applyPlateMaterial(spec: PlateMaterialSpec): void {
+    this.activePlateSpec = spec;
+    const color = new THREE.Color(spec.colorHex);
+    for (const mat of this.plateMaterials) {
+      mat.color.copy(color);
+      mat.metalness = spec.metalness;
+      mat.roughness = spec.roughness;
+      mat.envMapIntensity = spec.envMapIntensity;
+      const phys = mat as THREE.MeshPhysicalMaterial;
+      if ('transmission' in phys) {
+        phys.transmission = 0;
+        phys.transparent = false;
+        phys.opacity = 1;
+        phys.depthWrite = true;
+      }
+      if ('clearcoat' in phys) {
+        phys.clearcoat = spec.clearcoat ?? 0;
+        phys.clearcoatRoughness = spec.clearcoatRoughness ?? 0.3;
+      }
+      if (typeof spec.specularIntensity === 'number' && 'specularIntensity' in phys) {
+        phys.specularIntensity = spec.specularIntensity;
+      }
+      if (typeof spec.ior === 'number' && 'ior' in phys) {
+        phys.ior = spec.ior;
+      }
+      mat.needsUpdate = true;
+    }
+  }
+
+  /**
+   * Apply resolved base keycap set + Escape accent colors and per-key legend contrast
+   * tints across all 81 canonical keys without cloning instanced batches.
+   * Respects explicit `keyColorOverrides` precedence (reserved for KF-006B / verify:mechanics).
+   */
+  applyKeycapColorScheme(
+    capColors: ReadonlyMap<string, string | null>,
+    resolveLegendTint: (hex: string | null) => readonly [number, number, number] | null,
+  ): void {
+    this.keycapSchemeColors = new Map(capColors);
+    this.keycapSchemeTintResolver = resolveLegendTint;
+
+    for (const [keyId, kr] of this.keys.entries()) {
+      const effectiveHex = this.keyColorOverrides.has(keyId)
+        ? this.keyColorOverrides.get(keyId)!
+        : (capColors.get(keyId) ?? null);
+      this.applyResolvedKeyColor(keyId, kr, effectiveHex);
+      this.legend?.setKeyLegendTint(keyId, resolveLegendTint(effectiveHex));
+    }
+  }
+
+  private applyResolvedKeyColor(keyId: string, kr: KeyRuntime, hex: string | null): void {
+    const color = hex ? new THREE.Color(hex) : null;
+    for (const { batch, record } of this.instancing.instancesForKey(keyId)) {
+      if (batch.materialFamily !== 'MAT_Keycap_PBT') continue;
+      setBatchInstanceColor(batch, record.index, color);
+    }
+    for (const mesh of kr.capMeshes) {
+      if (!mesh.visible) continue;
+      const mat = mesh.material as THREE.MeshStandardMaterial | undefined;
+      if (!mat) continue;
+      const isKeycapMaterial = mat.name === 'MAT_Keycap_Alpha' || mat.name === 'MAT_Keycap_Mod';
+      if (!isKeycapMaterial && !mesh.userData.kf003cCapOverride) continue;
+      const ud = mesh.userData as Record<string, unknown>;
+      if (!ud.kf003cCapOverride) {
+        if (!color) continue;
+        const base = mat.color.clone();
+        const savedUserData = mat.userData;
+        mat.userData = {};
+        const clone = mat.clone() as THREE.MeshStandardMaterial;
+        mat.userData = savedUserData;
+        clone.onBeforeCompile = THREE.MeshStandardMaterial.prototype.onBeforeCompile;
+        clone.customProgramCacheKey = THREE.MeshStandardMaterial.prototype.customProgramCacheKey;
+        clone.name = `${mat.name}_KeyOverride_${keyId}`;
+        ud.kf003cCapBaseColor = [base.r, base.g, base.b];
+        ud.kf003cCapOverride = clone;
+        mesh.material = clone;
+        this.legend?.ensurePatched(keyId);
+      }
+      const target = ud.kf003cCapOverride as THREE.MeshStandardMaterial;
+      if (color) {
+        target.color.copy(color);
+      } else {
+        const base = ud.kf003cCapBaseColor as number[] | undefined;
+        if (base) target.color.setRGB(base[0], base[1], base[2], THREE.LinearSRGBColorSpace);
+      }
+      target.needsUpdate = true;
+    }
+  }
+
+  /**
+   * Read-only runtime material snapshot for automated configuration verification
+   * (used only by the test-only fixture; never exposed as a visitor global).
+   */
+  getBuildConfigMaterialAudit() {
+    const keycapColors: Record<string, string> = {};
+    const legendTints: Record<string, [number, number, number]> = {};
+    const tmp = new THREE.Color();
+
+    for (const [keyId, kr] of this.keys.entries()) {
+      let found = false;
+      for (const { batch, record } of this.instancing.instancesForKey(keyId)) {
+        if (batch.materialFamily !== 'MAT_Keycap_PBT') continue;
+        const attr = batch.mesh.instanceColor;
+        if (attr) {
+          tmp.setRGB(
+            attr.getX(record.index),
+            attr.getY(record.index),
+            attr.getZ(record.index),
+            THREE.LinearSRGBColorSpace,
+          );
+          keycapColors[keyId] = `#${tmp.getHexString()}`;
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        for (const mesh of kr.capMeshes) {
+          if (!mesh.visible) continue;
+          const mat = mesh.material as THREE.MeshStandardMaterial | undefined;
+          if (mat?.color) {
+            keycapColors[keyId] = `#${mat.color.getHexString()}`;
+            break;
+          }
+        }
+      }
+      const tint = this.legend?.getKeyLegendTint(keyId);
+      if (tint) {
+        legendTints[keyId] = [
+          Number(tint[0].toFixed(4)),
+          Number(tint[1].toFixed(4)),
+          Number(tint[2].toFixed(4)),
+        ];
+      }
+    }
+
+    let stabilizerSliderHex: string | null = null;
+    let stabilizerHousingHex: string | null = null;
+    for (const batch of this.instancing.batches) {
+      if (batch.assemblyGroup !== 'GRP_06_PCB_Assembly') continue;
+      const role = batch.instances[0]?.semantic.role;
+      const mat = (Array.isArray(batch.mesh.material) ? batch.mesh.material[0] : batch.mesh.material) as
+        | THREE.MeshStandardMaterial
+        | undefined;
+      if (role === 'stabilizer_slider' && mat?.color) stabilizerSliderHex = `#${mat.color.getHexString()}`;
+      if (role === 'stabilizer_housing' && mat?.color) stabilizerHousingHex = `#${mat.color.getHexString()}`;
+    }
+
+    const plateMat = this.plateMaterials[0] as THREE.MeshPhysicalMaterial | undefined;
+    return {
+      exteriorLoaded: this.isExteriorLoaded(),
+      internalLoaded: this.isInternalLoaded(),
+      legendTier: this.legendTier,
+      enclosurePreset: this.currentCasePreset,
+      enclosureHex: this.caseMaterials[0] ? `#${this.caseMaterials[0].color.getHexString()}` : null,
+      keycapColors,
+      legendTints,
+      installedSwitchStemHex: this.installedSwitchStemMaterial
+        ? `#${this.installedSwitchStemMaterial.color.getHexString()}`
+        : null,
+      installedSwitchHousingHex: this.installedSwitchHousingMaterial
+        ? `#${this.installedSwitchHousingMaterial.color.getHexString()}`
+        : null,
+      installedSwitchHousingTransmission: this.installedSwitchHousingMaterial?.transmission ?? null,
+      stabilizerSliderHex,
+      stabilizerHousingHex,
+      plateHex: plateMat ? `#${plateMat.color.getHexString()}` : null,
+      plateMetalness: plateMat ? Number(plateMat.metalness.toFixed(3)) : null,
+      plateRoughness: plateMat ? Number(plateMat.roughness.toFixed(3)) : null,
+      plateTransmission: plateMat && 'transmission' in plateMat ? plateMat.transmission : 0,
+    };
   }
 
   getMaterialSnapshot() {
@@ -1818,7 +2125,12 @@ export class ProductionScene {
         const ud = mesh.userData as Record<string, unknown>;
         if (!ud.kf003cCapOverride) {
           const base = mat.color.clone();
+          const savedUserData = mat.userData;
+          mat.userData = {};
           const clone = mat.clone() as THREE.MeshStandardMaterial;
+          mat.userData = savedUserData;
+          clone.onBeforeCompile = THREE.MeshStandardMaterial.prototype.onBeforeCompile;
+          clone.customProgramCacheKey = THREE.MeshStandardMaterial.prototype.customProgramCacheKey;
           clone.name = `${mat.name}_KeyOverride_${keyId}`;
           ud.kf003cCapBaseColor = [base.r, base.g, base.b];
           ud.kf003cCapOverride = clone;
@@ -1946,7 +2258,11 @@ export class ProductionScene {
       this.legendInventory = inventory;
       this.legendTier = wanted;
       this.legendError = null;
-      if (this.keyColorOverrides.size) this.applyKeyColorOverrides();
+      if (this.keycapSchemeColors && this.keycapSchemeTintResolver) {
+        this.applyKeycapColorScheme(this.keycapSchemeColors, this.keycapSchemeTintResolver);
+      } else if (this.keyColorOverrides.size) {
+        this.applyKeyColorOverrides();
+      }
       return {
         tier: wanted,
         resolution: inventory.resolution,
@@ -2004,8 +2320,16 @@ export class ProductionScene {
 
   /** Per-key colour override that also repatches the legend shader for that draw. */
   setKeyColorOverrideWithLegend(keyId: string, hex: string | null) {
-    if (this.legend) return this.legend.setKeyColor(keyId, hex);
-    return this.setKeyColorOverride(keyId, hex);
+    const result = this.legend ? this.legend.setKeyColor(keyId, hex) : this.setKeyColorOverride(keyId, hex);
+    if (this.keycapSchemeColors && this.keycapSchemeTintResolver) {
+      const kr = this.keys.get(keyId);
+      const effectiveHex = hex ?? (this.keycapSchemeColors.get(keyId) ?? null);
+      if (kr && hex === null) {
+        this.applyResolvedKeyColor(keyId, kr, effectiveHex);
+      }
+      this.legend?.setKeyLegendTint(keyId, this.keycapSchemeTintResolver(effectiveHex));
+    }
+    return result;
   }
 
   /** Shared Charcoal PBT recolour that preserves independent per-key overrides. */
@@ -2200,6 +2524,15 @@ export class ProductionScene {
     this.clearSelection();
     this.instancing.dispose();
     resetSharedBatchMaterials();
+    this.installedSwitchStemMaterial?.dispose();
+    this.installedSwitchStemMaterial = null;
+    this.installedSwitchHousingMaterial?.dispose();
+    this.installedSwitchHousingMaterial = null;
+    this.plateMaterials = [];
+    this.activeInstalledSwitchSpec = null;
+    this.activePlateSpec = null;
+    this.keycapSchemeColors = null;
+    this.keycapSchemeTintResolver = null;
     this.housingOverride?.material.dispose();
     this.housingOverride = null;
     this.instancingReports = {};

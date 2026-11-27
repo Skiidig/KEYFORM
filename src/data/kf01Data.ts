@@ -346,7 +346,7 @@ export const KEYCAP_SETS: StudioOption<KeycapSetId>[] = [
     name: 'Porcelain PBT',
     swatchHex: '#ECE9DF',
     secondaryHex: '#D8D4C7',
-    finishNote: 'Warm porcelain alphas paired with muted grey modifiers (saved in specification).',
+    finishNote: 'Warm porcelain alphas and spacebar paired with muted grey modifiers.',
   },
   {
     id: 'two-tone-slate',
@@ -354,7 +354,7 @@ export const KEYCAP_SETS: StudioOption<KeycapSetId>[] = [
     name: 'Two-Tone Slate',
     swatchHex: '#D9DDD8',
     secondaryHex: '#434A46',
-    finishNote: 'Light slate alphas framed by deep graphite outer keys (saved in specification).',
+    finishNote: 'Light slate alphas and spacebar framed by deep graphite modifiers.',
   },
 ];
 
@@ -364,28 +364,28 @@ export const ACCENT_KEYS: StudioOption<AccentKeyId>[] = [
     code: 'MTC',
     name: 'Matched',
     swatchHex: CHARCOAL_PBT_BASELINE_HEX,
-    finishNote: 'Uniform Escape keycap matching the selected keycap set.',
+    finishNote: 'Escape keycap matches the active keycap set.',
   },
   {
     id: 'ivory',
     code: 'IVR',
     name: 'Ivory Esc',
     swatchHex: '#F2EFE6',
-    finishNote: 'Warm ivory Escape accent cap (saved in specification; live 3D preview forthcoming).',
+    finishNote: 'Warm ivory Escape accent cap with dark legend.',
   },
   {
     id: 'forest-accent',
     code: 'FRT',
     name: 'Forest Esc',
     swatchHex: '#294B3B',
-    finishNote: 'Deep slate-pine Escape cap (saved in specification; live 3D preview forthcoming).',
+    finishNote: 'Deep slate-pine Escape accent cap with light legend.',
   },
   {
     id: 'brass-accent',
     code: 'BRS',
     name: 'Brass Accent',
     swatchHex: '#B49A70',
-    finishNote: 'Anodized brass-tone Escape cap (saved in specification; live 3D preview forthcoming).',
+    finishNote: 'Warm brass-tone Escape accent cap with dark legend.',
   },
 ];
 
@@ -564,7 +564,7 @@ export function resolveBuildStudioPreview(
       alt: asset.defaultAlt,
       match: 'matched',
       statusLabel: `${enclosure.name} finish preview`,
-      detailNote: `Showing the matched ${enclosure.name} aluminium and Charcoal PBT studio render. Open 3D to orbit or compare angles; switch (${sw.name}) and plate (${plate.name}) choices are saved in your build summary.`,
+      detailNote: `Matched ${enclosure.name} aluminium and Charcoal PBT photo. Open 3D for live orbit and Exploded ${sw.name} / ${plate.name} material preview.`,
     };
   }
 
@@ -574,8 +574,8 @@ export function resolveBuildStudioPreview(
       sizes,
       alt: asset.defaultAlt,
       match: 'partial',
-      statusLabel: `${enclosure.name} enclosure · Keycaps in spec`,
-      detailNote: `Showing the ${enclosure.name} aluminium enclosure with Charcoal PBT keycaps. Your ${keycaps.name} / ${accent.name}, ${sw.name}, and ${plate.name} selections are saved in the build summary.`,
+      statusLabel: `${enclosure.name} photo · Spec updated`,
+      detailNote: `Static photo shows ${enclosure.name} with Charcoal PBT. Open 3D to preview ${keycaps.name}, ${accent.name}, ${sw.name}, and ${plate.name} live.`,
     };
   }
 
@@ -587,7 +587,7 @@ export function resolveBuildStudioPreview(
     statusLabel: `Reference view · Forest finish`,
     detailNote:
       config.enclosure === 'forest' && hasUniformCharcoalCaps
-        ? `${camera.caption}. Static reference render—open 3D to orbit or switch enclosures from any angle.`
-        : `${camera.caption}. Static secondary angles show the Forest reference finish—switch back to Studio ¾ or open 3D to view ${enclosure.name}.`,
+        ? `${camera.caption}. Open 3D to orbit or inspect live ${sw.name} and ${plate.name} finishes.`
+        : `${camera.caption}. Static secondary angles show Forest / Charcoal—open 3D to preview your active build live.`,
   };
 }
