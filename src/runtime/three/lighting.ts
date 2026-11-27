@@ -317,6 +317,7 @@ export class CameraTransitionController {
   private toFov = 28;
   private fromNear = 0.005;
   private toNear = 0.005;
+  private fromFar = 5.0;
   private toFar = 5.0;
   private scratchTarget = new THREE.Vector3();
   private scratchOffset = new THREE.Vector3();
@@ -349,6 +350,7 @@ export class CameraTransitionController {
     this.toFov = pose.fov;
     this.fromNear = camera.near;
     this.toNear = pose.near;
+    this.fromFar = camera.far;
     this.toFar = pose.far;
 
     // Skip animation when already at an effectively identical pose.
@@ -372,13 +374,10 @@ export class CameraTransitionController {
     this.fromSpherical.setFromVector3(fromOffset);
     this.toSpherical.setFromVector3(toOffset);
 
-    let dTheta = Math.atan2(
+    this.deltaTheta = Math.atan2(
       Math.sin(this.toSpherical.theta - this.fromSpherical.theta),
       Math.cos(this.toSpherical.theta - this.fromSpherical.theta),
     );
-    // Deterministic front-right sweep when nearly 180 deg apart.
-    if (Math.abs(Math.abs(dTheta) - Math.PI) < 1e-3) dTheta = Math.PI;
-    this.deltaTheta = dTheta;
 
     if (options.durationMs !== undefined) {
       this.durationMs = Math.max(1, options.durationMs);
@@ -418,7 +417,8 @@ export class CameraTransitionController {
     if (!this.active) return false;
     if (this.startMs === null) this.startMs = now;
     const raw = Math.min(1, Math.max(0, (now - this.startMs) / Math.max(1, this.durationMs)));
-    if (raw >= 1 - 1e-6) {
+    if (raw === 0) return true;
+    if (raw === 1) {
       camera.position.copy(this.toPos);
       camera.fov = this.toFov;
       camera.near = this.toNear;
@@ -435,19 +435,22 @@ export class CameraTransitionController {
     const t = easeInOutCubic(raw);
     this.scratchTarget.lerpVectors(this.fromTarget, this.toTarget, t);
     const radius = THREE.MathUtils.lerp(this.fromSpherical.radius, this.toSpherical.radius, t);
-    const phi = THREE.MathUtils.clamp(
-      THREE.MathUtils.lerp(this.fromSpherical.phi, this.toSpherical.phi, t),
-      MIN_TRANSITION_POLAR,
-      MAX_TRANSITION_POLAR,
-    );
+    // Constrain the interior control points so an out-of-range orbit enters the
+    // safe band smoothly while both endpoint angles retain their exact values.
+    const fromPhi = this.fromSpherical.phi;
+    const toPhi = this.toSpherical.phi;
+    const control1 = THREE.MathUtils.clamp(THREE.MathUtils.lerp(fromPhi, toPhi, 1 / 3), MIN_TRANSITION_POLAR, MAX_TRANSITION_POLAR);
+    const control2 = THREE.MathUtils.clamp(THREE.MathUtils.lerp(fromPhi, toPhi, 2 / 3), MIN_TRANSITION_POLAR, MAX_TRANSITION_POLAR);
+    const v = 1 - t;
+    const phi = v * v * (v * fromPhi + 3 * t * control1) + t * t * (3 * v * control2 + t * toPhi);
     const theta = this.fromSpherical.theta + this.deltaTheta * t;
     this.scratchSpherical.set(radius, phi, theta);
     this.scratchOffset.setFromSpherical(this.scratchSpherical);
 
     camera.position.copy(this.scratchTarget).add(this.scratchOffset);
     camera.fov = THREE.MathUtils.lerp(this.fromFov, this.toFov, t);
-    camera.near = Math.min(this.fromNear, this.toNear);
-    camera.far = this.toFar;
+    camera.near = THREE.MathUtils.lerp(this.fromNear, this.toNear, t);
+    camera.far = THREE.MathUtils.lerp(this.fromFar, this.toFar, t);
     camera.lookAt(this.scratchTarget);
     camera.updateProjectionMatrix();
     camera.updateMatrixWorld(true);

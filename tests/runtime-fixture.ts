@@ -1,7 +1,7 @@
 // Built in memory by verify-runtime.mjs. This fixture is outside the production entry graph.
 import { Matrix3, Raycaster, Vector2, Vector3, type Mesh, type MeshStandardMaterial } from 'three';
 import { loadAssetPackage } from '../src/runtime/three/assets';
-import { CAMERA_PRESETS } from '../src/runtime/three/lighting';
+import { CAMERA_PRESETS, solveCameraPresetPose } from '../src/runtime/three/lighting';
 import type { NativeStage } from '../src/runtime/three/NativeStage';
 import { createNativeStage } from '../src/runtime/three/viewportAdapter';
 
@@ -376,7 +376,7 @@ async function core() {
       revElapsed <= expectedRevMs + 25 &&
       model.getExplodeProgress() === 0 &&
       JSON.stringify(model.getGroupWorldOffsets()) === JSON.stringify(assembled) &&
-      bakesAfterSettle - bakesBeforeExplode <= 1,
+      bakesAfterSettle - bakesBeforeExplode === 1,
   );
   motionTiming.explodeReversal = {
     midProgress: Number(midProgress.toFixed(4)),
@@ -397,6 +397,8 @@ async function core() {
   stage.step(0);
 
   const cameraDurations: Record<number, number> = {};
+  const rearPose = solveCameraPresetPose(CAMERA_PRESETS.rearUsbc, stage.camera.aspect);
+  const visibleKeyProbes = ['Esc', 'Delete', 'LCtrl', 'Right'].map((id) => model.keyCrownWorldPosition(id)!);
   let arcNoClipping = true;
   let cameraExactEnd = true;
   for (const hz of [30, 60, 120]) {
@@ -409,13 +411,19 @@ async function core() {
     while (steps < 200) {
       const active = stage.step(t);
       const dist = stage.camera.position.length();
-      if (stage.camera.position.y < 0.04 || dist < 0.28) arcNoClipping = false;
+      if (stage.camera.position.y < 0.04 || dist < 0.28 || visibleKeyProbes.some((point) => {
+        const clip = point.clone().project(stage.camera);
+        return Math.max(Math.abs(clip.x), Math.abs(clip.y), Math.abs(clip.z)) >= 1;
+      })) arcNoClipping = false;
       if (!active) break;
       t += dt;
       steps++;
     }
     cameraDurations[hz] = Number(t.toFixed(1));
-    if (stage.camera.position.z > -0.25) cameraExactEnd = false;
+    if (!stage.camera.position.equals(rearPose.position) || !stage.controls.target.equals(rearPose.target) ||
+        stage.camera.fov !== rearPose.fov || stage.camera.near !== rearPose.near || stage.camera.far !== rearPose.far) {
+      cameraExactEnd = false;
+    }
   }
   const largeDuration = stage.getTransitionDurationMs();
   check(
@@ -429,6 +437,44 @@ async function core() {
       cameraExactEnd,
   );
   motionTiming.camera = { nearbyDuration, largeDuration, rearDurationsMs: cameraDurations };
+
+  const resetPose = solveCameraPresetPose(CAMERA_PRESETS.threeQuarter, stage.camera.aspect);
+  const resetSamples = [];
+  for (const phi of [0.015, 1.9]) {
+    stage.setReducedMotion(true);
+    stage.setCamera('threeQuarter', true);
+    stage.controls.object.position.setFromSphericalCoords(0.5, phi, 0.9).add(stage.controls.target);
+    stage.controls.update();
+    stage.step(0);
+    const start = stage.camera.position.clone();
+    const startPhi = start.clone().sub(stage.controls.target).angleTo(stage.camera.up);
+    stage.setReducedMotion(false);
+    stage.resetView();
+    const duration = stage.getTransitionDurationMs();
+    const startActive = stage.step(0);
+    const exactStart = stage.camera.position.equals(start);
+    let prevPosition = start.clone();
+    let maxStep = 0;
+    let firstStep = 0;
+    for (let ms = 1; ms <= duration; ms = Math.min(duration, ms + 8)) {
+      stage.step(ms);
+      const displacement = stage.camera.position.distanceTo(prevPosition);
+      if (ms === 1) firstStep = displacement;
+      maxStep = Math.max(maxStep, displacement);
+      prevPosition.copy(stage.camera.position);
+      if (ms === duration) break;
+    }
+    const endDistance = stage.camera.position.distanceTo(resetPose.position);
+    const targetDistance = stage.controls.target.distanceTo(resetPose.target);
+    const aimError = stage.camera.getWorldDirection(new Vector3())
+      .distanceTo(resetPose.target.clone().sub(resetPose.position).normalize());
+    const activeAtEnd = stage.isMotionActive();
+    resetSamples.push({phi: startPhi, duration, startActive, exactStart, firstStep, maxStep, endDistance, targetDistance, aimError, activeAtEnd});
+    check(`reset from polar ${phi} preserves its displayed start, continuous path, and solved end`,
+      close(startPhi, phi, 1e-12) && startActive && exactStart && firstStep < 0.001 && maxStep < 0.06 &&
+      endDistance === 0 && targetDistance < 1e-12 && aimError < 1e-12 && !activeAtEnd);
+  }
+  motionTiming.cameraReset = resetSamples;
 
   // 4. User interruption mid-preset rebases from displayed pose with zero jump
   stage.setCamera('threeQuarter', true);
@@ -462,42 +508,94 @@ async function core() {
       stage.ground.getTelemetry().bakeCount === bakesBeforeOrbit,
   );
 
-  // Keyboard Shift+Arrow orbit smoothing: smooth half-life progression, bounded <=250ms settle, 0 shadow bakes
+  const canvas = stage.renderer.domElement;
+  const wheel = () => canvas.dispatchEvent(new WheelEvent('wheel', {deltaY:-120, bubbles:true, cancelable:true}));
+  stage.setCamera('threeQuarter', true);
+  stage.step(0);
+  stage.setCamera('rearUsbc', false, 0);
+  stage.step(180);
+  const offsetBeforeWheel = stage.camera.position.clone().sub(stage.controls.target);
+  wheel();
+  const offsetAfterWheel = stage.camera.position.clone().sub(stage.controls.target);
+  stage.step(500);
+  check('wheel interrupts a preset mid-flight and changes only its radius', !stage.isMotionActive() &&
+    offsetAfterWheel.angleTo(offsetBeforeWheel) < 1e-6 && offsetAfterWheel.length() < offsetBeforeWheel.length() &&
+    stage.camera.position.clone().sub(stage.controls.target).distanceTo(offsetAfterWheel) < 1e-6);
+  for (const button of [0, 2]) {
+    stage.setCamera('threeQuarter', true);
+    stage.step(0);
+    const origin = stage.controls.target.clone();
+    const orbitOffset = () => stage.controls.object.position.clone().sub(stage.controls.target);
+    const beforeDrag = orbitOffset();
+    // Synthetic pointers have no browser-owned capture. The rest of the input and render path is real.
+    canvas.setPointerCapture = () => {};
+    canvas.releasePointerCapture = () => {};
+    canvas.dispatchEvent(new PointerEvent('pointerdown', {pointerId:1, pointerType:'mouse', button, clientX:400, clientY:300}));
+    canvas.dispatchEvent(new PointerEvent('pointermove', {pointerId:1, pointerType:'mouse', clientX:480, clientY:320}));
+    canvas.dispatchEvent(new PointerEvent('pointerup', {pointerId:1, pointerType:'mouse', button}));
+    delete (canvas as Partial<HTMLCanvasElement>).setPointerCapture;
+    delete (canvas as Partial<HTMLCanvasElement>).releasePointerCapture;
+    const desiredTarget = stage.controls.target.clone();
+    const desiredOffset = orbitOffset();
+    const pendingBeforeWheel = stage.isMotionActive();
+    wheel();
+    const afterWheel = orbitOffset();
+    const poseMoved = button === 0 ? desiredOffset.angleTo(beforeDrag) > 0.01 : desiredTarget.distanceTo(origin) > 0.01;
+    const preserved = stage.controls.target.equals(desiredTarget) && afterWheel.angleTo(desiredOffset) < 1e-6;
+    const directZoom = Math.abs(stage.camera.position.distanceTo(origin) - afterWheel.length()) < 1e-6 &&
+      Math.abs(desiredOffset.length() - afterWheel.length()) > 1e-4;
+    // Simulate the first available frame being delayed beyond the input deadline.
+    stage.step(performance.now() + 251);
+    check(`${button === 0 ? 'angular' : 'pan'} drag target survives immediate wheel with direct zoom and overdue snap`,
+      poseMoved && pendingBeforeWheel && preserved && directZoom && !stage.isMotionActive() &&
+      stage.camera.position.distanceTo(stage.controls.object.position) < 1e-6);
+  }
+
+  // Keyboard orbit runs through the normal demand loop. Only timing tests use step().
   stage.setCamera('threeQuarter', true);
   stage.step(0);
   const startOrbitPos = stage.camera.position.clone();
-  stage.renderer.domElement.focus();
-  stage.renderer.domElement.dispatchEvent(
+  canvas.focus();
+  canvas.dispatchEvent(
     new KeyboardEvent('keydown', { key: 'ArrowRight', code: 'ArrowRight', shiftKey: true, bubbles: true, cancelable: true }),
   );
   const orbitStarted = stage.isMotionActive();
-  let orbitT = 0;
-  let halfWayMoved = false;
-  let orbitSteps = 0;
-  while (orbitSteps < 80) {
-    const active = stage.step(orbitT);
-    if (orbitT >= 45 && orbitT <= 70 && stage.camera.position.distanceTo(startOrbitPos) > 1e-4) {
-      halfWayMoved = true;
-    }
-    if (!active) break;
-    orbitT += 16.6667;
-    orbitSteps++;
+  const orbitStartMs = performance.now();
+  const desiredOrbitPos = stage.controls.object.position.clone();
+  let intermediatePose = false;
+  while (stage.isMotionActive() && performance.now() - orbitStartMs < 1000) {
+    await wait(8);
+    intermediatePose ||= stage.camera.position.distanceTo(startOrbitPos) > 1e-4 &&
+      stage.camera.position.distanceTo(desiredOrbitPos) > 1e-4;
   }
+  const orbitT = performance.now() - orbitStartMs;
   const bakesAfterOrbit = stage.ground.getTelemetry().bakeCount;
   const drawsAfterOrbitSettle = passes.main;
   await wait(2050);
   const idleZeroAfterOrbit = passes.main === drawsAfterOrbitSettle;
   check(
-    'orbit damping smooths keyboard input, settles <=250ms, 0 shadow bakes, 0 draws over 2s idle',
+    'keyboard damping renders an intermediate pose, settles, and reaches zero production draws over 2s idle',
     orbitStarted &&
-      halfWayMoved &&
+      intermediatePose &&
       orbitT <= 270 &&
       !stage.isMotionActive() &&
       stage.camera.position.distanceTo(startOrbitPos) > 1e-4 &&
+      stage.camera.position.equals(desiredOrbitPos) &&
       bakesAfterOrbit === bakesBeforeOrbit &&
       idleZeroAfterOrbit,
   );
   motionTiming.orbitSettleMs = Number(orbitT.toFixed(1));
+
+  canvas.dispatchEvent(new KeyboardEvent('keydown', {code:'ArrowRight', shiftKey:true, bubbles:true, cancelable:true}));
+  const wasDamping = stage.isMotionActive();
+  const reducedOrbitTarget = stage.controls.object.position.clone();
+  const bakesBeforeReducedOrbit = stage.ground.getTelemetry().bakeCount;
+  stage.setReducedMotion(true);
+  await wait(80);
+  check('reduced motion snaps orbit without rebaking an unchanged shadow', wasDamping &&
+    !stage.isMotionActive() && stage.camera.position.equals(reducedOrbitTarget) &&
+    stage.ground.getTelemetry().bakeCount === bakesBeforeReducedOrbit);
+  stage.setReducedMotion(false);
 
   // 6. Live reduced-motion snaps active explode + camera + HUD inset refits cleanly
   stage.setCamera('exploded', true);

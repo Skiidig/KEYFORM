@@ -23,7 +23,7 @@ export class NativeStage {
   private readonly displayedTarget = new THREE.Vector3();
   private readonly lights: ReturnType<typeof createStudioLights>;
   private readonly transition = new CameraTransitionController();
-  private readonly observer: ResizeObserver;
+  private readonly observer?: ResizeObserver;
   private readonly scratchDesiredOffset = new THREE.Vector3();
   private readonly scratchCurrentOffset = new THREE.Vector3();
   private readonly scratchDesiredSpherical = new THREE.Spherical();
@@ -44,8 +44,8 @@ export class NativeStage {
   private syncingControls = false;
   private orbitSmoothingActive = false;
   private orbitLastFrameMs: number | null = null;
-  private orbitSettleStartMs: number | null = null;
   private orbitInputEventMs: number | null = null;
+  private wheelEvent?: WheelEvent;
 
   constructor(
     readonly renderer: THREE.WebGLRenderer,
@@ -73,6 +73,7 @@ export class NativeStage {
     this.controls.listenToKeyEvents(renderer.domElement);
     this.controls.addEventListener('change', this.onControlsChange);
     this.controls.addEventListener('start', this.interrupt);
+    renderer.domElement.addEventListener('wheel', this.captureWheel, { capture: true, passive: true });
     const resize = () => {
       const { clientWidth: width, clientHeight: height } = container;
       if (!width || !height || this.disposed) return;
@@ -91,9 +92,14 @@ export class NativeStage {
       renderer.setSize(width, height, false);
       this.invalidate();
     };
-    this.observer = new ResizeObserver(resize);
-    this.observer.observe(container);
-    resize();
+    try {
+      this.observer = new ResizeObserver(resize);
+      this.observer.observe(container);
+      resize();
+    } catch (error) {
+      this.disposeStageResources();
+      throw error;
+    }
   }
 
   private applyViewOffset(targetCamera: THREE.PerspectiveCamera): void {
@@ -143,7 +149,6 @@ export class NativeStage {
   private clearOrbitSmoothing(): void {
     this.orbitSmoothingActive = false;
     this.orbitLastFrameMs = null;
-    this.orbitSettleStartMs = null;
     this.orbitInputEventMs = null;
   }
 
@@ -253,14 +258,17 @@ export class NativeStage {
     if (this.orbitSmoothingActive) this.snapDisplayedToInput();
     if (this.transition.isActive()) this.setCamera(this.preset, true);
     if (this.model.isExplodeAnimating()) {
+      const previousPose = this.model.getExplodeProgress();
       this.model.setExplodeTarget(this.model.getExplodeTarget(), true);
+      this.shadowDirty ||= this.model.getExplodeProgress() !== previousPose;
     }
     if (this.model.getViewMode() === 'hero_switch') {
+      const previousPose = this.model.getHeroPoseProgress();
       const state = this.model.getHeroSwitchMechanicalState();
       this.model.setHeroSwitchPresentation(state.pose, true);
       this.model.setHeroSwitchPressed(state.phase === 'pressing' || state.phase === 'bottomed', true);
+      this.shadowDirty ||= this.model.getHeroPoseProgress() !== previousPose;
     }
-    this.shadowDirty = true;
     this.invalidate();
   }
 
@@ -309,17 +317,12 @@ export class NativeStage {
       return false;
     }
 
-    if (this.orbitSettleStartMs === null) {
-      this.orbitSettleStartMs = now;
+    const lastInput = this.orbitInputEventMs ?? now;
+    if (now - lastInput >= ORBIT_MAX_SETTLE_MS) {
+      this.snapDisplayedToInput();
+      return false;
     }
-    let dt: number;
-    if (this.orbitLastFrameMs === null) {
-      // First frame after an input event: use elapsed time since input (clamped cleanly for synthetic clocks).
-      const rawSinceInput = this.orbitInputEventMs !== null ? now - this.orbitInputEventMs : 16.67;
-      dt = rawSinceInput > 0 && rawSinceInput <= ORBIT_MAX_DT_MS ? rawSinceInput : 16.67;
-    } else {
-      dt = Math.min(ORBIT_MAX_DT_MS, Math.max(0, now - this.orbitLastFrameMs));
-    }
+    const dt = Math.min(ORBIT_MAX_DT_MS, Math.max(0, now - (this.orbitLastFrameMs ?? lastInput)));
     this.orbitLastFrameMs = now;
 
     this.scratchDesiredOffset.copy(this.orbitInputCamera.position).sub(this.controls.target);
@@ -333,13 +336,10 @@ export class NativeStage {
       Math.cos(this.scratchDesiredSpherical.theta - this.scratchCurrentSpherical.theta),
     );
     const targetDist = this.displayedTarget.distanceTo(this.controls.target);
-    const elapsedTail = now - this.orbitSettleStartMs;
-
     if (
-      elapsedTail >= ORBIT_MAX_SETTLE_MS ||
-      (Math.abs(dPhi) < ORBIT_ANGLE_EPSILON &&
-        Math.abs(dTheta) < ORBIT_ANGLE_EPSILON &&
-        targetDist < ORBIT_TARGET_EPSILON)
+      Math.abs(dPhi) < ORBIT_ANGLE_EPSILON &&
+      Math.abs(dTheta) < ORBIT_ANGLE_EPSILON &&
+      targetDist < ORBIT_TARGET_EPSILON
     ) {
       this.snapDisplayedToInput();
       return false;
@@ -433,15 +433,21 @@ export class NativeStage {
     }
 
     this.orbitSmoothingActive = true;
-    this.orbitSettleStartMs = null;
     this.orbitInputEventMs = performance.now();
     this.invalidate();
   };
 
+  // OrbitControls emits the same start event for a wheel tick and a new drag.
+  private captureWheel = (event: WheelEvent) => { this.wheelEvent = event; };
+
   private interrupt = () => {
     if (this.syncingControls || this.disposed) return;
     this.userOrbited = true;
-    const wasAnimating = this.transition.isActive() || this.orbitSmoothingActive;
+    const fromWheel = Boolean(this.wheelEvent?.eventPhase);
+    this.wheelEvent = undefined;
+    const wasTransitioning = this.transition.isActive();
+    if (fromWheel && !wasTransitioning) return;
+    const wasAnimating = wasTransitioning || this.orbitSmoothingActive;
     this.transition.cancel();
     this.clearOrbitSmoothing();
     // Rebase OrbitControls from the displayed camera pose so interruptions never jump.
@@ -461,13 +467,22 @@ export class NativeStage {
 
   dispose() {
     if (this.disposed) return;
+    this.disposeStageResources();
+    this.renderer.dispose();
+    this.renderer.forceContextLoss();
+    this.renderer.domElement.remove();
+  }
+
+  private disposeStageResources() {
     this.disposed = true;
     cancelAnimationFrame(this.frame);
     this.frame = 0;
     this.transition.cancel();
     this.clearOrbitSmoothing();
-    this.observer.disconnect();
+    this.observer?.disconnect();
     this.renderer.domElement.removeEventListener('webglcontextlost', this.contextLost);
+    this.renderer.domElement.removeEventListener('wheel', this.captureWheel, true);
+    this.wheelEvent = undefined;
     this.controls.removeEventListener('change', this.onControlsChange);
     this.controls.removeEventListener('start', this.interrupt);
     this.controls.dispose();
@@ -476,8 +491,5 @@ export class NativeStage {
     this.ground.dispose();
     disposeStudioLights(this.lights);
     this.model.dispose();
-    this.renderer.dispose();
-    this.renderer.forceContextLoss();
-    this.renderer.domElement.remove();
   }
 }

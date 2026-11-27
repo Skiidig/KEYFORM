@@ -128,7 +128,11 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
         do {
           snapshot = revision;
           context.signal.throwIfAborted();
-          await apply(target, true);
+          try {
+            await apply(target, true);
+          } catch (error) {
+            if (snapshot === revision) throw error;
+          }
         } while (snapshot !== revision);
         context.signal.throwIfAborted();
         failure = 'renderer';
@@ -140,9 +144,9 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
     },
     update(next) {
       current = next;
-      revision++;
+      const snapshot = ++revision;
       if (stage && ready) void apply(stage, false).catch(() => {
-        if (!lifetime.signal.aborted) lifetime.fail('asset');
+        if (!lifetime.signal.aborted && snapshot === revision) lifetime.fail('asset');
       });
     },
     setReducedMotion(value) {

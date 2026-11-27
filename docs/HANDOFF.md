@@ -1,5 +1,11 @@
 # KEYFORM — Phase Handoff
 
+## KF-007 targeted runtime corrections
+
+The runtime corrections build on `08d6185` on `integration/kf004b-production`. Reset preserves its exact displayed start and solved destination, wheel zoom preserves pending drag and pan, and obsolete internal GLB failures leave the exterior viewport active. The orbit deadline starts at input, reduced-motion snaps only rebake changed poses, and stage setup rolls back an observer and scene resources if initialization fails.
+
+The [KF-007 report](KF-007.md) records the regression evidence and bundle budgets. The [production preview](http://127.0.0.1:4185/) serves the local build. Overall release approval requires independent production QA of the corrections and closure of the device, performance, Node 22.x parity, and accessibility gates below.
+
 ## KF-QUALITY-002C final motion craftsmanship (Ready for Review)
 
 KF-QUALITY-002C builds on accepted `KF-ART-002B` checkpoint `d4d36de` on `integration/kf004b-production`. All `120/120` production assets (`A01`, `H02`, `C02`/`C02Mobile`, GLBs, legend atlases, CC0 WAV audio), explicit `View in 3D` WebGL activation, single-renderer ownership, and the single-entry-script contract remain untouched. Automatic Build Studio 3D activation remains explicitly deferred. The [production preview](http://127.0.0.1:4185/) serves `dist/` directly.

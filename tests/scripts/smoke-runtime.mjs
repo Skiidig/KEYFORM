@@ -14,7 +14,21 @@ const initialProbe = () => {
   const probe = globalThis.runtimeProbe = {
     active: new Set(), max: 0, draws: 0, raf: new Set(), firstDraw: {},
     fault: '', hold: '', held: 0, aborted: 0, readyWhileDetached: 0, renderer: '',
-    mediaListeners: new Set(), holdDecode: false, decoding: false, decodedClosed: 0,
+    mediaListeners: new Set(), stageObservers: new Set(), holdDecode: false, decoding: false, decodedClosed: 0,
+    views: new WeakMap(), contextDraws: new WeakMap(), internalFailures: 0,
+  };
+  const NativeResizeObserver = window.ResizeObserver;
+  window.ResizeObserver = class extends NativeResizeObserver {
+    observe(element, options) {
+      super.observe(element, options);
+      if (!element.matches('.kf-viewport-host__canvas-slot')) return;
+      probe.stageObservers.add(this);
+      if (probe.fault === 'stage-observe') throw new Error('Injected failure after stage observation');
+    }
+    disconnect() {
+      probe.stageObservers.delete(this);
+      super.disconnect();
+    }
   };
   const request = window.requestAnimationFrame.bind(window);
   const cancel = window.cancelAnimationFrame.bind(window);
@@ -41,6 +55,7 @@ const initialProbe = () => {
     const gl = original.call(this, type, options);
     if (type !== 'webgl2' || !gl || probe.active.has(gl)) return gl;
     probe.active.add(gl);
+    probe.contextDraws.set(gl, 0);
     probe.max = Math.max(probe.max, probe.active.size);
     const debug = gl.getExtension('WEBGL_debug_renderer_info');
     probe.renderer = debug ? gl.getParameter(debug.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
@@ -49,18 +64,33 @@ const initialProbe = () => {
       const lose = loss.loseContext.bind(loss);
       loss.loseContext = () => { probe.active.delete(gl); lose(); };
     }
+    const viewLocations = new WeakSet();
+    const getUniformLocation = gl.getUniformLocation.bind(gl);
+    gl.getUniformLocation = (program, name) => {
+      const location = getUniformLocation(program, name);
+      if (location && name === 'viewMatrix') viewLocations.add(location);
+      return location;
+    };
+    const uniformMatrix4fv = gl.uniformMatrix4fv.bind(gl);
+    gl.uniformMatrix4fv = (location, transpose, values, ...rest) => {
+      if (viewLocations.has(location) && gl.getParameter(gl.DRAW_FRAMEBUFFER_BINDING) === null) {
+        probe.views.set(gl, Array.from(values));
+      }
+      uniformMatrix4fv(location, transpose, values, ...rest);
+    };
     let first = true;
     for (const method of ['drawElements', 'drawArrays', 'drawElementsInstanced', 'drawArraysInstanced']) {
       const native = gl[method].bind(gl);
       gl[method] = (...args) => {
         if (gl.getParameter(gl.DRAW_FRAMEBUFFER_BINDING) === null) {
           probe.draws++;
+          probe.contextDraws.set(gl, probe.contextDraws.get(gl) + 1);
           if (first) {
             first = false;
             const host = this.closest('[data-kf-viewport]');
             if (!host) probe.readyWhileDetached++;
             else probe.firstDraw[host.dataset.kfViewport] = {
-              staticVisible: Boolean(host.querySelector('picture')),
+              staticVisible: host.querySelector('picture img')?.checkVisibility({opacityProperty: true, visibilityProperty: true}) === true,
               canvasHidden: getComputedStyle(this.parentElement).visibility === 'hidden',
               reduced: matchMedia('(prefers-reduced-motion: reduce)').matches,
             };
@@ -89,6 +119,10 @@ const initialProbe = () => {
       });
     }
     if (probe.fault === 'missing' && href.includes('exterior_b21')) return new Response('', {status: 404});
+    if (probe.fault === 'internal' && href.includes('internal_b21')) {
+      probe.internalFailures++;
+      return new Response('', {status: 404});
+    }
     if (probe.fault === 'corrupt' && href.includes('legends_b21')) return new Response('invalid', {headers: {'Content-Type':'image/png'}});
     if (probe.fault === 'html' && href.endsWith('/manifest.json')) return new Response('<html>', {headers: {'Content-Type':'text/html'}});
     return nativeFetch(input, options);
@@ -121,9 +155,45 @@ const stats = () => evaluate(() => ({
   canvases: document.querySelectorAll('.kf-runtime-canvas').length, renderer: runtimeProbe.renderer,
   firstDraw: runtimeProbe.firstDraw, held: runtimeProbe.held, aborted: runtimeProbe.aborted,
   detached: runtimeProbe.readyWhileDetached, mediaListeners: runtimeProbe.mediaListeners.size,
+  stageObservers: runtimeProbe.stageObservers.size,
   decoding: runtimeProbe.decoding, decodedClosed: runtimeProbe.decodedClosed,
 }));
 const setFault = (fault) => evaluate((value) => { runtimeProbe.fault = value; }, fault);
+const view = () => evaluate(() => runtimeProbe.views.get([...runtimeProbe.active][0]) ?? null);
+const viewDistance = (a, b) => b ? Math.hypot(...a.map((value, i) => value - b[i])) : 0;
+const waitForViewChange = (before, label) => until(async () => {
+  const after = await view();
+  return viewDistance(before, after) > 1e-4 && after;
+}, label);
+const selectStudioView = (index) => evaluate((position) => {
+  document.querySelectorAll('#build-studio .kf-hud-btn')[position].click();
+}, index);
+const queueMotionAndExit = (exit) => evaluate((kind) => {
+  const canvas = document.querySelector('#build-studio .kf-runtime-canvas');
+  const gl = [...runtimeProbe.active][0];
+  canvas.dispatchEvent(new KeyboardEvent('keydown', {code:'ArrowRight', shiftKey:true, bubbles:true, cancelable:true}));
+  const queued = runtimeProbe.raf.size;
+  runtimeProbe.retired = gl;
+  runtimeProbe.retiredDraws = runtimeProbe.contextDraws.get(gl);
+  if (kind === 'loss') {
+    runtimeProbe.lossDelivered = false;
+    // The extension delivers the event asynchronously. Measure after the stage has disposed.
+    canvas.addEventListener('webglcontextlost', () => {
+      runtimeProbe.retiredDraws = runtimeProbe.contextDraws.get(gl);
+      runtimeProbe.lossDelivered = true;
+    }, {once:true});
+    gl.getExtension('WEBGL_lose_context').loseContext();
+  } else {
+    const station = kind === 'handoff' ? 'mechanical-anatomy' : 'build-studio';
+    document.querySelector(`[data-kf-viewport="${station}"] .kf-viewport-host__action:last-child`).click();
+  }
+  return queued;
+}, exit);
+const assertRetiredIdle = async () => {
+  await delay(120);
+  assert.equal(await evaluate(() => runtimeProbe.contextDraws.get(runtimeProbe.retired)),
+    await evaluate(() => runtimeProbe.retiredDraws));
+};
 const capture = async (station, file) => {
   if (strict) return;
   await evaluate((id) => document.querySelector('[data-kf-viewport="' + id + '"]').scrollIntoView({block:'center', behavior:'instant'}), station);
@@ -212,10 +282,13 @@ try {
   assert.equal((await stats()).draws, idle.draws);
   assert.equal((await stats()).raf, 0);
   passed('zero continuous idle rendering');
+  const defaultView = await view();
+  assert.ok(defaultView, 'camera view matrix captured from the framebuffer pass');
   await evaluate(() => document.querySelector('.kf-runtime-canvas').focus());
   await send('Input.dispatchKeyEvent', {type:'keyDown',key:'ArrowLeft',code:'ArrowLeft',windowsVirtualKeyCode:37,modifiers:8});
   await send('Input.dispatchKeyEvent', {type:'keyUp',key:'ArrowLeft',code:'ArrowLeft',windowsVirtualKeyCode:37,modifiers:8});
   await until(async () => (await stats()).draws > idle.draws, 'keyboard orbit render');
+  await waitForViewChange(defaultView, 'keyboard orbit pose');
   passed('keyboard orbit invalidates the active viewport');
   const afterOrbitDraws = (await stats()).draws;
   await evaluate(() => document.querySelector('[data-kf-viewport="build-studio"] [aria-label="Reset camera view"]').click());
@@ -225,6 +298,7 @@ try {
   await delay(400);
   assert.equal((await stats()).draws, afterResetDraws);
   assert.equal((await stats()).raf, 0);
+  assert.ok(viewDistance(defaultView, await view()) < 1e-5);
   passed('camera reset restores framing and settles to zero idle frames');
 
   // KF-QUALITY-002C: Live motion lifecycle — pointer/touch/wheel damping, live reduced-motion snap, and 2s idle settle
@@ -236,10 +310,15 @@ try {
     return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
   });
   const drawsBeforeDrag = (await stats()).draws;
+  const viewBeforeDrag = await view();
   await send('Input.dispatchMouseEvent', { type: 'mousePressed', button: 'left', x: canvasBox.x, y: canvasBox.y, clickCount: 1 });
   await send('Input.dispatchMouseEvent', { type: 'mouseMoved', button: 'left', x: canvasBox.x + 64, y: canvasBox.y - 18, buttons: 1 });
   await send('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'left', x: canvasBox.x + 64, y: canvasBox.y - 18, clickCount: 1 });
+  await waitForViewChange(viewBeforeDrag, 'pointer drag pose');
+  await until(async () => (await stats()).raf === 0, 'pointer drag settles');
+  const draggedView = await view();
   await send('Input.dispatchMouseEvent', { type: 'mouseWheel', x: canvasBox.x, y: canvasBox.y, deltaX: 0, deltaY: -80 });
+  await waitForViewChange(draggedView, 'wheel zoom pose');
   await until(async () => (await stats()).draws > drawsBeforeDrag && (await stats()).raf === 0, 'orbit damping and wheel settle');
   const settledOrbitDraws = (await stats()).draws;
   await delay(2050);
@@ -249,14 +328,24 @@ try {
   await evaluate(() => {
     document.querySelector('[data-kf-viewport="build-studio"] [aria-label="Reset camera view"]')?.click();
   });
-  await delay(40);
+  const zoomedView = await view();
+  const movingView = await waitForViewChange(zoomedView, 'reset starts moving');
+  assert.ok(viewDistance(defaultView, movingView) > 1e-4, 'reset is between its endpoints');
   await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
-  await until(async () => (await stats()).raf === 0, 'live reduced-motion snap');
+  await until(async () => (await stats()).raf === 0 && viewDistance(defaultView, await view()) < 1e-5, 'live reduced-motion snap');
   passed('pointer orbit damping, wheel zoom, 2s zero-idle settle, and live reduced-motion snap');
 
   requests.clear();
-  await toggle(stations.anatomy);
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
+  assert.ok(await queueMotionAndExit('close'), 'Close during a queued stage frame');
+  await expectMode(stations.studio, 'static-fallback');
+  await assertRetiredIdle();
+  await toggle(stations.studio);
+  await expectMode(stations.studio, 'interactive-3d');
+  assert.ok(await queueMotionAndExit('handoff'), 'handoff during a queued stage frame');
   await expectMode(stations.anatomy, 'interactive-3d');
+  await assertRetiredIdle();
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   assert.equal(await mode(stations.studio), 'static-fallback');
   assert.equal((await stats()).max, 1);
   const anatomy = trace();
@@ -311,6 +400,50 @@ try {
   assert.equal((await stats()).max, 1);
   passed('late parsed geometry is discarded and its decoded image closed');
 
+  await setFault('stage-observe');
+  await toggle(stations.studio);
+  await expectMode(stations.studio, 'runtime-error');
+  const rolledBack = await stats();
+  assert.deepEqual([rolledBack.stageObservers, rolledBack.mediaListeners, rolledBack.active, rolledBack.canvases, rolledBack.raf], [0, 0, 0, 0, 0]);
+  await setFault('');
+  await toggle(stations.studio);
+  await expectMode(stations.studio, 'interactive-3d');
+  await toggle(stations.studio);
+  await expectMode(stations.studio, 'static-fallback');
+  passed('partial stage setup rolls back after observation and manual retry succeeds');
+
+  const failHeldInternal = async (duringMount, obsolete) => {
+    const heldBefore = (await stats()).held;
+    const failuresBefore = await evaluate(() => runtimeProbe.internalFailures);
+    await evaluate(() => { runtimeProbe.hold = 'internal_b21'; });
+    await selectStudioView(3);
+    if (duringMount) await toggle(stations.studio);
+    await until(async () => (await stats()).held > heldBefore, 'held internal model');
+    await expectMode(stations.studio, duringMount ? 'loading-runtime' : 'interactive-3d');
+    if (obsolete) await selectStudioView(0);
+    await evaluate(() => {
+      runtimeProbe.fault = 'internal';
+      runtimeProbe.hold = '';
+      runtimeProbe.resume();
+    });
+    await until(async () => await evaluate(() => runtimeProbe.internalFailures) > failuresBefore, 'internal model request failed');
+    await expectMode(stations.studio, obsolete ? 'interactive-3d' : 'runtime-error');
+    await delay(120);
+    assert.equal(await mode(stations.studio), obsolete ? 'interactive-3d' : 'runtime-error');
+    assert.equal((await stats()).active, obsolete ? 1 : 0);
+    await setFault('');
+  };
+  await failHeldInternal(true, true);
+  await failHeldInternal(false, true);
+  await failHeldInternal(false, false);
+  await failHeldInternal(true, false);
+  await toggle(stations.studio);
+  await expectMode(stations.studio, 'interactive-3d');
+  await selectStudioView(0);
+  await toggle(stations.studio);
+  await expectMode(stations.studio, 'static-fallback');
+  passed('stale internal rejection during mount and update preserves exterior; current rejection allows retry');
+
   for (const fault of ['missing','corrupt','html','renderer']) {
     await setFault(fault);
     await toggle(stations.studio);
@@ -331,21 +464,22 @@ try {
     assert.equal(remount.reduce((total, row) => total + (row.transferBytes ?? 0), 0), 0);
     passed('repeat activation reuses cached asset bytes');
   }
-  await evaluate(() => {
-    const gl = [...runtimeProbe.active][0];
-    gl.getExtension('WEBGL_lose_context').loseContext();
-  });
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
+  assert.ok(await queueMotionAndExit('loss'), 'context loss during a queued stage frame');
   await expectMode(stations.studio, 'runtime-error');
+  assert.ok(await evaluate(() => runtimeProbe.lossDelivered));
+  await assertRetiredIdle();
   assert.equal((await stats()).raf, 0);
   assert.equal((await stats()).canvases, 0);
   await toggle(stations.studio);
   await expectMode(stations.studio, 'interactive-3d');
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   passed('synthetic context loss releases resources and retry mounts a fresh lease');
 
   await evaluate(() => { location.hash = '/design-system'; });
   await until(() => evaluate(() => document.querySelector('main h1')?.textContent.includes('Design System & Brand Lab')), 'route unmount');
   const disposed = await stats();
-  assert.deepEqual([disposed.active, disposed.canvases, disposed.raf, disposed.mediaListeners, disposed.detached], [0,0,0,0,0]);
+  assert.deepEqual([disposed.active, disposed.canvases, disposed.raf, disposed.mediaListeners, disposed.detached, disposed.stageObservers], [0,0,0,0,0,0]);
   assert.equal(disposed.max, 1);
   assert.deepEqual(errors, []);
   passed('route unmount removes canvas, listeners and outstanding frame work');
@@ -372,9 +506,11 @@ try {
     return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) };
   });
   const drawsBeforeTouch = (await stats()).draws;
+  const viewBeforeTouch = await view();
   await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: touchBox.x, y: touchBox.y, id: 1 }] });
   await send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: touchBox.x + 48, y: touchBox.y - 12, id: 1 }] });
   await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await waitForViewChange(viewBeforeTouch, 'touch orbit pose');
   await until(async () => (await stats()).draws > drawsBeforeTouch && (await stats()).raf === 0, 'touch orbit damping settle');
   await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   await capture(stations.studio, 'studio-mobile-active.png');
