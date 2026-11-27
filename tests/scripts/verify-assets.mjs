@@ -172,6 +172,10 @@ for (const name of assets.filter((name) => /\.(js|css)$/.test(name))) {
 const initialJs = Object.keys(bundle).filter((name) => name.startsWith('index-') && name.endsWith('.js'));
 assert.equal(initialJs.length, 1);
 assert.ok(bundle[initialJs[0]].gzipLevel9 <= 90_000, 'Initial JavaScript budget');
+const runtimeJs = Object.keys(bundle).filter((name) => /^(viewportLifecycle|viewportAdapter|buildConfigRuntime|digest)-.+\.js$/.test(name));
+assert.ok(runtimeJs.some((name) => name.startsWith('viewportAdapter-')), 'Lazy native runtime chunk');
+assert.ok(runtimeJs.reduce((total, name) => total + bundle[name].gzipLevel9, 0) <= 220_000,
+  'Aggregate lazy 3D JavaScript budget');
 const allDistEntries = await readdir(dist, {recursive: true, withFileTypes: true});
 let distBytes = 0;
 for (const entry of allDistEntries.filter((entry) => entry.isFile())) {

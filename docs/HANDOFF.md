@@ -1,10 +1,16 @@
 # KEYFORM — Phase Handoff
 
+## KF-008B conditional automatic 3D activation
+
+KF-008B builds on `0cef56d`. Anatomy, Switch Lab, and Build Studio can claim the single renderer after 500 ms of eligible stage visibility. Photography stays through the first draw. Manual ownership has priority, automatic work cancels when it loses eligibility, and Close suppresses automatic reopening for the page session.
+
+The [KF-008B report](KF-008B.md) records the ownership rules, regression and network evidence, and desktop and simulated mobile captures. Initial JavaScript measured 89,749 B gzip-9 and the aggregate lazy 3D path measured 196,283 B gzip-9. The [local production build](http://127.0.0.1:4185/) is ready for owner review. Owner approval and the outstanding physical-device and release checks are the entry criteria for further release work.
+
 ## KF-008A owner-approved visual integration
 
 KF-008A carries the frozen prototype into `integration/kf004b-production` from `3a991ba`. It adds 40 optimized editorial derivatives, retains canonical photography and technical diagrams, and preserves the current Build Studio and manual WebGL lifecycle. The [KF-008A report](KF-008A.md) contains provenance, known image discrepancies, bundle measurements, and desktop/mobile comparisons.
 
-All production regression suites and the local compressed-delivery performance checks passed. The uncompressed preview misses the mobile LCP target on both the baseline and the integrated build. Review the served build on [port 4185](http://127.0.0.1:4185/) alongside the approved prototype on [port 4186](http://127.0.0.1:4186/). Owner approval of this checkpoint is required before KF-008B.
+All production regression suites and the local compressed-delivery performance checks passed. The uncompressed preview missed the mobile LCP target on both the baseline and the integrated build. The owner completed KF-008A at `0cef56d` before starting KF-008B. See the [visual integration report](KF-008A.md) for the original comparisons.
 
 ## KF-007 targeted runtime corrections
 

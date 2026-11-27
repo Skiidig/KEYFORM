@@ -135,6 +135,8 @@ export interface ViewportMount {
   signal: AbortSignal;
   reducedMotion: boolean;
   progress(message: string): void;
+  automatic?: boolean;
+  canContinue?(): boolean;
   fail(code: 'context-lost' | 'asset' | 'renderer'): void;
 }
 

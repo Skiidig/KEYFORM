@@ -2,6 +2,23 @@ import type { RuntimeAvailability, RuntimeCapability } from './types';
 
 interface NetworkInformationLike {
   saveData?: boolean;
+  effectiveType?: string;
+  downlink?: number;
+}
+
+export const stageVisibilityThreshold = 0.35;
+
+export const runtimeDevice = () => navigator as Navigator & {
+  connection?: NetworkInformationLike & EventTarget;
+  deviceMemory?: number;
+};
+
+export function allowsAutomaticRuntime() {
+  const { connection, deviceMemory, hardwareConcurrency, onLine } = runtimeDevice();
+  return typeof window.WebGL2RenderingContext !== 'undefined' && onLine && !connection?.saveData
+    && (!connection?.effectiveType || connection.effectiveType === '4g')
+    && (connection?.downlink === undefined || connection.downlink >= 1.5)
+    && (!deviceMemory || deviceMemory > 4) && (!hardwareConcurrency || hardwareConcurrency > 2);
 }
 
 /**
@@ -23,8 +40,7 @@ export function detectRuntimeCapability(
 
   const webgl2Supported = typeof window.WebGL2RenderingContext !== 'undefined';
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const nav = navigator as Navigator & { connection?: NetworkInformationLike };
-  const saveData = Boolean(nav.connection?.saveData);
+  const saveData = Boolean(runtimeDevice().connection?.saveData);
 
   return {
     webgl2Supported,

@@ -5,6 +5,7 @@ import { mkdir, mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as delay } from 'node:timers/promises';
+import { gzipSync } from 'node:zlib';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const url = new URL(process.env.BASE_URL ?? 'http://127.0.0.1:4185/');
@@ -182,6 +183,12 @@ try {
     const heroes = network.filter(({url}) => url.includes(expected));
     assert.equal(heroes.length, 1, JSON.stringify({ name, heroes }));
     const scripts = network.filter(({type}) => type === 'Script');
+    let initialGzip9 = 0;
+    for (const {url: script} of scripts) {
+      const bytes = await readFile(resolve(root, 'dist', '.' + new URL(script).pathname));
+      initialGzip9 += gzipSync(bytes, { level: 9 }).length;
+    }
+    assert.ok(initialGzip9 <= 90_000, `Aggregate initial JavaScript: ${initialGzip9} B gzip-9`);
     assert.equal(scripts.length, 1, 'Expected only the entry script: ' + scripts.map(({url}) => url).join(', '));
     assert.ok(/\/assets\/index-/.test(scripts[0]?.url ?? ''), 'Missing entry script');
     assert.ok(!network.some(({url}) => url.includes('DesignSystemPreview')), 'Expected lazy preview chunk');
@@ -189,7 +196,7 @@ try {
     const heroTransfer = images.find(({url}) => new URL(url).pathname === layout.hero)?.transferBytes;
     assert.ok(heroTransfer > 0, name);
     const imageTransfer = images.reduce((total, row) => total + (row.transferBytes ?? 0), 0);
-    viewports[name] = { ...layout, heroTransfer, imageTransfer, network };
+    viewports[name] = { ...layout, heroTransfer, imageTransfer, initialGzip9, network };
     if (width === 1440 || width === 390) await screenshot(name);
   }
 
@@ -212,6 +219,8 @@ try {
   assert.equal(await evaluate(() => location.hash), '#main-content');
 
   const origin = url.origin;
+  // The static preview assertions exercise the reduced-motion fallback at an eligible stage.
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   await send('Browser.grantPermissions', { origin, permissions: ['clipboardReadWrite', 'clipboardSanitizedWrite'] });
   const interactive = await evaluate(async () => {
     const frame = () => new Promise((ready) => requestAnimationFrame(() => requestAnimationFrame(ready)));

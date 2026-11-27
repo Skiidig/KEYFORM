@@ -30,6 +30,8 @@ const browser = await openRuntimeBrowser();
 const { send, evaluate, on } = browser;
 
 const uiProbeScript = () => {
+  // Keep pre-existing explicit activation assertions on the constrained-device path.
+  Object.defineProperty(navigator, 'hardwareConcurrency', { value: 2 });
   const probe = (globalThis.__kf005 = {
     audioContexts: 0,
     audioStarts: 0,

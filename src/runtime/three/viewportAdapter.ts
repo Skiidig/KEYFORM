@@ -11,7 +11,9 @@ const switchVariants = { 'linear-45': 'linear45', 'tactile-58': 'tactile58', 'si
 
 export function createNativeStage(container: HTMLElement, assets: AssetPackage, lifetime: ViewportMount) {
   const canvas = document.createElement('canvas');
-  const context = canvas.getContext('webgl2', { antialias: true, alpha: false });
+  const context = canvas.getContext('webgl2', {
+    antialias: true, alpha: false, failIfMajorPerformanceCaveat: lifetime.automatic,
+  });
   if (!context) throw new Error('WebGL2 context creation failed');
   let renderer: WebGLRenderer | undefined;
   try {
@@ -103,6 +105,7 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
           station === 'build-studio' ? import('./buildConfigRuntime') : Promise.resolve(undefined),
         ]);
         context.signal.throwIfAborted();
+        if (context.canContinue?.() === false) return;
         buildConfigApplier = studioConfigMod?.createBuildConfigApplier();
         appliedCameraPreset = undefined;
         failure = 'renderer';
@@ -135,6 +138,7 @@ export function createViewportAdapter<K extends ViewportStationId>(station: K): 
           }
         } while (snapshot !== revision);
         context.signal.throwIfAborted();
+        if (context.canContinue?.() === false) return;
         failure = 'renderer';
         target.present();
         ready = true;

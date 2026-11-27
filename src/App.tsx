@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useLayoutEffect, useState } from 'react';
 import { DEFAULT_BUILD_CONFIG, type BuildConfig } from './data/kf01Data';
 import { HeaderNav, type ActiveView } from './components/HeaderNav';
 import { HeroSection } from './components/sections/HeroSection';
@@ -20,6 +20,11 @@ export const App: React.FC = () => {
     window.location.hash === '#/design-system' ? 'design-system' : 'prototype',
   );
   const [buildConfig, setBuildConfig] = useState<BuildConfig>(DEFAULT_BUILD_CONFIG);
+
+  useLayoutEffect(() => {
+    // The browser can resolve the initial fragment before React has rendered the section.
+    document.getElementById(location.hash.slice(1))?.scrollIntoView({ behavior: 'instant' });
+  }, []);
 
   useEffect(() => {
     const onHashChange = () => {

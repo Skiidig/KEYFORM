@@ -1,9 +1,9 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ResponsiveImage } from '../components/ui/ResponsiveImage';
-import { evaluateRuntimeAvailability } from './capabilities';
-import { acquireRendererLease } from './rendererLease';
+import { stageVisibilityThreshold } from './capabilities';
+import type { ViewportLifecycle } from './viewportLifecycle';
 import type {
-  StationState, StaticFallbackDescriptor, ViewportMode, ViewportMount, ViewportRuntimeAdapter, ViewportStationId,
+  StationState, StaticFallbackDescriptor, ViewportMode, ViewportStationId,
 } from './types';
 
 interface ViewportHostProps<K extends ViewportStationId> {
@@ -20,91 +20,77 @@ interface ViewportHostProps<K extends ViewportStationId> {
   onModeChange?: (mode: ViewportMode) => void;
 }
 
-const failures: Record<Parameters<ViewportMount['fail']>[0], string> = {
-  renderer: '3D preview is unavailable on this device.',
-  asset: '3D preview could not load.',
-  'context-lost': '3D preview lost its graphics connection.',
-};
+let manualRevision = 0;
 
 export function ViewportHost<K extends ViewportStationId>({
   station, state, fallback, className = '', imgClassName = '', imgStyle, priority = false,
   children, activeControls, resetTrigger = 0, onModeChange,
 }: ViewportHostProps<K>) {
   const slot = useRef<HTMLDivElement>(null);
-  const releaseRef = useRef<() => void>(undefined);
-  const adapterRef = useRef<ViewportRuntimeAdapter<StationState[K]>>(undefined);
+  const lifecycle = useRef<ViewportLifecycle<K>>(undefined);
+  const toggle = useRef<(close: boolean) => void>(undefined);
   const latestState = useRef(state);
-  const mounted = useRef(false);
   const lastReset = useRef(resetTrigger);
   const [mode, setMode] = useState<ViewportMode>('static-fallback');
   const [message, setMessage] = useState('');
 
   useLayoutEffect(() => {
     latestState.current = state;
-    adapterRef.current?.update(state);
+    lifecycle.current?.update(state);
   }, [state]);
 
   useEffect(() => {
     if (resetTrigger === lastReset.current) return;
     lastReset.current = resetTrigger;
-    adapterRef.current?.resetView?.();
+    lifecycle.current?.reset();
   }, [resetTrigger]);
 
   useLayoutEffect(() => {
-    mounted.current = true;
-    return () => {
-      mounted.current = false;
-      releaseRef.current?.();
+    const container = slot.current!;
+    let disposed = false;
+    let observed: IntersectionObserverEntry | undefined;
+    let requested = false;
+    const load = () => import('./viewportLifecycle').then(({ createViewportLifecycle }) => {
+      if (disposed) return;
+      if (!lifecycle.current) {
+        lifecycle.current = createViewportLifecycle(station, container, () => latestState.current, setMode, setMessage);
+        if (observed) lifecycle.current.observe(observed);
+      }
+      return lifecycle.current;
+    });
+    const observer = typeof IntersectionObserver === 'undefined' ? undefined : new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        observed = entry;
+        if (lifecycle.current) lifecycle.current.observe(entry);
+        else if (!requested && entry.intersectionRatio >= stageVisibilityThreshold) {
+          requested = true;
+          void load().catch(() => {});
+        }
+      }
+    }, { threshold: [0.001, stageVisibilityThreshold] });
+    observer?.observe(container);
+
+    toggle.current = (close) => {
+      const revision = ++manualRevision;
+      if (lifecycle.current) lifecycle.current.toggle(close);
+      else void load().then((session) => {
+        if (revision === manualRevision) session?.toggle(close);
+      }).catch(() => {
+        if (disposed || revision !== manualRevision) return;
+        setMessage('3D preview could not load.');
+        setMode('runtime-error');
+      });
     };
-  }, []);
+    return () => {
+      disposed = true;
+      observer?.disconnect();
+      lifecycle.current?.dispose();
+      lifecycle.current = undefined;
+    };
+  }, [station]);
 
   useEffect(() => onModeChange?.(mode), [mode, onModeChange]);
 
-  const start = async () => {
-    const availability = evaluateRuntimeAvailability(true);
-    const container = slot.current;
-    if (!availability.available || !container) {
-      setMessage(availability.reason);
-      setMode('runtime-error');
-      return;
-    }
-    const abort = new AbortController();
-    const media = matchMedia('(prefers-reduced-motion: reduce)');
-    const updateMotion = (event: MediaQueryListEvent) => adapterRef.current?.setReducedMotion(event.matches);
-    const release = acquireRendererLease(() => {
-      abort.abort();
-      media.removeEventListener('change', updateMotion);
-      adapterRef.current?.dispose();
-      adapterRef.current = undefined;
-      releaseRef.current = undefined;
-      if (mounted.current) setMode('static-fallback');
-    });
-    releaseRef.current = release;
-    media.addEventListener('change', updateMotion);
-    const fail: ViewportMount['fail'] = (code) => {
-      if (abort.signal.aborted) return;
-      release();
-      setMessage(failures[code]);
-      setMode('runtime-error');
-    };
-    setMessage('Preparing 3D preview…');
-    setMode('loading-runtime');
-    try {
-      const { createViewportAdapter } = await import('./three/viewportAdapter');
-      if (abort.signal.aborted) return;
-      const adapter = createViewportAdapter(station);
-      adapterRef.current = adapter;
-      await adapter.mount(container, latestState.current, {
-        signal: abort.signal,
-        reducedMotion: media.matches,
-        progress: (next) => { if (!abort.signal.aborted) setMessage(next); },
-        fail,
-      });
-      if (!abort.signal.aborted) setMode('interactive-3d');
-    } catch {
-      fail('asset');
-    }
-  };
   const interactive = mode === 'interactive-3d';
   const loading = mode === 'loading-runtime';
   const errored = mode === 'runtime-error';
@@ -136,7 +122,7 @@ export function ViewportHost<K extends ViewportStationId>({
           <button
             className="kf-viewport-host__action kf-viewport-host__action--subtle kf-viewport-host__action--reset"
             type="button"
-            onClick={() => adapterRef.current?.resetView?.()}
+            onClick={() => lifecycle.current?.reset()}
             aria-label="Reset camera view"
             title="Reset camera view"
           >
@@ -149,7 +135,7 @@ export function ViewportHost<K extends ViewportStationId>({
         <button
           className={`kf-viewport-host__action ${!interactive && !loading ? 'kf-viewport-host__action--activate' : ''}`.trim()}
           type="button"
-          onClick={interactive || loading ? () => releaseRef.current?.() : start}
+          onClick={() => toggle.current?.(interactive || loading)}
         >
           {!interactive && !loading && (
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">

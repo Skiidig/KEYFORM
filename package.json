@@ -13,7 +13,8 @@
     "verify:runtime": "node tests/scripts/smoke-runtime.mjs",
     "verify:mechanics": "node tests/scripts/verify-runtime.mjs",
     "verify:kf005": "node tests/scripts/verify-kf005.mjs",
-    "verify:kf006a": "node tests/scripts/verify-kf006a.mjs"
+    "verify:kf006a": "node tests/scripts/verify-kf006a.mjs",
+    "verify:kf008b": "node tests/scripts/verify-kf008b.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.2.5",
