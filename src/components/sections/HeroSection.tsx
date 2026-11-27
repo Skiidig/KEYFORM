@@ -39,13 +39,13 @@ export const HeroSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Single art-directed <picture>: A01 (16:9) on >=768px, A02 (1:1) on <768px */}
+        {/* Single art-directed <picture>: A01 (16:9) on >=768px, H02 (16:10.6) on <768px */}
         <div className="kf-hero__media">
           <ArtDirectedHeroPicture
             desktopShotId="A01"
-            mobileShotId="A02"
+            mobileShotId="H02"
             breakpointPx={768}
-            alt="KEYFORM KF—01 studio render in dark After Hours lighting showing Forest anodized 6063 aluminium enclosure, uniform Charcoal PBT keycaps across all 81 keys, and diamond-knurled rotary dial"
+            alt="KEYFORM KF—01 with a Forest aluminium enclosure, Charcoal keycaps and a knurled rotary dial."
             pictureClassName="kf-hero__picture"
             className="kf-hero__img"
           />

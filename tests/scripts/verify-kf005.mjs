@@ -294,6 +294,15 @@ try {
     async () => (await getPressBtn()).readout === '4.0 / 4.0 mm',
     'pointer press reaches 4.0 mm',
   );
+  // The readout rounds travel to one decimal, so "4.0" can display while the
+  // eased bar animation is still ~1% from settling. Wait for full bottom-out.
+  await until(
+    async () => {
+      const settled = await getPressBtn();
+      return settled.readout === '4.0 / 4.0 mm' && settled.barWidth === '100%' && settled.pressed === 'true';
+    },
+    'press settles at bottom-out',
+  );
   const atBottom = await getPressBtn();
   await send('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'left', x: p0.x, y: p0.y, clickCount: 1 });
   await until(async () => (await getPressBtn()).readout === '0.0 / 4.0 mm', 'pointer release returns to 0.0 mm');

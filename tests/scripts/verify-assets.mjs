@@ -113,7 +113,14 @@ const runtimeFiles = [...files.keys()].filter((url) => url.startsWith(packageURL
 assert.deepEqual(new Set(runtimeFiles), used, 'All public runtime files must be declared');
 const entries = await readdir(new URL('./', new URL(inventory.manifest, dist)), { recursive: true, withFileTypes: true });
 assert.equal(entries.filter((entry) => entry.isFile()).length, used.size, packagePath);
-for (const ext of ['.avif', '.webp']) assert.equal([...files.keys()].filter((url) => url.endsWith(ext)).length, 37);
+const kf003bAvif = [...files.keys()].filter((url) => url.includes('/media/kf003b/') && url.endsWith('.avif')).length;
+const kf003bWebp = [...files.keys()].filter((url) => url.includes('/media/kf003b/') && url.endsWith('.webp')).length;
+const art002aAvif = [...files.keys()].filter((url) => url.includes('/media/kf-art-002a/') && url.endsWith('.avif')).length;
+const art002aWebp = [...files.keys()].filter((url) => url.includes('/media/kf-art-002a/') && url.endsWith('.webp')).length;
+assert.equal(kf003bAvif, 37, 'KF-003B AVIF count');
+assert.equal(kf003bWebp, 37, 'KF-003B WebP count');
+assert.equal(art002aAvif, 9, 'KF-ART-002A AVIF count');
+assert.equal(art002aWebp, 9, 'KF-ART-002A WebP count');
 
 let audioBytes = 0;
 let audioFiles = 0;

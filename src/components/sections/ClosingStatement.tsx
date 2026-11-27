@@ -1,8 +1,8 @@
 import React from 'react';
+import { KF003B_ASSETS, buildSrcSet } from '../../assets/kf003bManifest';
 import { getBuildCode, type BuildConfig } from '../../data/kf01Data';
 import { MachinedSymbol, SwissWordmark } from '../BrandMarks';
 import { Button } from '../ui/Button';
-import { ResponsiveImage } from '../ui/ResponsiveImage';
 
 interface ClosingStatementProps {
   config: BuildConfig;
@@ -21,7 +21,7 @@ export const ClosingStatement: React.FC<ClosingStatementProps> = ({
       className="kf-section kf-closing env-after-hours"
       aria-labelledby="closing-heading"
     >
-      <div className="kf-container">
+      <div className="kf-container kf-closing__content">
         <div className="kf-closing__layout">
           <div className="kf-closing__copy">
             <p className="kf-eyebrow">
@@ -33,7 +33,7 @@ export const ClosingStatement: React.FC<ClosingStatementProps> = ({
               Nothing accidental.
             </h2>
             <p className="kf-lead" style={{ marginBottom: '32px' }}>
-              From the 1.2 mm perimeter chamfer to the recessed rear USB-C port, every detail of
+              From the diamond-knurled encoder to the 1.2 mm perimeter chamfer, every detail of
               KF—01 is designed to earn its place.
             </p>
 
@@ -50,14 +50,40 @@ export const ClosingStatement: React.FC<ClosingStatementProps> = ({
 
           <div className="kf-closing__media">
             <figure className="kf-closing__figure">
-              <ResponsiveImage
-                shotId="A08"
-                sizes="(min-width: 1024px) 60vw, 100vw"
-                className="kf-closing__img"
-              />
-              <figcaption className="kf-closing__caption">
-                Reference finish — Forest anodized 6063 aluminium, centered recessed USB-C
-              </figcaption>
+              <picture className="kf-closing__picture">
+                <source
+                  media="(min-width: 1024px)"
+                  type="image/avif"
+                  srcSet={buildSrcSet(KF003B_ASSETS.C02, 'avif')}
+                  sizes="100vw"
+                />
+                <source
+                  media="(min-width: 1024px)"
+                  type="image/webp"
+                  srcSet={buildSrcSet(KF003B_ASSETS.C02, 'webp')}
+                  sizes="100vw"
+                />
+                <source
+                  media="(max-width: 1023px)"
+                  type="image/avif"
+                  srcSet={buildSrcSet(KF003B_ASSETS.C02Mobile, 'avif')}
+                  sizes="(min-width: 760px) 760px, 100vw"
+                />
+                <source
+                  media="(max-width: 1023px)"
+                  type="image/webp"
+                  srcSet={buildSrcSet(KF003B_ASSETS.C02Mobile, 'webp')}
+                  sizes="(min-width: 760px) 760px, 100vw"
+                />
+                <img
+                  src={KF003B_ASSETS.C02Mobile.fallbackSrc}
+                  alt="Close-up of the KF—01 diamond-knurled encoder, Charcoal keycaps and chamfered Forest aluminium enclosure."
+                  sizes="100vw"
+                  loading="lazy"
+                  decoding="async"
+                  className="kf-closing__img"
+                />
+              </picture>
             </figure>
           </div>
         </div>

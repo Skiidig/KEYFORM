@@ -3,6 +3,11 @@
  *
  * Mirrors D:\Assets\KEYFORM\kf003b\validation\production-asset-manifest.json
  * strictly using responsive AVIF + WebP web derivatives (zero raw PNG masters).
+ * Descriptive placement/material metadata lives only in the external manifest
+ * to keep the shipped visitor bundle minimal.
+ *
+ * KF-ART-002A approved derivatives (H02, C02) are versioned under
+ * /media/kf-art-002a/ and preserve all original KF-003B assets.
  *
  * All default keyboard imagery uses Forest anodized 6063 aluminium with uniform
  * Charcoal PBT (#1A1F1E) across all 81 keycaps including Esc.
@@ -26,7 +31,10 @@ export type ShotId =
   | 'A08'
   | 'B01'
   | 'B02'
-  | 'B03';
+  | 'B03'
+  | 'H02'
+  | 'C02'
+  | 'C02Mobile';
 
 export interface ImageVariant {
   width: number;
@@ -37,11 +45,8 @@ export interface ImageVariant {
 
 export interface ProductionAsset {
   shotId: ShotId;
-  placement: string;
-  materialConfig: string;
   intrinsicWidth: number;
   intrinsicHeight: number;
-  aspectRatio: string;
   defaultAlt: string;
   variants: readonly ImageVariant[];
   /** Default fallback URL (primary WebP variant for <img src>) */
@@ -49,15 +54,13 @@ export interface ProductionAsset {
 }
 
 const BASE = '/media/kf003b';
+const ART_002A_BASE = '/media/kf-art-002a';
 
 export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   A01: {
     shotId: 'A01',
-    placement: 'Section 01 — Desktop flagship hero (16:9)',
-    materialConfig: 'Forest aluminium · Unified Charcoal PBT (81 keys)',
     intrinsicWidth: 1600,
     intrinsicHeight: 900,
-    aspectRatio: '16 / 9',
     defaultAlt:
       'KEYFORM KF—01 studio render in dark After Hours lighting showing Forest anodized 6063 aluminium enclosure, uniform Charcoal PBT keycaps across all 81 keys, and diamond-knurled rotary encoder',
     variants: [
@@ -84,11 +87,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A02: {
     shotId: 'A02',
-    placement: 'Section 01 — Dedicated mobile hero (1:1)',
-    materialConfig: 'Forest aluminium · Unified Charcoal PBT (81 keys)',
     intrinsicWidth: 800,
     intrinsicHeight: 800,
-    aspectRatio: '1 / 1',
     defaultAlt:
       'KEYFORM KF—01 dark After Hours square composition framing the complete Forest anodized 6063 aluminium keyboard with uniform Charcoal PBT keycaps and knurled rotary encoder',
     variants: [
@@ -109,11 +109,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A03: {
     shotId: 'A03',
-    placement: 'Section 05 / Editorial — Neutral studio beauty & Forest fallback (3:2)',
-    materialConfig: 'Forest aluminium · Unified Charcoal PBT (81 keys)',
     intrinsicWidth: 1200,
     intrinsicHeight: 800,
-    aspectRatio: '3 / 2',
     defaultAlt:
       'KEYFORM KF—01 neutral studio three-quarter render in Forest anodized 6063 aluminium with uniform Charcoal PBT keycaps across all 81 keys',
     variants: [
@@ -134,11 +131,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A04a: {
     shotId: 'A04a',
-    placement: 'Section 02 — Engineering Bento primary macro (4:3)',
-    materialConfig: 'Forest aluminium · Unified Charcoal PBT · 48-tooth knurled encoder',
     intrinsicWidth: 960,
     intrinsicHeight: 720,
-    aspectRatio: '4 / 3',
     defaultAlt:
       'Macro studio detail of KF—01 Forest anodized 6063 aluminium top chamfer, uniform Charcoal PBT keycaps, and 48-tooth diamond-knurled rotary encoder',
     variants: [
@@ -159,11 +153,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A04b: {
     shotId: 'A04b',
-    placement: 'Section 02 — Engineering Bento 6.5° orthographic side profile (16:9)',
-    materialConfig: 'Forest aluminium · Unified Charcoal PBT',
     intrinsicWidth: 1200,
     intrinsicHeight: 675,
-    aspectRatio: '16 / 9',
     defaultAlt:
       'Orthographic side profile render of KF—01 showing the 6.5 degree typing incline, sculpted Charcoal PBT keycap rows, and knurled rotary encoder',
     variants: [
@@ -184,11 +175,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A04c: {
     shotId: 'A04c',
-    placement: 'Section 02 — Engineering Bento rear recessed USB-C macro (4:3)',
-    materialConfig: 'Forest aluminium · Recessed stainless USB-C daughterboard',
     intrinsicWidth: 960,
     intrinsicHeight: 720,
-    aspectRatio: '4 / 3',
     defaultAlt:
       'Macro view of the centered recessed rear USB-C daughterboard port housed inside the Forest anodized 6063 aluminium enclosure wall',
     variants: [
@@ -209,11 +197,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A05: {
     shotId: 'A05',
-    placement: 'Section 03 — Mechanical Anatomy 9-group exploded stack (10:9)',
-    materialConfig: 'Forest aluminium · Unified Charcoal PBT · 9 mechanical strata',
     intrinsicWidth: 1000,
     intrinsicHeight: 900,
-    aspectRatio: '10 / 9',
     defaultAlt:
       'Exploded studio render of KF—01 revealing all nine mechanical strata stacked vertically from uniform Charcoal PBT keycaps down to the Forest aluminium bottom chassis and brass weight',
     variants: [
@@ -234,11 +219,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A06a: {
     shotId: 'A06a',
-    placement: 'Section 04 — Switch Lab hero: KF—Linear 45 (1:1)',
-    materialConfig: 'Smoked translucent PC top · Obsidian base · Porcelain POM stem',
     intrinsicWidth: 960,
     intrinsicHeight: 960,
-    aspectRatio: '1 / 1',
     defaultAlt:
       'Dark studio macro of the KF—Linear 45 switch with smoked translucent polycarbonate upper housing, Porcelain POM cross stem, steel spring, and obsidian base',
     variants: [
@@ -259,11 +241,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A06b: {
     shotId: 'A06b',
-    placement: 'Section 04 — Switch Lab hero: KF—Tactile 58 (1:1)',
-    materialConfig: 'Matte carbon top · Obsidian base · Signal POM stem',
     intrinsicWidth: 960,
     intrinsicHeight: 960,
-    aspectRatio: '1 / 1',
     defaultAlt:
       'Dark studio macro of the KF—Tactile 58 switch featuring a matte carbon upper housing, Signal POM cross stem, coil spring, and copper tactile contact leaf',
     variants: [
@@ -284,11 +263,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A06c: {
     shotId: 'A06c',
-    placement: 'Section 04 — Switch Lab hero: KF—Silent 50 (1:1)',
-    materialConfig: 'Frosted smoke top · Obsidian base · Forest dampened stem',
     intrinsicWidth: 960,
     intrinsicHeight: 960,
-    aspectRatio: '1 / 1',
     defaultAlt:
       'Dark studio macro of the KF—Silent 50 switch featuring a frosted smoke housing, Forest dampened POM cross stem, and cushioned lower housing',
     variants: [
@@ -309,11 +285,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A07a: {
     shotId: 'A07a',
-    placement: 'Section 06 — Material Library: Bead-blasted 6063 aluminium & knurl (16:10)',
-    materialConfig: 'Forest anodized aluminium · Machined diamond knurl',
     intrinsicWidth: 960,
     intrinsicHeight: 600,
-    aspectRatio: '16 / 10',
     defaultAlt:
       'Extreme macro surface study of bead-blasted Forest anodized 6063 aluminium bezel chamfer alongside the machined diamond-knurled encoder',
     variants: [
@@ -334,11 +307,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A07b: {
     shotId: 'A07b',
-    placement: 'Section 06 — Material Library: Brushed brass internal weight (16:10)',
-    materialConfig: 'Directional brushed brass · Dark engraving · Forest lower chassis',
     intrinsicWidth: 960,
     intrinsicHeight: 600,
-    aspectRatio: '16 / 10',
     defaultAlt:
       'Close-up of the recessed directional brushed solid brass internal weight with dark engraving nested inside the Forest lower chassis pocket',
     variants: [
@@ -359,11 +329,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A07c: {
     shotId: 'A07c',
-    placement: 'Section 06 — Material Library: Sculpted Charcoal PBT & legends (16:10)',
-    materialConfig: 'Unified Charcoal PBT · Off-white legends (incl. Esc)',
     intrinsicWidth: 960,
     intrinsicHeight: 600,
-    aspectRatio: '16 / 10',
     defaultAlt:
       'Macro study of uniform sculpted Charcoal PBT keycaps showing fine matte micro-grain and subtle off-white legends',
     variants: [
@@ -384,11 +351,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A07d: {
     shotId: 'A07d',
-    placement: 'Section 06 — Material Library: Silicone gasket, Poron & PCB stack (16:10)',
-    materialConfig: 'Silicone gaskets · Open-cell Poron · Graphite plate · FR4 PCB',
     intrinsicWidth: 960,
     intrinsicHeight: 600,
-    aspectRatio: '16 / 10',
     defaultAlt:
       'Detailed cutaway study of the internal silicone gaskets, open-cell Poron acoustic damper, switch plate, and matte-black FR4 PCB assembly',
     variants: [
@@ -409,11 +373,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   A08: {
     shotId: 'A08',
-    placement: 'Section 07 — Closing product statement rear silhouette (3:2)',
-    materialConfig: 'Forest aluminium · Unified Charcoal PBT · Centered rear USB-C',
     intrinsicWidth: 1200,
     intrinsicHeight: 800,
-    aspectRatio: '3 / 2',
     defaultAlt:
       'Rear three-quarter After Hours studio silhouette of KF—01 showing the centered recessed USB-C port, Forest anodized seam, uniform Charcoal PBT keycaps, and knurled rotary encoder',
     variants: [
@@ -434,11 +395,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   B01: {
     shotId: 'B01',
-    placement: 'Section 05 — Build Studio static fallback: Obsidian enclosure (3:2)',
-    materialConfig: 'Obsidian anodized aluminium · Unified Charcoal PBT (81 keys)',
     intrinsicWidth: 1200,
     intrinsicHeight: 800,
-    aspectRatio: '3 / 2',
     defaultAlt:
       'KEYFORM KF—01 studio beauty render in Obsidian anodized 6063 aluminium with uniform Charcoal PBT keycaps across all 81 keys',
     variants: [
@@ -459,11 +417,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   B02: {
     shotId: 'B02',
-    placement: 'Section 05 — Build Studio static fallback: Carbon enclosure (3:2)',
-    materialConfig: 'Carbon matte graphite aluminium · Unified Charcoal PBT (81 keys)',
     intrinsicWidth: 1200,
     intrinsicHeight: 800,
-    aspectRatio: '3 / 2',
     defaultAlt:
       'KEYFORM KF—01 studio beauty render in Carbon matte graphite anodized aluminium with uniform Charcoal PBT keycaps across all 81 keys',
     variants: [
@@ -484,11 +439,8 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   },
   B03: {
     shotId: 'B03',
-    placement: 'Section 05 — Build Studio static fallback: Titanium enclosure (3:2)',
-    materialConfig: 'Titanium bead-blasted aluminium · Unified Charcoal PBT (81 keys)',
     intrinsicWidth: 1200,
     intrinsicHeight: 800,
-    aspectRatio: '3 / 2',
     defaultAlt:
       'KEYFORM KF—01 studio beauty render in Titanium bead-blasted silver-grey aluminium with uniform Charcoal PBT keycaps across all 81 keys',
     variants: [
@@ -506,6 +458,90 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
       },
     ],
     fallbackSrc: `${BASE}/webp/B03-fallback-titanium-1200w.webp`,
+  },
+  H02: {
+    shotId: 'H02',
+    intrinsicWidth: 1600,
+    intrinsicHeight: 1060,
+    defaultAlt:
+      'KEYFORM KF—01 with a Forest aluminium enclosure, Charcoal keycaps and a knurled rotary dial.',
+    variants: [
+      {
+        width: 800,
+        height: 530,
+        avif: `${ART_002A_BASE}/avif/H02-mobile-hero-800w.avif`,
+        webp: `${ART_002A_BASE}/webp/H02-mobile-hero-800w.webp`,
+      },
+      {
+        width: 1280,
+        height: 848,
+        avif: `${ART_002A_BASE}/avif/H02-mobile-hero-1280w.avif`,
+        webp: `${ART_002A_BASE}/webp/H02-mobile-hero-1280w.webp`,
+      },
+      {
+        width: 1600,
+        height: 1060,
+        avif: `${ART_002A_BASE}/avif/H02-mobile-hero-1600w.avif`,
+        webp: `${ART_002A_BASE}/webp/H02-mobile-hero-1600w.webp`,
+      },
+    ],
+    fallbackSrc: `${ART_002A_BASE}/webp/H02-mobile-hero-800w.webp`,
+  },
+  C02: {
+    shotId: 'C02',
+    intrinsicWidth: 2560,
+    intrinsicHeight: 1400,
+    defaultAlt:
+      'Close-up of the KF—01 diamond-knurled encoder, Charcoal keycaps and chamfered Forest aluminium enclosure.',
+    variants: [
+      {
+        width: 1280,
+        height: 700,
+        avif: `${ART_002A_BASE}/avif/C02-desktop-closing-1280w.avif`,
+        webp: `${ART_002A_BASE}/webp/C02-desktop-closing-1280w.webp`,
+      },
+      {
+        width: 1600,
+        height: 875,
+        avif: `${ART_002A_BASE}/avif/C02-desktop-closing-1600w.avif`,
+        webp: `${ART_002A_BASE}/webp/C02-desktop-closing-1600w.webp`,
+      },
+      {
+        width: 2560,
+        height: 1400,
+        avif: `${ART_002A_BASE}/avif/C02-desktop-closing-2560w.avif`,
+        webp: `${ART_002A_BASE}/webp/C02-desktop-closing-2560w.webp`,
+      },
+    ],
+    fallbackSrc: `${ART_002A_BASE}/webp/C02-desktop-closing-1280w.webp`,
+  },
+  C02Mobile: {
+    shotId: 'C02Mobile',
+    intrinsicWidth: 1520,
+    intrinsicHeight: 1700,
+    defaultAlt:
+      'Close-up of the KF—01 diamond-knurled encoder, Charcoal keycaps and chamfered Forest aluminium enclosure.',
+    variants: [
+      {
+        width: 800,
+        height: 895,
+        avif: `${ART_002A_BASE}/avif/C02-mobile-closing-800w.avif`,
+        webp: `${ART_002A_BASE}/webp/C02-mobile-closing-800w.webp`,
+      },
+      {
+        width: 1200,
+        height: 1342,
+        avif: `${ART_002A_BASE}/avif/C02-mobile-closing-1200w.avif`,
+        webp: `${ART_002A_BASE}/webp/C02-mobile-closing-1200w.webp`,
+      },
+      {
+        width: 1520,
+        height: 1700,
+        avif: `${ART_002A_BASE}/avif/C02-mobile-closing-1520w.avif`,
+        webp: `${ART_002A_BASE}/webp/C02-mobile-closing-1520w.webp`,
+      },
+    ],
+    fallbackSrc: `${ART_002A_BASE}/webp/C02-mobile-closing-800w.webp`,
   },
 };
 

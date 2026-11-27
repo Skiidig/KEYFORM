@@ -409,6 +409,78 @@
     "audio/kf01-v2/shared/up-foxfire-01.wav": {
       "bytes": 18126,
       "sha256": "92510c8a7bd5f8e2ce3d7cbbf9815880ac016017bc198b8f3b7c6294b35487d6"
+    },
+    "media/kf-art-002a/avif/H02-mobile-hero-800w.avif": {
+      "bytes": 23411,
+      "sha256": "0bc045cbfe8c9ce0296b7cb49e6bf9ec240d4e9f0181f32a65bf72e4e2f71f4f"
+    },
+    "media/kf-art-002a/webp/H02-mobile-hero-800w.webp": {
+      "bytes": 29066,
+      "sha256": "abbe689451e13e66da6f0f0b4100e9a16fb087d2e2221068198d9f47ccdc3c9f"
+    },
+    "media/kf-art-002a/avif/H02-mobile-hero-1280w.avif": {
+      "bytes": 42015,
+      "sha256": "426647e0e6cfa43f2f53804c825c22c5c4a7297a883af357ab92d1c2b52f2d6f"
+    },
+    "media/kf-art-002a/webp/H02-mobile-hero-1280w.webp": {
+      "bytes": 55702,
+      "sha256": "b6c52cea8e89852769c92c6234a547feb28810a18bdb1e2752522b488ede98c7"
+    },
+    "media/kf-art-002a/avif/H02-mobile-hero-1600w.avif": {
+      "bytes": 59330,
+      "sha256": "505604808be661a40164cf50b55d40e2d17c5e3a5241d94489c6cd8d8606ac70"
+    },
+    "media/kf-art-002a/webp/H02-mobile-hero-1600w.webp": {
+      "bytes": 75202,
+      "sha256": "70acd8703c2bad8ee53a75c35fea77db15c6e39eaf0be8600ea44c042d80bd7b"
+    },
+    "media/kf-art-002a/avif/C02-desktop-closing-1280w.avif": {
+      "bytes": 41924,
+      "sha256": "9e68e11ba43e161190effa6680c828b35dea5f3556aeee3f752037491a4ac2f2"
+    },
+    "media/kf-art-002a/webp/C02-desktop-closing-1280w.webp": {
+      "bytes": 52114,
+      "sha256": "977b81a2d60eb6da61b727b8e9448655f51917aaa5d84f644c8a387af4546f7e"
+    },
+    "media/kf-art-002a/avif/C02-desktop-closing-1600w.avif": {
+      "bytes": 56921,
+      "sha256": "a873c4f52b3ab208269f9f5173f3955f9242ad993681fcd012546fcd3ec6d10a"
+    },
+    "media/kf-art-002a/webp/C02-desktop-closing-1600w.webp": {
+      "bytes": 71008,
+      "sha256": "023634682eff8653f7ffce06901bfe47b69e4d666207f7e2d059a495eea9fddf"
+    },
+    "media/kf-art-002a/avif/C02-desktop-closing-2560w.avif": {
+      "bytes": 107294,
+      "sha256": "ced04923ce290a497a6caa130139b426ceb20455c59f2281710e3c6b1cb99d5e"
+    },
+    "media/kf-art-002a/webp/C02-desktop-closing-2560w.webp": {
+      "bytes": 131474,
+      "sha256": "49b4bceff948592719941e28a628aa348f105f5edb85b7b863dfb65fc7224cc4"
+    },
+    "media/kf-art-002a/avif/C02-mobile-closing-800w.avif": {
+      "bytes": 43901,
+      "sha256": "98129d24a1f6a6e375a531d37007df638193e8cd42e0f4a007ac8011ec4a2e7c"
+    },
+    "media/kf-art-002a/webp/C02-mobile-closing-800w.webp": {
+      "bytes": 56164,
+      "sha256": "302755d19a65f123226c55ee67971b99341d0ca6edc841152396f53fea474abf"
+    },
+    "media/kf-art-002a/avif/C02-mobile-closing-1200w.avif": {
+      "bytes": 77838,
+      "sha256": "8a1bd18f28d7fc700068c695328cbaeea55658b297c166ba88d25a14fe848e03"
+    },
+    "media/kf-art-002a/webp/C02-mobile-closing-1200w.webp": {
+      "bytes": 94026,
+      "sha256": "56974ebc2c0045e21e2666f01a0202003f1b5cd785a80a0d25e1271eabe8f129"
+    },
+    "media/kf-art-002a/avif/C02-mobile-closing-1520w.avif": {
+      "bytes": 111947,
+      "sha256": "3e0d0d84e9e55f1f65e4b56dbe15439fc7c69600a0457cc4aa3c557547806dec"
+    },
+    "media/kf-art-002a/webp/C02-mobile-closing-1520w.webp": {
+      "bytes": 133300,
+      "sha256": "5db5b941d8c6a3ce43cc7a371dde77d1abdd03410165d9e816ac5a78b1bb04d3"
     }
   },
   "audioManifest": "audio/kf01-v2/manifest.json"

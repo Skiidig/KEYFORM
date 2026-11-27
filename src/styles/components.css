@@ -700,7 +700,7 @@
   color: var(--kf-brass);
 }
 
-/* Mobile (<768px): single art-directed A02 (1:1) sits cleanly beneath headline inside 390x844 */
+/* Mobile (<768px): single art-directed H02 (16:10.6) sits cleanly beneath headline inside 390x844 */
 .kf-hero__media {
   position: relative;
   margin-top: var(--kf-sp-12);
@@ -726,7 +726,7 @@
 }
 
 /* Mobile (<768px) first-fold hero refinement (KF-004A-R1): tighter rhythm,
-   single-row CTA grouping down to 320px, and trimmed upper void on A02 */
+   single-row CTA grouping down to 320px, and trimmed upper void on H02 */
 @media (max-width: 767px) {
   .kf-hero__content {
     padding-top: 14px;
@@ -2674,33 +2674,43 @@
    SECTION 07 — CLOSING PRODUCT STATEMENT (After Hours Seamless Finale)
    ========================================================================== */
 .kf-closing {
-  background-color: var(--kf-studio-void);
+  position: relative;
+  overflow: hidden;
+  background-color: #050606;
+}
+
+.kf-closing__content {
+  position: relative;
 }
 
 .kf-closing__layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--kf-sp-48);
-  align-items: center;
-}
-
-.kf-closing__copy,
-.kf-closing__media {
-  min-width: 0;
+  gap: 14px;
+  align-items: start;
 }
 
 @media (min-width: 1024px) {
-  .kf-closing__layout {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
+  .kf-closing__content {
+    position: static;
   }
+}
 
-  .kf-closing__copy {
-    grid-column: 1 / span 5;
-  }
+.kf-closing__copy {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
 
-  .kf-closing__media {
-    grid-column: 6 / span 7;
-  }
+.kf-closing__media {
+  position: relative;
+  z-index: 0;
+  min-width: 0;
+  width: 100vw;
+  max-width: 760px;
+  margin-inline: auto;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .kf-closing__actions {
@@ -2731,25 +2741,70 @@
   margin: 0;
 }
 
+.kf-closing__picture,
 .kf-closing__figure picture {
+  display: block;
   width: 100%;
+  height: 100%;
 }
 
 .kf-closing__img {
+  display: block;
   width: 100%;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  object-position: center 54%;
+  height: auto;
+  aspect-ratio: 76 / 85;
+  object-fit: contain;
+  object-position: center;
 }
 
-.kf-closing__caption {
-  margin-top: 12px;
-  font-family: var(--kf-font-sans);
-  font-size: var(--kf-text-caption);
-  color: var(--kf-ah-muted);
+@media (min-width: 1024px) {
+  .kf-closing__layout {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--kf-sp-32);
+    min-height: 440px;
+    align-items: start;
+  }
+
+  .kf-closing__copy {
+    grid-column: 1 / span 5;
+    padding-bottom: var(--kf-sp-48);
+  }
+
+  .kf-closing__media {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: min(100%, 54.6875vw);
+    width: auto;
+    max-width: none;
+    margin-inline: 0;
+    left: auto;
+    transform: none;
+    pointer-events: none;
+  }
+
+  .kf-closing__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 73%, #050606 86%);
+  }
+
+  .kf-closing__figure,
+  .kf-closing__picture,
+  .kf-closing__figure picture,
+  .kf-closing__img {
+    height: 100%;
+  }
+
+  .kf-closing__img {
+    aspect-ratio: auto;
+  }
 }
 
 .kf-footer-colophon {
+  position: relative;
+  z-index: 2;
   margin-top: var(--kf-sp-64);
   padding-top: var(--kf-sp-32);
   border-top: 1px solid rgba(242, 241, 235, 0.12);
@@ -2792,7 +2847,7 @@
   font-family: var(--kf-font-sans);
   font-size: var(--kf-text-caption);
   font-weight: 500;
-  color: var(--kf-ah-muted);
+  color: #d1d5cd;
   white-space: nowrap;
   transition: color var(--kf-dur-button) var(--kf-ease-mech),
     border-color var(--kf-dur-button) var(--kf-ease-mech);

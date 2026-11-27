@@ -70,8 +70,9 @@ export interface ArtDirectedHeroPictureProps {
 
 /**
  * Single-<picture> art-directed hero image.
- * Ensures desktop viewports fetch only A01 (16:9) and mobile viewports fetch
- * only A02 (1:1), eliminating duplicate eager hero downloads.
+ * Ensures desktop viewports fetch only the desktop source and mobile
+ * viewports fetch only the mobile source, eliminating duplicate eager
+ * hero downloads.
  */
 export const ArtDirectedHeroPicture: React.FC<ArtDirectedHeroPictureProps> = ({
   desktopShotId,
@@ -125,3 +126,4 @@ export const ArtDirectedHeroPicture: React.FC<ArtDirectedHeroPictureProps> = ({
     </picture>
   );
 };
+

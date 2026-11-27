@@ -162,8 +162,8 @@ try {
     requests.clear();
     const loaderId = await navigate();
     const layout = await evaluate(geometry);
-    const expected = width >= 768 ? 'A01-desktop-hero' : 'A02-mobile-hero';
-    const alternate = width >= 768 ? 'A02-mobile-hero' : 'A01-desktop-hero';
+    const expected = width >= 768 ? 'A01-desktop-hero' : 'H02-mobile-hero';
+    const alternate = width >= 768 ? 'H02-mobile-hero' : 'A01-desktop-hero';
     assert.equal(layout.overflowX, 0, name);
     assert.ok(layout.ctaTouchTargetsOk, name);
     if (width < 768) assert.ok(layout.imgAboveFold && layout.ctaSingleRow, name);
@@ -174,9 +174,12 @@ try {
     const network = [...requests.values()].filter((row) => row.loaderId === loaderId);
     assert.ok(network.every(({url, mimeType}) => !/\/assets\/kf01\/|\.glb(?:$|\?)|meshopt|three(?:[.-]|\b)|\/audio\/|audio-engine|legend-\d/i.test(url) && !mimeType?.startsWith('audio/')));
     assert.ok(!network.some(({url}) => url.includes(alternate)), 'Unexpected alternate hero preload');
+    assert.ok(!network.some(({url}) => url.includes('A02-mobile-hero')), 'Obsolete A02 mobile hero requested');
     const heroes = network.filter(({url}) => url.includes(expected));
     assert.equal(heroes.length, 1, JSON.stringify({ name, heroes }));
-    assert.equal(network.filter(({type}) => type === 'Script').length, 1, 'Expected only the entry script');
+    const scripts = network.filter(({type}) => type === 'Script');
+    assert.equal(scripts.length, 1, 'Expected only the entry script: ' + scripts.map(({url}) => url).join(', '));
+    assert.ok(/\/assets\/index-/.test(scripts[0]?.url ?? ''), 'Missing entry script');
     assert.ok(!network.some(({url}) => url.includes('DesignSystemPreview')), 'Expected lazy preview chunk');
     const images = network.filter(({type}) => type === 'Image');
     const heroTransfer = images.find(({url}) => new URL(url).pathname === layout.hero)?.transferBytes;
@@ -192,7 +195,7 @@ try {
     await img.decode();
     return new URL(img.currentSrc).pathname;
   });
-  assert.match(fallback, /A02-mobile-hero-.+\.webp$/);
+  assert.match(fallback, /H02-mobile-hero-.+\.webp$/);
 
   await device(dimensions[0]);
   await navigate();
