@@ -7,7 +7,7 @@
 Production 3D files and uncompressed renders stay **outside** the Git repository:
 
 ```text
-D:\Assets\KEYFORM\                 # External local production workspace (NOT in Git)
+<external-asset-workspace>/        # External local production workspace (NOT in Git)
 ├── blender/
 │   ├── kf01_master.blend          # Approved KF-002 geometry master
 │   ├── kf01_kf003a.blend          # Editable lookdev derivative

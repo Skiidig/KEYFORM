@@ -1,6 +1,6 @@
 # KEYFORM — Recorded Audio Sample Sources (`kf01-v2`)
 
-All shipped production audio samples under `public/audio/kf01-v2/` are **CC0 1.0** public-domain recordings verified at the individual recording level prior to promotion from the Audio V2 listening lab (`D:\Assets\KEYFORM\audio-lab-v2`).
+All shipped production audio samples under `public/audio/kf01-v2/` are **CC0 1.0** public-domain recordings verified at the individual recording level prior to promotion from the external Audio V2 listening lab workspace.
 
 - **Inventory:** 18 mono `44.1 kHz`, 16-bit PCM WAV files (`341,600` bytes total).
 - **Manifest & checksums:** `public/audio/kf01-v2/manifest.json` and `public/audio/kf01-v2/SHA256SUMS`.

@@ -48,7 +48,7 @@ KF—01 uses an **exploded 75% ANSI layout** (`16.25u` wide × `6.25u` deep incl
 
 - **Stabilizers required (4 total):** Backspace (2u), Enter and left Shift (2.25u) use the `23.8 mm` short span. Space (6.25u) uses `100.0 mm`.
 - **Arrow cluster alignment:** `Up` (`14.25u–15.25u`) sits directly above `Down` (`14.25u–15.25u`); `End` (`15.25u–16.25u`) aligns cleanly under the right-hand nav column (`Del`, `PgUp`, `PgDn`) and above `Right`.
-- **Canonical coordinates:** `D:\Assets\KEYFORM\reference\kf01_layout.json` records every key, blocker, encoder, nominal unit width and center relative to the keybed. The same manifest is embedded in the Blender master.
+- **Canonical coordinates:** `<external-asset-workspace>/reference/kf01_layout.json` records every key, blocker, encoder, nominal unit width and center relative to the keybed. The same manifest is embedded in the Blender master.
 
 ### 3.2 Exterior Dimensions & Ergonomics (Fictional)
 

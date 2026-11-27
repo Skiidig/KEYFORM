@@ -1,9 +1,10 @@
 # KEYFORM — Website Information Architecture & Technical Architecture
 
-> **Status:** Preliminary Foundation (KF-001)  
+> **Status:** Production Live (KF-011) — Original KF-001 Architecture Proposal Preserved Below
+>
 > **Scope:** Client-only experimental product showcase and interactive 3D configurator. No backend, database, authentication, or checkout.
 
-KF-004B adopts the [current roadmap](ROADMAP.md) for stack and release gates. The R3F, Tailwind, and single-GLB options below describe the KF-001 proposal. Production uses plain CSS, native Three.js adapters in P1, and the independently loaded B3 partitions.
+**Implemented Production Stack (KF-004B → KF-011):** Production ships with React 19, TypeScript 5.8, Vite 6, plain CSS with semantic tokens (`--kf-*`), native Three.js `0.180.0` (no R3F/Drei), Meshopt-compressed partitioned GLBs (`EXT_meshopt_compression`), a single shared WebGL renderer lease with conditional automatic activation across **Mechanical Anatomy**, **Switch Lab**, and **Build Studio**, and an opt-in CC0 Web Audio engine. The sections below preserve the original KF-001 architectural proposal and target budgets alongside the current [development roadmap](ROADMAP.md).
 
 ## 1. Website Information Architecture
 
