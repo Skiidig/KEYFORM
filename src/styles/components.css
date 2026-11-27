@@ -1280,6 +1280,11 @@
   cursor: not-allowed;
 }
 
+/* Selected pose stays readable while disabled in static fallback (porcelain on forest, 8.98:1) */
+.kf-anatomy__pose-btn:disabled[aria-pressed='true'] {
+  color: var(--kf-porcelain);
+}
+
 .kf-anatomy__note {
   margin: 10px 0 0;
   font-family: var(--kf-font-sans);
@@ -2058,6 +2063,9 @@
 
   .kf-studio__viewport-col .kf-viewport__canvas {
     aspect-ratio: 16 / 10;
+    /* Definite width: when 33svh clamps the height, the stage still fills its column
+       instead of re-transferring the clamped height through the aspect ratio */
+    width: 100%;
     max-height: 33svh;
   }
 
