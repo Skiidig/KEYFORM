@@ -9,7 +9,7 @@
  * KF-ART-002A approved derivatives (H02, C02) are versioned under
  * /media/kf-art-002a/ and preserve all original KF-003B assets.
  *
- * All default keyboard imagery uses Forest anodized 6063 aluminium with uniform
+ * Canonical default keyboard imagery uses Forest anodized 6063 aluminium with uniform
  * Charcoal PBT (#1A1F1E) across all 81 keycaps including Esc.
  */
 
@@ -34,7 +34,16 @@ export type ShotId =
   | 'B03'
   | 'H02'
   | 'C02'
-  | 'C02Mobile';
+  | 'C02Mobile'
+  | 'OR01'
+  | 'OR04'
+  | 'OR05'
+  | 'OR07'
+  | 'OR08'
+  | 'OR09'
+  | 'OR10'
+  | 'OR11'
+  | 'OR12';
 
 export interface ImageVariant {
   width: number;
@@ -55,6 +64,7 @@ export interface ProductionAsset {
 
 const BASE = '/media/kf003b';
 const ART_002A_BASE = '/media/kf-art-002a';
+const OWNER_BASE = '/media/kf-008a';
 
 export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
   A01: {
@@ -542,6 +552,207 @@ export const KF003B_ASSETS: Record<ShotId, ProductionAsset> = {
       },
     ],
     fallbackSrc: `${ART_002A_BASE}/webp/C02-mobile-closing-800w.webp`,
+  },
+  OR01: {
+    shotId: 'OR01',
+    intrinsicWidth: 2560,
+    intrinsicHeight: 1440,
+    defaultAlt: 'Illustrative KF—01 concept render in Forest aluminium and Charcoal PBT. Layout and legends differ from the canonical model.',
+    variants: [
+      {
+        width: 960,
+        height: 540,
+        avif: `${OWNER_BASE}/avif/OR01-provisional-desktop-hero-960w.avif`,
+        webp: `${OWNER_BASE}/webp/OR01-provisional-desktop-hero-960w.webp`,
+      },
+      {
+        width: 1600,
+        height: 900,
+        avif: `${OWNER_BASE}/avif/OR01-provisional-desktop-hero-1600w.avif`,
+        webp: `${OWNER_BASE}/webp/OR01-provisional-desktop-hero-1600w.webp`,
+      },
+      {
+        width: 2560,
+        height: 1440,
+        avif: `${OWNER_BASE}/avif/OR01-provisional-desktop-hero-2560w.avif`,
+        webp: `${OWNER_BASE}/webp/OR01-provisional-desktop-hero-2560w.webp`,
+      },
+    ],
+    fallbackSrc: `${OWNER_BASE}/webp/OR01-provisional-desktop-hero-1600w.webp`,
+  },
+  OR04: {
+    shotId: 'OR04',
+    intrinsicWidth: 1600,
+    intrinsicHeight: 1200,
+    defaultAlt: 'Illustrative macro of the recessed rear USB-C port.',
+    variants: [
+      {
+        width: 960,
+        height: 720,
+        avif: `${OWNER_BASE}/avif/OR04-rear-usbc-960w.avif`,
+        webp: `${OWNER_BASE}/webp/OR04-rear-usbc-960w.webp`,
+      },
+      {
+        width: 1600,
+        height: 1200,
+        avif: `${OWNER_BASE}/avif/OR04-rear-usbc-1600w.avif`,
+        webp: `${OWNER_BASE}/webp/OR04-rear-usbc-1600w.webp`,
+      },
+    ],
+    fallbackSrc: `${OWNER_BASE}/webp/OR04-rear-usbc-960w.webp`,
+  },
+  OR05: {
+    shotId: 'OR05',
+    intrinsicWidth: 1600,
+    intrinsicHeight: 1000,
+    defaultAlt: 'Illustrative macro of a bead-blasted aluminium surface.',
+    variants: [
+      {
+        width: 960,
+        height: 600,
+        avif: `${OWNER_BASE}/avif/OR05-mat-aluminium-960w.avif`,
+        webp: `${OWNER_BASE}/webp/OR05-mat-aluminium-960w.webp`,
+      },
+      {
+        width: 1600,
+        height: 1000,
+        avif: `${OWNER_BASE}/avif/OR05-mat-aluminium-1600w.avif`,
+        webp: `${OWNER_BASE}/webp/OR05-mat-aluminium-1600w.webp`,
+      },
+    ],
+    fallbackSrc: `${OWNER_BASE}/webp/OR05-mat-aluminium-960w.webp`,
+  },
+  OR07: {
+    shotId: 'OR07',
+    intrinsicWidth: 1600,
+    intrinsicHeight: 1000,
+    defaultAlt: 'Illustrative macro of sculpted Charcoal PBT keycaps.',
+    variants: [
+      {
+        width: 960,
+        height: 600,
+        avif: `${OWNER_BASE}/avif/OR07-mat-charcoal-pbt-960w.avif`,
+        webp: `${OWNER_BASE}/webp/OR07-mat-charcoal-pbt-960w.webp`,
+      },
+      {
+        width: 1600,
+        height: 1000,
+        avif: `${OWNER_BASE}/avif/OR07-mat-charcoal-pbt-1600w.avif`,
+        webp: `${OWNER_BASE}/webp/OR07-mat-charcoal-pbt-1600w.webp`,
+      },
+    ],
+    fallbackSrc: `${OWNER_BASE}/webp/OR07-mat-charcoal-pbt-960w.webp`,
+  },
+  OR08: {
+    shotId: 'OR08',
+    intrinsicWidth: 1600,
+    intrinsicHeight: 1200,
+    defaultAlt: 'Illustrative macro of the Forest aluminium enclosure.',
+    variants: [
+      {
+        width: 960,
+        height: 720,
+        avif: `${OWNER_BASE}/avif/OR08-enclosure-macro-960w.avif`,
+        webp: `${OWNER_BASE}/webp/OR08-enclosure-macro-960w.webp`,
+      },
+      {
+        width: 1600,
+        height: 1200,
+        avif: `${OWNER_BASE}/avif/OR08-enclosure-macro-1600w.avif`,
+        webp: `${OWNER_BASE}/webp/OR08-enclosure-macro-1600w.webp`,
+      },
+    ],
+    fallbackSrc: `${OWNER_BASE}/webp/OR08-enclosure-macro-960w.webp`,
+  },
+  OR09: {
+    shotId: 'OR09',
+    intrinsicWidth: 1600,
+    intrinsicHeight: 1000,
+    defaultAlt: 'Illustrative macro of the engraved internal brass weight.',
+    variants: [
+      {
+        width: 960,
+        height: 600,
+        avif: `${OWNER_BASE}/avif/OR09-mat-brass-weight-960w.avif`,
+        webp: `${OWNER_BASE}/webp/OR09-mat-brass-weight-960w.webp`,
+      },
+      {
+        width: 1600,
+        height: 1000,
+        avif: `${OWNER_BASE}/avif/OR09-mat-brass-weight-1600w.avif`,
+        webp: `${OWNER_BASE}/webp/OR09-mat-brass-weight-1600w.webp`,
+      },
+    ],
+    fallbackSrc: `${OWNER_BASE}/webp/OR09-mat-brass-weight-960w.webp`,
+  },
+  OR10: {
+    shotId: 'OR10',
+    intrinsicWidth: 1920,
+    intrinsicHeight: 1072,
+    defaultAlt: 'Illustrative side profile of the KF—01 concept keyboard.',
+    variants: [
+      {
+        width: 1200,
+        height: 670,
+        avif: `${OWNER_BASE}/avif/OR10-side-profile-1200w.avif`,
+        webp: `${OWNER_BASE}/webp/OR10-side-profile-1200w.webp`,
+      },
+      {
+        width: 1920,
+        height: 1072,
+        avif: `${OWNER_BASE}/avif/OR10-side-profile-1920w.avif`,
+        webp: `${OWNER_BASE}/webp/OR10-side-profile-1920w.webp`,
+      },
+    ],
+    fallbackSrc: `${OWNER_BASE}/webp/OR10-side-profile-1200w.webp`,
+  },
+  OR11: {
+    shotId: 'OR11',
+    intrinsicWidth: 1600,
+    intrinsicHeight: 995,
+    defaultAlt: 'Illustrative close-up of the switch plate and PCB assembly.',
+    variants: [
+      {
+        width: 960,
+        height: 597,
+        avif: `${OWNER_BASE}/avif/OR11-acoustic-stack-960w.avif`,
+        webp: `${OWNER_BASE}/webp/OR11-acoustic-stack-960w.webp`,
+      },
+      {
+        width: 1600,
+        height: 995,
+        avif: `${OWNER_BASE}/avif/OR11-acoustic-stack-1600w.avif`,
+        webp: `${OWNER_BASE}/webp/OR11-acoustic-stack-1600w.webp`,
+      },
+    ],
+    fallbackSrc: `${OWNER_BASE}/webp/OR11-acoustic-stack-960w.webp`,
+  },
+  OR12: {
+    shotId: 'OR12',
+    intrinsicWidth: 2560,
+    intrinsicHeight: 1429,
+    defaultAlt: 'Illustrative KF—01 concept render of the encoder and Forest enclosure.',
+    variants: [
+      {
+        width: 1280,
+        height: 714,
+        avif: `${OWNER_BASE}/avif/OR12-closing-1280w.avif`,
+        webp: `${OWNER_BASE}/webp/OR12-closing-1280w.webp`,
+      },
+      {
+        width: 1920,
+        height: 1072,
+        avif: `${OWNER_BASE}/avif/OR12-closing-1920w.avif`,
+        webp: `${OWNER_BASE}/webp/OR12-closing-1920w.webp`,
+      },
+      {
+        width: 2560,
+        height: 1429,
+        avif: `${OWNER_BASE}/avif/OR12-closing-2560w.avif`,
+        webp: `${OWNER_BASE}/webp/OR12-closing-2560w.webp`,
+      },
+    ],
+    fallbackSrc: `${OWNER_BASE}/webp/OR12-closing-1280w.webp`,
   },
 };
 

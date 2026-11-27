@@ -1,5 +1,11 @@
 # KEYFORM — Phase Handoff
 
+## KF-008A owner-approved visual integration
+
+KF-008A carries the frozen prototype into `integration/kf004b-production` from `3a991ba`. It adds 40 optimized editorial derivatives, retains canonical photography and technical diagrams, and preserves the current Build Studio and manual WebGL lifecycle. The [KF-008A report](KF-008A.md) contains provenance, known image discrepancies, bundle measurements, and desktop/mobile comparisons.
+
+All production regression suites and the local compressed-delivery performance checks passed. The uncompressed preview misses the mobile LCP target on both the baseline and the integrated build. Review the served build on [port 4185](http://127.0.0.1:4185/) alongside the approved prototype on [port 4186](http://127.0.0.1:4186/). Owner approval of this checkpoint is required before KF-008B.
+
 ## KF-007 targeted runtime corrections
 
 The runtime corrections build on `08d6185` on `integration/kf004b-production`. Reset preserves its exact displayed start and solved destination, wheel zoom preserves pending drag and pan, and obsolete internal GLB failures leave the exterior viewport active. The orbit deadline starts at input, reduced-motion snaps only rebake changed poses, and stage setup rolls back an observer and scene resources if initialization fails.

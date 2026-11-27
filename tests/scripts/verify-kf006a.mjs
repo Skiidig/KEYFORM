@@ -448,7 +448,7 @@ try {
 
   // Switch Lab preview must NOT mutate Build Studio; Apply must update Build Studio switch
   await evaluate(() => {
-    const tabs = [...document.querySelectorAll('#switch-lab .kf-switch-lab__tabs button')];
+    const tabs = [...document.querySelectorAll('#switch-lab .kf-switch-lab__profiles button')];
     tabs.find((b) => b.textContent.includes('Silent 50')).click();
   });
   await delay(80);
@@ -464,7 +464,7 @@ try {
     'switch-lab handoff',
   );
   await evaluate(() => {
-    const btns = [...document.querySelectorAll('#switch-lab .kf-switch-panel__footer button')];
+    const btns = [...document.querySelectorAll('#switch-lab .kf-switch-lab__footer button')];
     btns.find((b) => b.textContent.includes('Apply to Build Studio')).click();
   });
   await delay(80);

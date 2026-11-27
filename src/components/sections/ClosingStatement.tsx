@@ -1,5 +1,5 @@
 import React from 'react';
-import { KF003B_ASSETS, buildSrcSet } from '../../assets/kf003bManifest';
+import { ResponsiveImage } from '../ui/ResponsiveImage';
 import { getBuildCode, type BuildConfig } from '../../data/kf01Data';
 import { MachinedSymbol, SwissWordmark } from '../BrandMarks';
 import { Button } from '../ui/Button';
@@ -50,40 +50,12 @@ export const ClosingStatement: React.FC<ClosingStatementProps> = ({
 
           <div className="kf-closing__media">
             <figure className="kf-closing__figure">
-              <picture className="kf-closing__picture">
-                <source
-                  media="(min-width: 1024px)"
-                  type="image/avif"
-                  srcSet={buildSrcSet(KF003B_ASSETS.C02, 'avif')}
-                  sizes="100vw"
-                />
-                <source
-                  media="(min-width: 1024px)"
-                  type="image/webp"
-                  srcSet={buildSrcSet(KF003B_ASSETS.C02, 'webp')}
-                  sizes="100vw"
-                />
-                <source
-                  media="(max-width: 1023px)"
-                  type="image/avif"
-                  srcSet={buildSrcSet(KF003B_ASSETS.C02Mobile, 'avif')}
-                  sizes="(min-width: 760px) 760px, 100vw"
-                />
-                <source
-                  media="(max-width: 1023px)"
-                  type="image/webp"
-                  srcSet={buildSrcSet(KF003B_ASSETS.C02Mobile, 'webp')}
-                  sizes="(min-width: 760px) 760px, 100vw"
-                />
-                <img
-                  src={KF003B_ASSETS.C02Mobile.fallbackSrc}
-                  alt="Close-up of the KF—01 diamond-knurled encoder, Charcoal keycaps and chamfered Forest aluminium enclosure."
-                  sizes="100vw"
-                  loading="lazy"
-                  decoding="async"
-                  className="kf-closing__img"
-                />
-              </picture>
+              <ResponsiveImage
+                shotId="OR12"
+                sizes="(min-width: 1024px) 100vw, (min-width: 760px) 760px, 100vw"
+                className="kf-closing__img"
+                pictureClassName="kf-closing__picture"
+              />
             </figure>
           </div>
         </div>

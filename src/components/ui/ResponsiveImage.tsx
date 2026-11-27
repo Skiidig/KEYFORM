@@ -20,7 +20,7 @@ export interface ResponsiveImageProps {
 
 /**
  * Renders a responsive <picture> element with AVIF primary and WebP fallback
- * sourced exclusively from verified KF-003B web derivatives.
+ * sourced from the production image registry.
  */
 export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
   shotId,
@@ -58,72 +58,3 @@ export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
     </picture>
   );
 };
-
-export interface ArtDirectedHeroPictureProps {
-  desktopShotId: ShotId;
-  mobileShotId: ShotId;
-  breakpointPx?: number;
-  alt: string;
-  className?: string;
-  pictureClassName?: string;
-}
-
-/**
- * Single-<picture> art-directed hero image.
- * Ensures desktop viewports fetch only the desktop source and mobile
- * viewports fetch only the mobile source, eliminating duplicate eager
- * hero downloads.
- */
-export const ArtDirectedHeroPicture: React.FC<ArtDirectedHeroPictureProps> = ({
-  desktopShotId,
-  mobileShotId,
-  breakpointPx = 768,
-  alt,
-  className,
-  pictureClassName,
-}) => {
-  const desktopAsset = KF003B_ASSETS[desktopShotId];
-  const mobileAsset = KF003B_ASSETS[mobileShotId];
-  const desktopMedia = `(min-width: ${breakpointPx}px)`;
-  const mobileMedia = `(max-width: ${breakpointPx - 1}px)`;
-
-  return (
-    <picture className={pictureClassName}>
-      <source
-        media={desktopMedia}
-        type="image/avif"
-        srcSet={buildSrcSet(desktopAsset, 'avif')}
-        sizes="100vw"
-      />
-      <source
-        media={desktopMedia}
-        type="image/webp"
-        srcSet={buildSrcSet(desktopAsset, 'webp')}
-        sizes="100vw"
-      />
-      <source
-        media={mobileMedia}
-        type="image/avif"
-        srcSet={buildSrcSet(mobileAsset, 'avif')}
-        sizes="100vw"
-      />
-      <source
-        media={mobileMedia}
-        type="image/webp"
-        srcSet={buildSrcSet(mobileAsset, 'webp')}
-        sizes="100vw"
-      />
-      <img
-        src={desktopAsset.fallbackSrc}
-        alt={alt}
-        width={desktopAsset.intrinsicWidth}
-        height={desktopAsset.intrinsicHeight}
-        loading="eager"
-        decoding="sync"
-        fetchPriority="high"
-        className={className}
-      />
-    </picture>
-  );
-};
-

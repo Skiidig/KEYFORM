@@ -26,7 +26,6 @@ export interface AnatomyLayer {
   assemblyRelation: string;
   engineeringNote: string;
   /** Approximate vertical percentage along the A05 exploded stack render */
-  stratumY: number;
 }
 
 export interface SwitchProfile {
@@ -100,7 +99,6 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     purpose: 'Row-sculpted R1–R4 keycaps and a convex 6.25u spacebar in dry matte Charcoal PBT that resists shine.',
     assemblyRelation: 'Seats onto all 81 MX cross stems with recessed skirts that clear the top frame at full travel.',
     engineeringNote: '18.0 × 18.0 mm nominal 1u base on the 19.05 mm MX grid (#1A1F1E Charcoal PBT).',
-    stratumY: 22,
   },
   {
     id: 'top-enclosure',
@@ -114,7 +112,6 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     purpose: 'Frames separated function pockets, an integrated navigation bridge, a 1.2 mm chamfer, and a 48-tooth knurled dial.',
     assemblyRelation: 'Bolts downward to the bottom chassis via eight concealed underside screws around the gasket channel.',
     engineeringNote: 'Frozen Alternative A integrated deck geometry (KF-003A-R3).',
-    stratumY: 32,
   },
   {
     id: 'switches',
@@ -128,7 +125,6 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     purpose: 'Defines the tactile character of every press, hot-swappable across three conceptual KEYFORM profiles.',
     assemblyRelation: 'Snaps into 1.50 mm plate cutouts and seats into south-facing PCB sockets below.',
     engineeringNote: 'Standard Cherry MX 14.0 × 14.0 mm plate cutouts and 4.0 mm nominal travel.',
-    stratumY: 41,
   },
   {
     id: 'switch-plate',
@@ -142,7 +138,6 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     purpose: 'Aligns all 81 switches while tuning typing firmness and acoustic response by plate material.',
     assemblyRelation: 'Floats on 12 perimeter silicone gasket tabs with zero metal-to-metal screw contact.',
     engineeringNote: '2.2 mm below top deck datum with four stabilizer reliefs and dial clearance.',
-    stratumY: 49,
   },
   {
     id: 'acoustic-gaskets',
@@ -156,7 +151,6 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     purpose: 'Decouples typing vibration from the aluminium shell to soften harsh metallic resonance.',
     assemblyRelation: 'Silicone gaskets wrap plate perimeter tabs while Poron sits between plate and PCB.',
     engineeringNote: '3.0 mm installed Poron damper; conceptual acoustic design, not lab-measured dBA.',
-    stratumY: 57,
   },
   {
     id: 'pcb-assembly',
@@ -170,7 +164,6 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     purpose: 'Registers every keystroke and rotary detent without RGB distraction, keeping only a warm-white Caps indicator.',
     assemblyRelation: 'Carries four PCB-mounted stabilizers and links to the rear USB-C board via flex harness.',
     engineeringNote: '5.0 mm plate-to-PCB stack; 23.8 mm short and 100.0 mm spacebar stabilizer spans.',
-    stratumY: 64,
   },
   {
     id: 'usb-daughterboard',
@@ -184,7 +177,6 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     purpose: 'Keeps the rear USB-C port centered so gasket flex never stresses the cable connector.',
     assemblyRelation: 'Bolts directly to the lower chassis rear wall and bridges upward to the floating PCB.',
     engineeringNote: 'Unified Daughterboard throat clearance (9.70 × 4.22 mm case aperture).',
-    stratumY: 71,
   },
   {
     id: 'internal-weight',
@@ -198,7 +190,6 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     purpose: 'Anchors low-center mass beneath the typing zone so KF—01 stays planted and damps hollow reflections.',
     assemblyRelation: 'Recesses flush into the lower aluminium pocket beneath the bottom acoustic sheet.',
     engineeringNote: '4× M3 countersunk screws contributing to the ~1,680 g conceptual weight target.',
-    stratumY: 78,
   },
   {
     id: 'bottom-chassis',
@@ -212,7 +203,6 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     purpose: 'Forms the 6.5° angled base, concealing all eight fasteners underneath on flush silicone feet.',
     assemblyRelation: 'Houses the brass weight, lower gasket seats, daughterboard mounts, and top frame.',
     engineeringNote: '327 × 138 mm plan; 18.5 mm front edge rising to 34.2 mm rear.',
-    stratumY: 85,
   },
 ];
 
@@ -447,7 +437,7 @@ export const MATERIALS_LIBRARY: readonly MaterialPlate[] = [
   {
     id: 'aluminium-6063',
     index: '01',
-    shotId: 'A07a',
+    shotId: 'OR05',
     name: '6063 Bead-Blasted Aluminium',
     role: 'Enclosure & dial',
     description:
@@ -457,7 +447,7 @@ export const MATERIALS_LIBRARY: readonly MaterialPlate[] = [
   {
     id: 'brushed-brass',
     index: '02',
-    shotId: 'A07b',
+    shotId: 'OR09',
     name: 'Brushed Solid Brass',
     role: 'Internal mass',
     description:
@@ -467,7 +457,7 @@ export const MATERIALS_LIBRARY: readonly MaterialPlate[] = [
   {
     id: 'sculpted-pbt',
     index: '03',
-    shotId: 'A07c',
+    shotId: 'OR07',
     name: 'Sculpted Matte Charcoal PBT',
     role: 'Touch surface',
     description:
@@ -477,7 +467,7 @@ export const MATERIALS_LIBRARY: readonly MaterialPlate[] = [
   {
     id: 'acoustic-elastomers',
     index: '04',
-    shotId: 'A07d',
+    shotId: 'OR11',
     name: 'Poron, IXPE & Silicone',
     role: 'Acoustic isolation',
     description:

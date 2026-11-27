@@ -127,7 +127,7 @@ try {
   const geometry = () => {
     const img = document.querySelector('.kf-hero__img');
     const cta = document.querySelector('.kf-hero__actions .kf-btn');
-    const secondary = document.querySelector('.kf-hero__ghost-link');
+    const secondary = document.querySelector('.kf-hero__actions .kf-btn--secondary');
     const touch = (element) => {
       const bounds = element.getBoundingClientRect();
       return bounds.height >= 44 && bounds.width >= 44;
@@ -135,8 +135,10 @@ try {
     const rail = document.querySelector('.kf-hero__datum dd');
     return {
       overflowX: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-      imgAboveFold: img.getBoundingClientRect().bottom <= window.innerHeight,
-      ctaSingleRow: Math.abs(cta.getBoundingClientRect().top - secondary.getBoundingClientRect().top) < 8,
+      heroRatio: img.clientWidth / img.clientHeight,
+      heroObjectFit: getComputedStyle(img).objectFit,
+      railBelowImage: document.querySelector('.kf-hero__rail').getBoundingClientRect().top >= img.getBoundingClientRect().bottom - 1,
+      heroSpecCount: document.querySelectorAll('.kf-hero__datum').length,
       ctaTouchTargetsOk: touch(cta) && touch(secondary),
       heroRailValueText: rail.textContent.trim(),
       heroRailValueFont: getComputedStyle(rail).fontFamily.split(',')[0].replace(/['"]/g, ''),
@@ -149,7 +151,7 @@ try {
   };
   const defaultCode = 'KF01-FOR-CHR-MTC-L45-ALU';
   const dimensions = [
-    ['desktop-1440', 1440, 900, 1, false], ['tablet-768', 768, 1024, 2, true],
+    ['desktop-1440', 1440, 900, 1, false], ['desktop-1024', 1024, 768, 1, false], ['tablet-768', 768, 1024, 2, true],
     ['mobile-440', 440, 956, 2, true], ['mobile-390', 390, 844, 2, true],
     ['mobile-320', 320, 568, 2, true],
   ];
@@ -162,18 +164,20 @@ try {
     requests.clear();
     const loaderId = await navigate();
     const layout = await evaluate(geometry);
-    const expected = width >= 768 ? 'A01-desktop-hero' : 'H02-mobile-hero';
-    const alternate = width >= 768 ? 'H02-mobile-hero' : 'A01-desktop-hero';
+    const expected = 'OR01-provisional-desktop-hero';
     assert.equal(layout.overflowX, 0, name);
     assert.ok(layout.ctaTouchTargetsOk, name);
-    if (width < 768) assert.ok(layout.imgAboveFold && layout.ctaSingleRow, name);
+    assert.ok(layout.railBelowImage, name);
+    assert.equal(layout.heroSpecCount, 4, name);
+    if (width < 768) assert.ok(Math.abs(layout.heroRatio - 16 / 9) < 0.02, name);
+    else assert.equal(layout.heroObjectFit, 'cover', name);
     assert.ok(layout.hero.includes(expected) && layout.hero.endsWith('.avif'), layout.hero);
     assert.deepEqual(layout.sections, ['hero', 'engineering', 'anatomy', 'switch-lab', 'materials', 'build-studio', 'closing']);
     assert.equal(layout.canvases, 0);
     assert.ok(layout.lazyImages > 0);
     const network = [...requests.values()].filter((row) => row.loaderId === loaderId);
     assert.ok(network.every(({url, mimeType}) => !/\/assets\/kf01\/|\.glb(?:$|\?)|meshopt|three(?:[.-]|\b)|\/audio\/|audio-engine|legend-\d/i.test(url) && !mimeType?.startsWith('audio/')));
-    assert.ok(!network.some(({url}) => url.includes(alternate)), 'Unexpected alternate hero preload');
+    assert.ok(!network.some(({url}) => /A01-desktop-hero|H02-mobile-hero/.test(url)), 'Unexpected canonical hero preload');
     assert.ok(!network.some(({url}) => url.includes('A02-mobile-hero')), 'Obsolete A02 mobile hero requested');
     const heroes = network.filter(({url}) => url.includes(expected));
     assert.equal(heroes.length, 1, JSON.stringify({ name, heroes }));
@@ -195,7 +199,7 @@ try {
     await img.decode();
     return new URL(img.currentSrc).pathname;
   });
-  assert.match(fallback, /H02-mobile-hero-.+\.webp$/);
+  assert.match(fallback, /OR01-provisional-desktop-hero-.+\.webp$/);
 
   await device(dimensions[0]);
   await navigate();
@@ -287,7 +291,7 @@ try {
 
   const summary = { url: url.href, viewports, fallback, interactive, reducedMotion, consoleErrors, networkErrors };
   await writeFile(join(out, 'browser.json'), JSON.stringify(summary, null, 2) + '\n');
-  console.log('Verified five responsive viewports, static-first network traces, design system, and Build Studio behavior.');
+  console.log('Verified six responsive viewports, static-first network traces, design system, and Build Studio behavior.');
   console.log('Hero / all initial image transfer in bytes (CDP wire counts):');
   console.table(Object.fromEntries(Object.entries(viewports).map(([name, {heroTransfer, imageTransfer}]) => [name, {heroTransfer, imageTransfer}])));
 } finally {

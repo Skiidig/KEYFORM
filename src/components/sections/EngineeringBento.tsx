@@ -56,13 +56,12 @@ export const EngineeringBento: React.FC = () => {
           ref={ref}
           className={`kf-bento kf-reveal ${revealed ? 'kf-reveal--visible' : ''}`}
         >
-          {/* Cell 1: 6063 Aluminium Enclosure Concept (7 cols) — A04a */}
+          {/* Cell 1: 6063 Aluminium Enclosure Concept (7 cols) — OR08 (owner refinement, slot A04a) */}
           <article className="kf-bento__cell kf-bento__enclosure">
             <div className="kf-bento__media kf-bento__media--tall">
               <ResponsiveImage
-                shotId="A04a"
+                shotId="OR08"
                 sizes="(min-width: 1024px) 58vw, (min-width: 768px) 62vw, 100vw"
-                style={{ objectPosition: '58% 50%' }}
               />
             </div>
             <div className="kf-bento__pad">
@@ -80,12 +79,12 @@ export const EngineeringBento: React.FC = () => {
             </div>
           </article>
 
-          {/* Cell 2: 6.5-degree typing angle (5 cols) — A04b */}
+          {/* Cell 2: 6.5-degree typing angle (5 cols) — OR10 (owner editorial photography, slot A04b) */}
           <article className="kf-bento__cell kf-bento__angle">
             <div className="kf-bento__angle-top">
               <div className="kf-bento__media kf-bento__media--profile">
                 <ResponsiveImage
-                  shotId="A04b"
+                  shotId="OR10"
                   sizes="(min-width: 1024px) 42vw, (min-width: 768px) 38vw, 100vw"
                 />
               </div>
@@ -179,11 +178,11 @@ export const EngineeringBento: React.FC = () => {
             </div>
           </article>
 
-          {/* Cell 5: Gasket Suspension & Decoupled USB-C (4 cols, Dark contrast anchor) — A04c */}
+          {/* Cell 5: Gasket Suspension & Decoupled USB-C (4 cols, Dark contrast anchor) — OR04 (owner refinement, slot A04c) */}
           <article className="kf-bento__cell kf-bento__cell--dark kf-bento__gasket">
             <div className="kf-bento__media kf-bento__media--usbc">
               <ResponsiveImage
-                shotId="A04c"
+                shotId="OR04"
                 sizes="(min-width: 1024px) 33vw, (min-width: 768px) 38vw, 100vw"
               />
             </div>
@@ -207,11 +206,11 @@ export const EngineeringBento: React.FC = () => {
             </div>
           </article>
 
-          {/* Cell 6: Internal Brass Weight (12 cols editorial split) — A07b corner fastener detail crop */}
+          {/* Cell 6: Internal Brass Weight (12 cols editorial split) — OR09 (owner refinement, slot A07b) */}
           <article className="kf-bento__cell kf-bento__weight">
             <div className="kf-bento__media kf-bento__media--weight">
               <ResponsiveImage
-                shotId="A07b"
+                shotId="OR09"
                 sizes="(min-width: 1024px) 60vw, (min-width: 768px) 62vw, 100vw"
               />
             </div>

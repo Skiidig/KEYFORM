@@ -148,30 +148,37 @@ try {
   // 2. Mechanical Anatomy static fallback selection & Previous/Next synchronization
   await evaluate(() => document.getElementById('anatomy').scrollIntoView({ behavior: 'instant', block: 'start' }));
   await delay(150);
-  const layerCount = await evaluate(() => document.querySelectorAll('#anatomy .kf-layer-btn').length);
-  await evaluate(() => document.querySelectorAll('#anatomy .kf-layer-btn')[3].click());
+  const layerCount = await evaluate(() => document.querySelector('#kf-anatomy-layer').options.length);
+  const selectLayer = (index) => evaluate((index) => {
+    const select = document.querySelector('#kf-anatomy-layer');
+    select.value = String(index);
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  }, index);
+  await selectLayer(3);
   const staticSelected = await evaluate(() => ({
-    currentTitle: document.querySelector('#anatomy .kf-anatomy__active-card h3')?.textContent?.trim(),
+    currentTitle: document.querySelector('#anatomy .kf-anatomy__title')?.textContent?.trim(),
     status: document.querySelector('[data-kf-viewport="mechanical-anatomy"]')?.dataset.kfViewportMode,
+    specs: [...document.querySelectorAll('#anatomy .kf-anatomy__tech-dl dd')].filter((row) => row.getClientRects().length > 0).length,
   }));
   await evaluate(() => {
-    const btns = [...document.querySelectorAll('#anatomy .kf-anatomy__controls button')];
+    const btns = [...document.querySelectorAll('#anatomy .kf-anatomy__nav button')];
     btns.find((b) => b.textContent.includes('Next')).click();
   });
   const afterNextTitle = await evaluate(() =>
-    document.querySelector('#anatomy .kf-anatomy__active-card h3')?.textContent?.trim(),
+    document.querySelector('#anatomy .kf-anatomy__title')?.textContent?.trim(),
   );
   await evaluate(() => {
-    const btns = [...document.querySelectorAll('#anatomy .kf-anatomy__controls button')];
+    const btns = [...document.querySelectorAll('#anatomy .kf-anatomy__nav button')];
     btns.find((b) => b.textContent.includes('Previous')).click();
   });
   const afterPrevTitle = await evaluate(() =>
-    document.querySelector('#anatomy .kf-anatomy__active-card h3')?.textContent?.trim(),
+    document.querySelector('#anatomy .kf-anatomy__title')?.textContent?.trim(),
   );
   check(
     'ui-anatomy: 9 layers selectable in static fallback and Prev/Next synchronized',
     layerCount === 9 &&
       staticSelected.status === 'static-fallback' &&
+      staticSelected.specs === 6 &&
       staticSelected.currentTitle === 'Isolated Switch Plate' &&
       afterNextTitle === 'Poron Plate Foam & Silicone Gaskets' &&
       afterPrevTitle === 'Isolated Switch Plate',
@@ -190,49 +197,44 @@ try {
       ),
     'anatomy interactive-3d',
   );
-  await evaluate(() => document.querySelector('#anatomy .kf-anatomy__focus-btn').click());
-  const focusedState = await evaluate(() => ({
-    pressed: document.querySelector('#anatomy .kf-anatomy__focus-btn')?.getAttribute('aria-pressed'),
-    label: document.querySelector('#anatomy .kf-anatomy__focus-btn')?.textContent?.trim(),
-  }));
-  await evaluate(() => document.querySelector('#anatomy .kf-anatomy__focus-btn').click());
-  const restoredState = await evaluate(() => ({
-    pressed: document.querySelector('#anatomy .kf-anatomy__focus-btn')?.getAttribute('aria-pressed'),
-    label: document.querySelector('#anatomy .kf-anatomy__focus-btn')?.textContent?.trim(),
-  }));
+  await selectLayer(2);
+  const focusedState = await evaluate(() => document.querySelector('#anatomy .kf-anatomy__note')?.textContent);
+  await evaluate(() => document.querySelector('#anatomy .kf-anatomy__reset').click());
+  const restoredState = await evaluate(() => document.querySelector('#anatomy .kf-anatomy__note')?.textContent);
   // Assemble then click an internal layer (Switch Plate index 3) -> auto-explodes and focuses
   await evaluate(() => {
     [...document.querySelectorAll('#anatomy .kf-anatomy__pose-btn')].find((b) => b.textContent === 'Assemble').click();
   });
-  await evaluate(() => document.querySelectorAll('#anatomy .kf-layer-btn')[3].click());
+  await selectLayer(3);
   const autoExplodeState = await evaluate(() => ({
     explodePressed: [...document.querySelectorAll('#anatomy .kf-anatomy__pose-btn')]
       .find((b) => b.textContent === 'Explode')
       ?.getAttribute('aria-pressed'),
-    focusPressed: document.querySelector('#anatomy .kf-anatomy__focus-btn')?.getAttribute('aria-pressed'),
+    focusNote: document.querySelector('#anatomy .kf-anatomy__note')?.textContent,
   }));
-  // Rapid clicking all 9 layers ends cleanly on layer 9
+  // Consecutive option changes leave layer 9 selected.
   await evaluate(() => {
-    const list = document.querySelectorAll('#anatomy .kf-layer-btn');
-    for (let i = 0; i < list.length; i += 1) list[i].click();
+    const select = document.querySelector('#kf-anatomy-layer');
+    for (const option of select.options) {
+      select.value = option.value;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    }
   });
   const rapidLast = await evaluate(() =>
-    document.querySelector('#anatomy .kf-anatomy__active-card h3')?.textContent?.trim(),
+    document.querySelector('#anatomy .kf-anatomy__title')?.textContent?.trim(),
   );
   check(
-    'ui-anatomy: focus toggle, restore full view, internal auto-explode, and rapid selection clean',
-    focusedState.pressed === 'true' &&
-      focusedState.label === 'Restore full view' &&
-      restoredState.pressed === 'false' &&
-      restoredState.label === 'Focus layer' &&
+    'ui-anatomy: selector focus, reset full view, internal auto-explode, and rapid selection clean',
+    focusedState.startsWith('Focused: 03') &&
+      restoredState.startsWith('Drag to orbit') &&
       autoExplodeState.explodePressed === 'true' &&
-      autoExplodeState.focusPressed === 'true' &&
+      autoExplodeState.focusNote.startsWith('Focused: 04') &&
       rapidLast === 'CNC Bottom Chassis & Silicone Feet',
   );
 
   // 4. Switch Lab 3D activation causes ZERO /audio/ requests & loads lazy curve panel
   await evaluate(() => document.getElementById('switch-lab').scrollIntoView({ behavior: 'instant', block: 'start' }));
-  await until(() => evaluate(() => Boolean(document.querySelector('#switch-lab .kf-curve-svg'))), 'lazy switch curve');
+  await until(() => evaluate(() => Boolean(document.querySelector('#switch-lab .kf-curve-svg')?.getClientRects().length)), 'lazy switch curve');
   await evaluate(() =>
     document.querySelector('[data-kf-viewport="switch-lab"] .kf-viewport-host__action:last-child').click(),
   );
@@ -252,15 +254,15 @@ try {
   // 5. Conceptual curve disclaimer & Cutaway/Assembled toggle
   const curveInfo = await evaluate(() => ({
     note: document.querySelector('#switch-lab .kf-curve-card__note')?.textContent ?? '',
-    cutawayPressed: [...document.querySelectorAll('#switch-lab .kf-switch-pose__btn')]
+    cutawayPressed: [...document.querySelectorAll('#switch-lab .kf-switch-lab__pose-btn')]
       .find((b) => b.textContent === 'Cutaway')
       ?.getAttribute('aria-pressed'),
   }));
   await evaluate(() => {
-    [...document.querySelectorAll('#switch-lab .kf-switch-pose__btn')].find((b) => b.textContent === 'Assembled').click();
+    [...document.querySelectorAll('#switch-lab .kf-switch-lab__pose-btn')].find((b) => b.textContent === 'Assembled').click();
   });
   const assembledPressed = await evaluate(() =>
-    [...document.querySelectorAll('#switch-lab .kf-switch-pose__btn')]
+    [...document.querySelectorAll('#switch-lab .kf-switch-lab__pose-btn')]
       .find((b) => b.textContent === 'Assembled')
       ?.getAttribute('aria-pressed'),
   );
@@ -348,7 +350,7 @@ try {
   await send('Input.dispatchKeyEvent', { type: 'keyDown', key: ' ', code: 'Space', windowsVirtualKeyCode: 32 });
   await until(async () => (await getPressBtn()).pressed === 'true', 'pressed before variant switch');
   await evaluate(() => {
-    const tabs = [...document.querySelectorAll('#switch-lab .kf-switch-lab__tabs button')];
+    const tabs = [...document.querySelectorAll('#switch-lab .kf-switch-lab__profiles button')];
     tabs.find((b) => b.textContent.includes('Tactile 58')).click();
   });
   await until(
@@ -360,7 +362,7 @@ try {
   );
   // Explicit Apply to Build Studio updates Build Studio code
   await evaluate(() => {
-    const btns = [...document.querySelectorAll('#switch-lab .kf-switch-panel__footer button')];
+    const btns = [...document.querySelectorAll('#switch-lab .kf-switch-lab__footer button')];
     btns.find((b) => b.textContent.includes('Apply to Build Studio')).click();
   });
   const studioCodeAfterApply = await evaluate(() =>
