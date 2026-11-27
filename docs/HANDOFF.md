@@ -1,5 +1,13 @@
 # KEYFORM — Phase Handoff
 
+## KF-011 Production Release & Project Closure (Production Live)
+
+KF-011 finalizes production metadata (`https://keyform-lake.vercel.app`), README, and closure documentation on top of verified release candidate `61c31bb` after owner sign-off on all 11 physical-device acceptance checks.
+
+- **Canonical & social metadata (`index.html`).** Enabled `<link rel="canonical" href="https://keyform-lake.vercel.app/" />`, `og:url`, and absolute `og:image` / `twitter:image` URLs pointing to `https://keyform-lake.vercel.app/media/kf-008a/webp/OR13-desktop-hero-1600w.webp` (`1600×893`).
+- **Documentation (`README.md`, `docs/HANDOFF.md`).** Updated README with live production URL, fictional concept disclosure, stack, features, Node 22.x local setup, 172-asset provenance, CC0-1.0 audio attribution, Vercel deployment config, and known limitations.
+- **Release governance.** Merged `integration/kf004b-production` into `main` without force-push, deployed production to `https://keyform-lake.vercel.app`, verified the public HTTPS origin without authentication, and revoked the temporary KF-010A QA automation bypass secret while preserving prior deployment history (`dpl_DoXzVajU7JNDxxGU2HWVWTTxQTZv`, `dpl_BruCCS6mDzM882gK5CDMbvNuhMAY`) for rollback.
+
 ## KF-010B Final Release Candidate (Ready for owner release approval)
 
 KF-010B builds on `62b47d4` (`integration/kf004b-production`) with owner visual approval across desktop (`1920×1080`, `1440×900`, `1366×768`, `1280×720`, `1080×600`), tablet (`768×1024`), and mobile (`440×956`, `390×844`, `320×568`). Design and feature freeze are final.
