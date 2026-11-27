@@ -2,6 +2,27 @@ import React from 'react';
 import { useReveal } from '../../motion/useReveal';
 import { ResponsiveImage } from '../ui/ResponsiveImage';
 
+const P = 19.05;
+const row = (y: number, units: readonly number[], x = 9.2) =>
+  units
+    .map((u) => {
+      const w = +(u * P - 1.05).toFixed(1);
+      const s = `M${x.toFixed(1)} ${y}h${w}v18h-${w}Z`;
+      x += u * P;
+      return s;
+    })
+    .join('');
+const u1 = (n: number) => Array<number>(n).fill(1);
+const FN_PATH = [37.8, 118.8, 199.7].map((x) => row(10, u1(4), x)).join('');
+const MAIN_PATH =
+  row(33.8, [...u1(13), 2]) +
+  row(52.9, [1.5, ...u1(12), 1.5]) +
+  row(71.9, [1.75, ...u1(11), 2.25]) +
+  row(91, [2.25, ...u1(10), 1.75]) +
+  row(110, [1.25, 1.25, 1.25, 6.25, 1, 1, 1]);
+const NAV_PATH = [33.8, 52.9, 71.9, 91].map((y) => `M301.2 ${y}h18v18h-18Z`).join('');
+const ARROW_PATH = 'M279.3 93.8h18v18h-18ZM260.2 112.9h18v18h-18ZM279.3 112.9h18v18h-18ZM298.3 112.9h18v18h-18Z';
+
 export const EngineeringBento: React.FC = () => {
   const { ref, revealed } = useReveal<HTMLDivElement>();
 
@@ -117,30 +138,21 @@ export const EngineeringBento: React.FC = () => {
                 20 mm knurled push-button rotary dial with 30 tactile detents.
               </p>
               <svg
-                viewBox="0 0 280 94"
+                className="kf-layout-svg"
+                viewBox="0 0 328 140"
                 fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ marginTop: '12px' }}
                 role="img"
-                aria-label="Exploded 75 percent ANSI layout diagram with uniform keycap row"
+                aria-label="KF-01 75% ANSI layout plan showing separated function groups, navigation column, inverted-T arrows, and rotary dial"
               >
-                <rect x="1" y="1" width="278" height="92" stroke="#CED2C9" strokeWidth="1" />
-                <rect x="8" y="8" width="14" height="11" fill="#1A1F1E" stroke="#181C19" />
-                <rect x="30" y="8" width="58" height="11" fill="#E6E7E0" stroke="#636B63" />
-                <rect x="94" y="8" width="58" height="11" fill="#E6E7E0" stroke="#636B63" />
-                <rect x="158" y="8" width="58" height="11" fill="#E6E7E0" stroke="#636B63" />
-                <circle cx="256" cy="13.5" r="7" fill="#294B3B" />
-                <rect x="8" y="25" width="222" height="58" fill="#E6E7E0" stroke="#636B63" />
-                <rect x="238" y="25" width="34" height="42" fill="#E6E7E0" stroke="#636B63" />
-                <rect
-                  x="218"
-                  y="71"
-                  width="54"
-                  height="12"
-                  fill="#294B3B"
-                  fillOpacity="0.14"
-                  stroke="#294B3B"
-                />
+                <rect x="1" y="1" width="326" height="138" rx="4" fill="#E9EAE3" stroke="#BFC5BC" strokeWidth="1" />
+                <path d="M9.2 10h18v18h-18Z" fill="#1A1F1E" stroke="#181C19" strokeWidth="0.9" />
+                <path d={FN_PATH} fill="#F6F5F0" stroke="#6A726A" strokeWidth="0.9" />
+                <path d={MAIN_PATH} fill="#F6F5F0" stroke="#7D857E" strokeWidth="0.85" />
+                <path d={NAV_PATH} fill="rgba(41,75,59,.10)" stroke="#294B3B" strokeWidth="0.9" />
+                <path d={ARROW_PATH} fill="rgba(41,75,59,.20)" stroke="#294B3B" strokeWidth="0.95" />
+                <circle cx="301.6" cy="19" r="11.6" stroke="#294B3B" strokeOpacity=".45" strokeWidth="0.85" strokeDasharray="1.8 1.8" />
+                <circle cx="301.6" cy="19" r="9.6" fill="#294B3B" />
+                <line x1="301.6" y1="11.2" x2="301.6" y2="15.4" stroke="#B49A70" strokeWidth="1.4" strokeLinecap="round" />
               </svg>
             </div>
           </article>

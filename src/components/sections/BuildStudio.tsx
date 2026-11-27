@@ -255,7 +255,8 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                 {activeCategory === 'exterior' && (
                   <>
                     <SwatchSelector
-                      label="Enclosure finish"
+                      label="Enclosure"
+                      ariaLabel="Enclosure finish"
                       options={ENCLOSURE_FINISHES}
                       value={config.enclosure}
                       onChange={handleSelectEnclosure}
@@ -267,7 +268,8 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                 {activeCategory === 'keycaps' && (
                   <>
                     <SwatchSelector
-                      label="Keycap set (1.5 mm PBT)"
+                      label="Keycap set"
+                      ariaLabel="Keycap set (1.5 mm PBT)"
                       options={KEYCAP_SETS}
                       value={config.keycaps}
                       onChange={(id) => {
@@ -278,7 +280,8 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                     <p className="kf-studio-hint">{selectedKeycaps.finishNote}</p>
 
                     <SwatchSelector
-                      label="Escape key"
+                      label="Escape"
+                      ariaLabel="Escape key"
                       options={resolvedAccentOptions}
                       value={config.accent}
                       onChange={(id) => {
@@ -294,7 +297,7 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                   <>
                     <div className="kf-control-group">
                       <div className="kf-control-group__header">
-                        <span className="kf-control-group__label">Switch profile</span>
+                        <span className="kf-control-group__label">Switches</span>
                         <span className="kf-control-group__selected">{selectedSwitch.name}</span>
                       </div>
                       <SegmentedControl<SwitchProfile['id']>
@@ -310,12 +313,13 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                         }))}
                       />
                       <p className="kf-studio-hint">
-                        {selectedSwitch.nominalForce} target · {selectedSwitch.archetype} concept · Visible in Exploded 3D.
+                        {selectedSwitch.nominalForce} · {selectedSwitch.archetype} · Visible in Exploded 3D.
                       </p>
                     </div>
 
                     <SwatchSelector
-                      label="Switch plate (1.50 mm)"
+                      label="Switch plate"
+                      ariaLabel="Switch plate (1.50 mm)"
                       options={PLATE_MATERIALS}
                       value={config.plate}
                       onChange={(id) => {
@@ -328,25 +332,26 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
                 )}
               </div>
 
-              {/* Restrained Secondary Specification Summary & Utilities */}
+              {/* Progressive Disclosure for Technical Build Specification & Quiet Utilities */}
               <div className="kf-summary-box" aria-live="polite">
-                <div className="kf-summary-box__head">
-                  <span className="kf-summary-box__title">Specification</span>
-                  <span className="kf-summary-box__code">{buildCode}</span>
-                </div>
-
-                <dl className="kf-summary-dl">
-                  <dt>Enclosure</dt>
-                  <dd>{selectedEnclosure.name}</dd>
-                  <dt>Keycaps</dt>
-                  <dd>
-                    {selectedKeycaps.name} · {selectedAccent.name}
-                  </dd>
-                  <dt>Switches</dt>
-                  <dd>{selectedSwitch.name}</dd>
-                  <dt>Plate</dt>
-                  <dd>{selectedPlate.name}</dd>
-                </dl>
+                <details className="kf-spec-disclosure">
+                  <summary className="kf-summary-box__head">
+                    <span className="kf-summary-box__title">Build details</span>
+                    <span className="kf-summary-box__code">{buildCode}</span>
+                  </summary>
+                  <dl className="kf-summary-dl">
+                    <dt>Enclosure</dt>
+                    <dd>{selectedEnclosure.name}</dd>
+                    <dt>Keycaps</dt>
+                    <dd>
+                      {selectedKeycaps.name} · {selectedAccent.name}
+                    </dd>
+                    <dt>Switches</dt>
+                    <dd>{selectedSwitch.name}</dd>
+                    <dt>Plate</dt>
+                    <dd>{selectedPlate.name}</dd>
+                  </dl>
+                </details>
 
                 <div className="kf-studio-actions">
                   <Button variant="secondary" compact onClick={handleCopyBuild}>

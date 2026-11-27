@@ -97,12 +97,9 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     parent: 'Tilt Pivot (+6.5°)',
     explodeOffset: 'Z +108 mm',
     material: '1.5 mm matte Charcoal PBT with subtle off-white legends',
-    purpose:
-      'Row-sculpted R1–R4 key profiles guide fingertips across all 81 Charcoal keys, paired with a convex 6.25u spacebar and a dry matte texture that resists shine.',
-    assemblyRelation:
-      'Mounts directly onto all 81 MX cross stems, with recessed skirts that clear the top frame at full travel.',
-    engineeringNote:
-      '18.00 × 18.00 mm nominal 1u base with 1.05 mm minimum gap across the 19.05 mm standard grid (#1A1F1E Charcoal PBT).',
+    purpose: 'Row-sculpted R1–R4 keycaps and a convex 6.25u spacebar in dry matte Charcoal PBT that resists shine.',
+    assemblyRelation: 'Seats onto all 81 MX cross stems with recessed skirts that clear the top frame at full travel.',
+    engineeringNote: '18.0 × 18.0 mm nominal 1u base on the 19.05 mm MX grid (#1A1F1E Charcoal PBT).',
     stratumY: 22,
   },
   {
@@ -114,12 +111,9 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     parent: 'Tilt Pivot (+6.5°)',
     explodeOffset: 'Z +84 mm',
     material: 'Bead-blasted 6063 aluminium with diamond-knurled metal dial',
-    purpose:
-      'Shapes the outer profile of KF—01 with four separated function pockets, an integrated navigation bridge, a 1.2 mm 45° perimeter chamfer, and a 48-tooth knurled rotary dial.',
-    assemblyRelation:
-      'Secures downward to the bottom chassis via eight recessed underside screws, clamping the gasket channel without touching the switch plate.',
-    engineeringNote:
-      'Frozen Alternative A integrated deck geometry (KF-003A-R3); 48-tooth crossed-groove encoder knurling.',
+    purpose: 'Frames separated function pockets, an integrated navigation bridge, a 1.2 mm chamfer, and a 48-tooth knurled dial.',
+    assemblyRelation: 'Bolts downward to the bottom chassis via eight concealed underside screws around the gasket channel.',
+    engineeringNote: 'Frozen Alternative A integrated deck geometry (KF-003A-R3).',
     stratumY: 32,
   },
   {
@@ -131,12 +125,9 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     parent: 'Tilt Pivot (+6.5°)',
     explodeOffset: 'Z +64 mm',
     material: 'Polycarbonate upper housing, POM stem, copper contact leaves',
-    purpose:
-      'Defines the feel and travel of every keystroke, swappable without soldering across three conceptual KEYFORM switch profiles.',
-    assemblyRelation:
-      'Snaps into the 1.50 mm switch plate cutouts and seats into south-facing hot-swap sockets on the PCB below.',
-    engineeringNote:
-      'Reference geometry aligns with standard Cherry MX 14.00 × 14.00 mm plate cutouts and 4.0 mm total travel.',
+    purpose: 'Defines the tactile character of every press, hot-swappable across three conceptual KEYFORM profiles.',
+    assemblyRelation: 'Snaps into 1.50 mm plate cutouts and seats into south-facing PCB sockets below.',
+    engineeringNote: 'Standard Cherry MX 14.0 × 14.0 mm plate cutouts and 4.0 mm nominal travel.',
     stratumY: 41,
   },
   {
@@ -148,12 +139,9 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     parent: 'Tilt Pivot (+6.5°)',
     explodeOffset: 'Z +42 mm',
     material: '1.50 mm aluminium, FR4, polycarbonate, or brushed brass',
-    purpose:
-      'Keeps all 81 switches aligned while tuning typing firmness and acoustic response according to the selected plate material.',
-    assemblyRelation:
-      'Suspends inside the enclosure on 12 perimeter silicone gasket tabs with no metal-to-metal screw contact.',
-    engineeringNote:
-      'Rests 2.2 mm below the top deck datum with four stabilizer reliefs and rotary encoder clearance.',
+    purpose: 'Aligns all 81 switches while tuning typing firmness and acoustic response by plate material.',
+    assemblyRelation: 'Floats on 12 perimeter silicone gasket tabs with zero metal-to-metal screw contact.',
+    engineeringNote: '2.2 mm below top deck datum with four stabilizer reliefs and dial clearance.',
     stratumY: 49,
   },
   {
@@ -165,12 +153,9 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     parent: 'Tilt Pivot (+6.5°)',
     explodeOffset: 'Z +20 mm',
     material: 'Open-cell Poron acoustic foam and 12 molded silicone gaskets',
-    purpose:
-      'Cushions vibration between the typing assembly and the solid aluminium case to reduce metallic resonance.',
-    assemblyRelation:
-      'Silicone gaskets wrap the plate perimeter tabs while the perforated Poron layer sits between the plate and PCB.',
-    engineeringNote:
-      '3.0 mm installed Poron damper within the 3.5 mm free stack; conceptual acoustic design, not lab-measured dBA data.',
+    purpose: 'Decouples typing vibration from the aluminium shell to soften harsh metallic resonance.',
+    assemblyRelation: 'Silicone gaskets wrap plate perimeter tabs while Poron sits between plate and PCB.',
+    engineeringNote: '3.0 mm installed Poron damper; conceptual acoustic design, not lab-measured dBA.',
     stratumY: 57,
   },
   {
@@ -182,12 +167,9 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     parent: 'Tilt Pivot (+6.5°)',
     explodeOffset: 'Datum (0 mm)',
     material: '1.60 mm matte-black FR4 with 0.5 mm IXPE switch pad',
-    purpose:
-      'Registers every key press and rotary detent reliably without RGB distraction, keeping only a subtle warm-white Caps Lock indicator.',
-    assemblyRelation:
-      'Supports four PCB-mounted stabilizers and connects to the rear USB-C board via a flexible internal cable.',
-    engineeringNote:
-      '5.00 mm nominal stack from switch plate top to PCB top; 23.8 mm short and 100.0 mm Spacebar stabilizer spans.',
+    purpose: 'Registers every keystroke and rotary detent without RGB distraction, keeping only a warm-white Caps indicator.',
+    assemblyRelation: 'Carries four PCB-mounted stabilizers and links to the rear USB-C board via flex harness.',
+    engineeringNote: '5.0 mm plate-to-PCB stack; 23.8 mm short and 100.0 mm spacebar stabilizer spans.',
     stratumY: 64,
   },
   {
@@ -199,12 +181,9 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     parent: 'Root (Desk Plane)',
     explodeOffset: 'Y +20 mm, Z −18 mm',
     material: 'FR4 carrier board, USB-C receptacle, flexible harness',
-    purpose:
-      'Keeps the rear USB-C port centered in the case wall so gasket flex never transfers stress to the cable connector.',
-    assemblyRelation:
-      'Mounts directly to the lower chassis at the rear wall and bridges upward to the floating PCB.',
-    engineeringNote:
-      'Modeled to Unified Daughterboard throat guidance (9.70 × 4.22 mm case aperture for 8.94 × 3.46 mm shell).',
+    purpose: 'Keeps the rear USB-C port centered so gasket flex never stresses the cable connector.',
+    assemblyRelation: 'Bolts directly to the lower chassis rear wall and bridges upward to the floating PCB.',
+    engineeringNote: 'Unified Daughterboard throat clearance (9.70 × 4.22 mm case aperture).',
     stratumY: 71,
   },
   {
@@ -216,12 +195,9 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     parent: 'Root (Desk Plane)',
     explodeOffset: 'Z −33 mm',
     material: 'CNC-machined brushed brass with 2.0 mm Poron case liner',
-    purpose:
-      'Places dense low-center mass beneath the typing zone so the keyboard stays planted on the desk while damping hollow reflections.',
-    assemblyRelation:
-      'Recesses flush into the lower aluminium pocket beneath the bottom acoustic sheet, secured with four countersunk screws.',
-    engineeringNote:
-      '4× M3 countersunk fasteners contributing to the ~1,680 g conceptual assembled weight target.',
+    purpose: 'Anchors low-center mass beneath the typing zone so KF—01 stays planted and damps hollow reflections.',
+    assemblyRelation: 'Recesses flush into the lower aluminium pocket beneath the bottom acoustic sheet.',
+    engineeringNote: '4× M3 countersunk screws contributing to the ~1,680 g conceptual weight target.',
     stratumY: 78,
   },
   {
@@ -233,12 +209,9 @@ export const ANATOMY_LAYERS: AnatomyLayer[] = [
     parent: 'Root (Desk Plane)',
     explodeOffset: 'Z −50 mm',
     material: '6063 aluminium with recessed silicone feet',
-    purpose:
-      'Forms the 6.5° angled base, concealing all eight enclosure screws underneath and resting steadily on flush silicone feet.',
-    assemblyRelation:
-      'Houses the internal brass weight, lower gasket seats, daughterboard mounts, and top frame perimeter.',
-    engineeringNote:
-      '327.0 × 138.0 mm exterior plan; 18.5 mm front enclosure chin (19.5 mm on 1.0 mm proud feet) rising to 34.2 mm rear.',
+    purpose: 'Forms the 6.5° angled base, concealing all eight fasteners underneath on flush silicone feet.',
+    assemblyRelation: 'Houses the brass weight, lower gasket seats, daughterboard mounts, and top frame.',
+    engineeringNote: '327 × 138 mm plan; 18.5 mm front edge rising to 34.2 mm rear.',
     stratumY: 85,
   },
 ];

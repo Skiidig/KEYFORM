@@ -63,63 +63,79 @@ export const SwitchLabCurve: React.FC<{
   const endX = 34 + spec.totalTravelMm * 57;
 
   return (
-    <div className="kf-curve-card">
-      <div className="kf-curve-card__head">
-        <span className="kf-label kf-curve-card__title">Conceptual force-travel curve</span>
-        <span
-          className="kf-code kf-curve-card__readout"
-          ref={(el) => {
-            curveDomRef.current.readout = el;
-          }}
-        >
-          0.0 / {spec.totalTravelMm.toFixed(1)} mm
-        </span>
+    <>
+      <div className="kf-switch-curve-slot">
+        <div className="kf-curve-card">
+          <div className="kf-curve-card__head">
+            <span className="kf-label kf-curve-card__title">Conceptual force-travel curve</span>
+            <span
+              className="kf-code kf-curve-card__readout"
+              ref={(el) => {
+                curveDomRef.current.readout = el;
+              }}
+            >
+              0.0 / {spec.totalTravelMm.toFixed(1)} mm
+            </span>
+          </div>
+          <svg
+            className="kf-curve-svg"
+            viewBox="0 0 280 120"
+            role="img"
+            aria-label={`Conceptual ${activeSwitch.name} force-travel curve: ${activeSwitch.nominalForce} at ${activeSwitch.nominalPretravel}, ${activeSwitch.nominalTotalTravel} total. Nominal design target, not laboratory measured.`}
+          >
+            <path d="M34 73.1H262M34 50.3H262M34 27.4H262" className="kf-curve-grid" />
+            <path d="M34 16V96H262" className="kf-curve-baseline" />
+            <text x="6" y="20" className="kf-curve-axis">gf</text>
+            <text x="28" y="76" textAnchor="end" className="kf-curve-axis">20</text>
+            <text x="28" y="53" textAnchor="end" className="kf-curve-axis">40</text>
+            <text x="28" y="30" textAnchor="end" className="kf-curve-axis">60</text>
+            <text x="34" y="112" textAnchor="middle" className="kf-curve-axis">0 mm</text>
+            <text x="91" y="112" textAnchor="middle" className="kf-curve-axis">1</text>
+            <text x="148" y="112" textAnchor="middle" className="kf-curve-axis">2</text>
+            <text x="205" y="112" textAnchor="middle" className="kf-curve-axis">3</text>
+            <text x="262" y="112" textAnchor="middle" className="kf-curve-axis">4 mm</text>
+            <line x1={actX} y1="16" x2={actX} y2="96" className="kf-curve-ref" />
+            <line x1={endX} y1="16" x2={endX} y2="96" className="kf-curve-stop" />
+            <path d={spec.path} className="kf-curve-path" />
+            <circle cx={actX} cy={actY} r="3" className="kf-curve-act" />
+            <line
+              ref={(el) => {
+                curveDomRef.current.line = el;
+              }}
+              x1="34"
+              y1="16"
+              x2="34"
+              y2="96"
+              className="kf-curve-cursor"
+            />
+            <circle
+              ref={(el) => {
+                curveDomRef.current.dot = el;
+              }}
+              cx="34"
+              cy="60"
+              r="4"
+              className="kf-curve-dot"
+            />
+          </svg>
+          <p className="kf-curve-card__note">
+            Nominal design target ({activeSwitch.nominalForce} @ {activeSwitch.nominalPretravel}; {activeSwitch.nominalTotalTravel} total). Not laboratory measured.
+          </p>
+        </div>
       </div>
-      <svg
-        className="kf-curve-svg"
-        viewBox="0 0 280 120"
-        role="img"
-        aria-label={`Conceptual ${activeSwitch.name} force-travel curve: ${activeSwitch.nominalForce} at ${activeSwitch.nominalPretravel}, ${activeSwitch.nominalTotalTravel} total. Nominal design target, not laboratory measured.`}
-      >
-        <path d="M34 73.1H262M34 50.3H262M34 27.4H262" className="kf-curve-grid" />
-        <path d="M34 16V96H262" className="kf-curve-baseline" />
-        <text x="6" y="20" className="kf-curve-axis">gf</text>
-        <text x="28" y="76" textAnchor="end" className="kf-curve-axis">20</text>
-        <text x="28" y="53" textAnchor="end" className="kf-curve-axis">40</text>
-        <text x="28" y="30" textAnchor="end" className="kf-curve-axis">60</text>
-        <text x="34" y="112" textAnchor="middle" className="kf-curve-axis">0 mm</text>
-        <text x="91" y="112" textAnchor="middle" className="kf-curve-axis">1</text>
-        <text x="148" y="112" textAnchor="middle" className="kf-curve-axis">2</text>
-        <text x="205" y="112" textAnchor="middle" className="kf-curve-axis">3</text>
-        <text x="262" y="112" textAnchor="middle" className="kf-curve-axis">4 mm</text>
-        <line x1={actX} y1="16" x2={actX} y2="96" className="kf-curve-ref" />
-        <line x1={endX} y1="16" x2={endX} y2="96" className="kf-curve-stop" />
-        <path d={spec.path} className="kf-curve-path" />
-        <circle cx={actX} cy={actY} r="3" className="kf-curve-act" />
-        <line
-          ref={(el) => {
-            curveDomRef.current.line = el;
-          }}
-          x1="34"
-          y1="16"
-          x2="34"
-          y2="96"
-          className="kf-curve-cursor"
-        />
-        <circle
-          ref={(el) => {
-            curveDomRef.current.dot = el;
-          }}
-          cx="34"
-          cy="60"
-          r="4"
-          className="kf-curve-dot"
-        />
-      </svg>
-      <p className="kf-curve-card__note">
-        Nominal design target ({activeSwitch.nominalForce} @ {activeSwitch.nominalPretravel}; {activeSwitch.nominalTotalTravel} total). Not laboratory measured.
-      </p>
-    </div>
+
+      <dl className="kf-switch-notes">
+        <div>
+          <dt>Stem</dt>
+          <dd className="kf-switch-spec__stem">
+            <span className="kf-switch-spec__swatch" style={{ background: activeSwitch.stemColorHex }} aria-hidden="true" />
+            {activeSwitch.stemColorName}
+          </dd>
+        </div>
+        <div><dt>Housing</dt><dd>{activeSwitch.housingDesc}</dd></div>
+        <div><dt>Best suited for</dt><dd>{activeSwitch.bestFor}</dd></div>
+      </dl>
+    </>
   );
 };
 

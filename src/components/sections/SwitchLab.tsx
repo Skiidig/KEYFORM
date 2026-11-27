@@ -214,48 +214,34 @@ export const SwitchLab: React.FC<SwitchLabProps> = ({
             <div className="kf-switch-panel kf-switch-panel--dark" role="tabpanel" aria-live="polite">
               <div className="kf-switch-panel__top">
                 <span className="kf-switch-panel__id">
-                  <span className="kf-switch-panel__code">{activeSwitch.code}</span>
                   <span className="kf-switch-panel__archetype">{activeSwitch.archetype}</span>
+                  <span className="kf-switch-panel__code">{activeSwitch.code}</span>
                 </span>
               </div>
 
               <h3 className="kf-h1 kf-switch-panel__title">{activeSwitch.name}</h3>
               <p className="kf-lead kf-switch-panel__lead">{activeSwitch.character}</p>
 
-              <div className="kf-switch-specs">
-                <div>
-                  <span className="kf-switch-spec__label">Actuation target</span>
-                  <span className="kf-switch-spec__val">{activeSwitch.nominalForce}</span>
-                </div>
-                <div>
-                  <span className="kf-switch-spec__label">Pre-travel</span>
-                  <span className="kf-switch-spec__val">{activeSwitch.nominalPretravel}</span>
-                </div>
-                <div>
-                  <span className="kf-switch-spec__label">Total travel</span>
-                  <span className="kf-switch-spec__val">{activeSwitch.nominalTotalTravel}</span>
-                </div>
-                <div>
-                  <span className="kf-switch-spec__label">Stem</span>
-                  <span className="kf-switch-spec__val kf-switch-spec__stem">
-                    <span className="kf-switch-spec__swatch" style={{ background: activeSwitch.stemColorHex }} aria-hidden="true" />
-                    {activeSwitch.stemColorName}
-                  </span>
-                </div>
-              </div>
+              <p className="kf-switch-tactile-strip">
+                <span>{activeSwitch.nominalForce}</span>
+                <span aria-hidden="true">·</span>
+                <span>{activeSwitch.nominalPretravel} pre-travel</span>
+                <span aria-hidden="true">·</span>
+                <span>{activeSwitch.nominalTotalTravel} travel</span>
+              </p>
 
-              {controlsReady && (
-                <div className="kf-switch-curve-slot">
-                  <Suspense fallback={null}>
-                    <SwitchLabCurve activeSwitch={activeSwitch} curveDomRef={curveDomRef} />
-                  </Suspense>
+              <details className="kf-switch-details">
+                <summary className="kf-switch-details__summary">
+                  <span>Force curve &amp; technical details</span>
+                </summary>
+                <div className="kf-switch-details__body">
+                  {controlsReady && (
+                    <Suspense fallback={null}>
+                      <SwitchLabCurve activeSwitch={activeSwitch} curveDomRef={curveDomRef} />
+                    </Suspense>
+                  )}
                 </div>
-              )}
-
-              <dl className="kf-switch-notes">
-                <div><dt>Housing</dt><dd>{activeSwitch.housingDesc}</dd></div>
-                <div><dt>Best suited for</dt><dd>{activeSwitch.bestFor}</dd></div>
-              </dl>
+              </details>
 
               <div className="kf-switch-panel__footer">
                 <span className="kf-caption kf-switch-panel__status">

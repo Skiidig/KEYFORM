@@ -13,31 +13,27 @@ Continuing from the `KF-QUALITY-001` audit and accepted `KF-QUALITY-002A` real-t
 
 ### 2.1 Switch Lab — Reconnected Interaction & Product (`Q-01`)
 - **`src/components/sections/SwitchLab.tsx`, `src/components/sections/SwitchLabInteractive.tsx`, `src/styles/components.css`:**
-  - Elevated the three switch profile tabs (`KF—Linear 45`, `KF—Tactile 58`, `KF—Silent 50`) above the two-column grid so switching profiles immediately updates the specimen beneath the visitor's thumb on mobile and beside their gaze on desktop.
-  - Fused a unified obsidian **Switch Interaction Dock** (`.kf-switch-dock`) directly beneath the 3D switch stage inside `.kf-switch-lab__visual`, housing `Cutaway | Assembled`, the tactile `Hold to press switch` actuation trigger with embedded live travel bar, and the explicit `Enable sound` / audio bar.
-  - Moved the synchronized conceptual SVG force-travel curve (`SwitchLabCurve`, exported from the same single lazy `SwitchLabInteractive` chunk with zero `react-dom` portal overhead) into the right specification panel as secondary supporting evidence, removing the redundant `Conceptual target · Not lab tested` pill in the panel top bar while preserving honest curve and audio disclosures.
-  - Made `.kf-switch-lab__visual` sticky on desktop (`>= 1024px`) and tuned stage aspect/height (`max-height: 340px` desktop, `300px` laptop, `320px` mobile) so the 3D switch and actuation control stay visible together:
-    - **Mobile (`390×844`):** Stage-to-actuation gap reduced from **`1,164 px` → `162 px`** (`bothVisibleTogether: true`; stage `156..446`, press button `608..652`, sound control `684..728`).
-    - **Desktop (`1440×900`):** `bothVisibleTogether: true` (`stage 422..760`, press button `846..890`).
+  - Elevated the three switch profile tabs (`KF—Linear 45`, `KF—Tactile 58`, `KF—Silent 50`) above the grid and expanded the dark-studio visual column to `7/12` on desktop so the switch specimen dominates.
+  - Fused a unified obsidian **Switch Interaction Dock** (`.kf-switch-dock`) directly beneath the 3D switch inside `.kf-switch-lab__visual`, housing `Cutaway | Assembled`, the tactile `Hold to press switch` actuation trigger with embedded live travel bar, and explicit `Enable sound` / audio controls.
+  - Replaced the 4-column specification datasheet grid in the right column with an experiential summary: switch archetype/name, one sensory sentence, a single inline tactile strip (`45 gf · 2.0 mm pre-travel · 4.0 mm travel`), and a collapsible `<details className="kf-switch-details">` (`Force curve & technical details`, collapsed by default) containing the live-synchronized conceptual SVG force-travel curve (`SwitchLabCurve`, single shared lazy chunk) plus stem, housing, and use-case notes.
+  - Made `.kf-switch-lab__visual` sticky on desktop (`>= 1024px`) so the 3D switch and actuation control stay visible together (`bothVisibleTogether: true` on desktop `1440×900` and mobile `390×844`; mobile stage-to-actuation gap cut from **`1,164 px` → `162 px`**).
 
 ### 2.2 Build Studio — Calm Industrial Atelier (`Q-05`)
-- **`src/components/sections/BuildStudio.tsx`, `src/styles/components.css`:**
-  - **Removed visual clutter:** Eliminated the redundant 4-chip `.kf-pairing-strip` beneath the viewport, removed the duplicate `Escape key` swatch selector from the `Exterior` tab (retained exclusively in `Keycaps`), and removed the floating `.kf-hud-status` badge from inside the camera HUD bar so the glass HUD floats compactly with only the four camera presets (`Studio ¾ | Low light | Rear | Exploded`).
-  - **Consolidated status treatment:** Unified live 3D and static fallback status into one concise, honest `.kf-viewport__note` line beneath the stage.
-  - **Dynamic `Matched` Escape swatch:** Computed `Matched` swatch hex dynamically from the selected base keycap set (`#1A1F1E` Charcoal PBT, `#C2BEB2` Porcelain PBT modifier, `#434A46` Two-Tone Slate modifier), matching the actual 3D Escape keycap material.
-  - **De-emphasized utilities:** Converted the heavy limestone summary card + primary-green CTA block into a quiet border-top `Specification` footer with secondary `Copy Build Summary` (`variant="secondary" compact`) and ghost `Reset` (`variant="ghost" compact`) utilities while keeping `≥ 44 px` touch targets and build code visibility.
-  - **Height-gated mobile sticky stage:** Applied `@media (max-width: 1023px) and (min-height: 660px)` sticky framing (`aspect-ratio: 16 / 10`, `max-height: 33svh`) to `.kf-studio__viewport-col` so the keyboard remains continuously visible while selecting finishes on `390×844`, `440×956`, and `768×1024` (`stageAndControlsVisibleTogether: true`: stage `77..295`, swatches `399..445`), with an automatic clean non-sticky fallback (`position: static`) on short viewports (`320×568`) and zero nested scrolling.
+- **`src/components/sections/BuildStudio.tsx`, `src/components/ui/SwatchSelector.tsx`, `src/styles/components.css`:**
+  - **Removed visual clutter:** Eliminated the redundant 4-chip `.kf-pairing-strip` beneath the viewport, removed the duplicate `Escape key` selector from `Exterior` (retained exclusively in `Keycaps`), and simplified the floating glass camera HUD to only the four presets (`Studio ¾ | Low light | Rear | Exploded`).
+  - **Refined material swatches & concise labels:** Upgraded swatches to calmer architectural chips (`22×22 px` chip with subtle recessed sheen, clean transparent resting state, crisp Forest active hairline) with concise visible labels (`Enclosure`, `Keycap set`, `Escape`, `Switches`, `Switch plate`) while preserving full accessible `aria-label` group names.
+  - **Dynamic `Matched` Escape swatch:** Dynamically matches the active base keycap set (`#1A1F1E` Charcoal PBT, `#C2BEB2` Porcelain PBT modifier, `#434A46` Two-Tone Slate modifier).
+  - **Progressive disclosure & quiet utilities:** Moved the 4-row technical specification list (`.kf-summary-dl`) into a collapsible `<details className="kf-spec-disclosure">` (`Build details` + subtle mono build code, collapsed by default), keeping `Copy Build Summary` (`secondary compact`) and `Reset` (`ghost compact`) directly accessible as quiet utilities (`≥ 44 px` touch targets).
+  - **Consolidated status & height-gated mobile sticky stage:** Unified live/static status into one concise `.kf-viewport__note` line beneath the stage, and added a height-gated sticky mobile stage (`@media (max-width: 1023px) and (min-height: 660px)`, `stageAndControlsVisibleTogether: true` at `390×844`) with an automatic clean `static` fallback on short screens (`320×568`).
 
-### 2.3 Editorial Composition & Narrative Sequencing (`Q-08`, `Q-12`)
-- **Revised 01–07 Narrative (`src/App.tsx`, `HeaderNav.tsx`, `MaterialLibrary.tsx`, `BuildStudio.tsx`):** Moved **Material Library (`05`)** before **Build Studio (`06`)** so visitors progress from Hero (`01`) → Engineering (`02`) → Mechanical Anatomy (`03`) → Switch Lab (`04`) → Material Library (`05`) → Build Studio (`06`, experiential climax) → Closing (`07`). Preserved all established anchor IDs (`#engineering`, `#anatomy`, `#switch-lab`, `#materials`, `#build-studio`, `#closing`) and Switch Lab `Apply to Build Studio` behavior.
+### 2.3 Mechanical Anatomy, Bento, Material Library & Narrative (`Q-08`, `Q-12`)
+- **Revised 01–07 Narrative (`src/App.tsx`, `HeaderNav.tsx`, `MaterialLibrary.tsx`, `BuildStudio.tsx`):** Moved **Material Library (`05`)** before **Build Studio (`06`)** so Build Studio serves as the experiential climax while preserving all anchor IDs and Switch Lab `Apply`.
 - **Engineering Bento (`EngineeringBento.tsx`, `components.css`):**
-  - Unified the `6.5°` Typing Incline card by placing the architectural elevation SVG directly on matching dark slate (`#333637`) with warm chalk/brass linework beneath `A04b`, removing the jarring three-surface patchwork.
-  - Eliminated empty black space in the `12×` Gasket Mount & Recessed USB-C card (`justify-content: flex-start` + flexible `A04c` frame).
-  - Removed all five repetitive `Concept spec` cell stamps, keeping the single `MX standard` distinction on `02.4 Key Grid` and adding one calm section-level conceptual disclosure below the grid.
-  - Cropped `02.6` (`A07b`) tightly onto the corner countersunk M3 fasteners and CNC pocket (`scale(1.18)` at `24% 38%`) so it complements rather than repeats Material Library's full brushed-brass plate.
-- **Material Library (`MaterialLibrary.tsx`, `kf01Data.ts`, `components.css`):**
-  - Replaced the uniform 2×2 grid with an asymmetric 12-column editorial gallery (`7 / 5` + `5 / 7` with aligned `340 px` visual baselines on desktop), deliberate per-plate crops (`A07b` full diagonal brushing & engraving), and trimmed editorial descriptions.
-- **Closing Statement (`ClosingStatement.tsx`):** Preserved `Nothing accidental.` and dominant `A08` rear photography, made active spec secondary, and clarified the image caption (`Reference finish — Forest anodized 6063 aluminium, centered recessed USB-C`) so static photography never implies custom finish parity.
+  - Replaced the overlapping-rectangle schematic in `02.3 Compact Layout & Rotary Dial` with an **exact, manifest-derived 81-key + rotary dial SVG technical plan** (`viewBox="0 0 328 140"`, zero overlaps, `19.05 mm` pitch) clearly depicting `Esc`, three separated function groups (`F1–F4`, `F5–F8`, `F9–F12`), 60 main ANSI keys (`6.25u` spacebar), dedicated right navigation column, offset inverted-T arrow cluster, and top-right `20 mm` rotary dial with brass index mark.
+  - Unified the `6.5°` Typing Incline card onto matching dark slate (`#333637`) beneath `A04b`, eliminated empty black space in the `12×` Gasket/USB-C card, replaced 5 repetitive `Concept spec` stamps with one calm section-level footnote, and cropped `02.6` (`A07b`) tightly onto the corner M3 fasteners (`24% 38%`, `scale(1.18)`).
+- **Mechanical Anatomy (`MechanicalAnatomy.tsx`, `kf01Data.ts`, `components.css`):** Expanded the exploded product column to `8/12` on desktop, tightened all nine layer descriptions to single-sentence editorial explanations, and moved detailed material, fit, and CAD metadata into a single progressive-disclosure toggle (`Layer specifications & fit`, collapsed by default) while preserving direct access to all nine layers (`Prev/Next` + 9-layer index).
+- **Material Library (`MaterialLibrary.tsx`, `kf01Data.ts`, `components.css`):** Replaced the uniform 2×2 grid with an asymmetric `7 / 5` + `5 / 7` editorial gallery (`340 px` aligned image baselines on desktop), deliberate per-plate crops (`A07b` full brushed brass plate), and trimmed editorial prose.
+- **Closing Statement (`ClosingStatement.tsx`):** Preserved `Nothing accidental.` and dominant `A08` rear photography, made active spec secondary, and clarified the caption (`Reference finish — Forest anodized 6063 aluminium, centered recessed USB-C`).
 
 ### 2.4 Navigation & Responsive Quality (`Q-10`)
 - **`src/components/HeaderNav.tsx`, `src/styles/global.css`:**
@@ -80,10 +76,10 @@ All 9 repository verification suites passed on the final `KF-QUALITY-002B` build
 `1440×900`, `1280×800`, `768×1024`, `440×956`, `390×844`, and `320×568` all recorded **`0 px` horizontal overflow**, with sticky Build Studio stage active at `≥ 660 px` height and clean `static` fallback at `320×568`.
 
 ### Bundle Sizes (Gzip Level 9)
-- **Entry JS (`index-g1s8T4B9.js`):** **`89,897 B`** (`-43 B` vs. `89,940 B` QUALITY-002A baseline, `≤ 90,000 B` **PASS**)
-- **Initial CSS (`index-D3ovY-gN.css`):** `13,903 B` (`+287 B` vs. `13,616 B`)
-- **Lazy native runtime (`viewportAdapter-CVME6gT_.js`):** `190,590 B` (`-1 B` vs. `190,591 B`, `≤ 220,000 B` **PASS**)
-- **Lazy chunks:** `buildConfigRuntime` `1,633 B`, `SwitchLabInteractive` `2,725 B`, `SwitchLabAudioPanel` `4,182 B`, `DesignSystemPreview` `5,783 B`, `digest` `209 B`; total `dist`: `12,918,385 B`.
+- **Entry JS (`index-C3k1Xv0t.js`):** **`89,892 B`** (`-48 B` vs. `89,940 B` QUALITY-002A baseline, `≤ 90,000 B` **PASS**)
+- **Initial CSS (`index-BQn4mIP7.css`):** `14,157 B` (`+541 B` vs. `13,616 B`)
+- **Lazy native runtime (`viewportAdapter-D-NboJEq.js`):** `190,588 B` (`-3 B` vs. `190,591 B`, `≤ 220,000 B` **PASS**)
+- **Lazy chunks:** `buildConfigRuntime` `1,635 B`, `SwitchLabInteractive` `2,873 B`, `SwitchLabAudioPanel` `4,181 B`, `DesignSystemPreview` `5,783 B`, `digest` `209 B`; total `dist`: `12,919,934 B`.
 
 ---
 
@@ -92,12 +88,14 @@ All 9 repository verification suites passed on the final `KF-QUALITY-002B` build
 Saved in ignored `.tmp/quality-002b/`:
 1. `.tmp/quality-002b/contact-sheet-1-switch-and-studio-desktop.png` — Desktop `1440×900` Switch Lab & Build Studio + Laptop `1280×800` Build Studio (Before vs. After)
 2. `.tmp/quality-002b/contact-sheet-2-mobile-ux-and-nav.png` — Mobile `390×844` Switch Lab control proximity, Sticky Build Studio + swatches, and cleaned Mobile Navigation (Before vs. After)
-3. `.tmp/quality-002b/contact-sheet-3-editorial-bento-materials-closing.png` — Engineering Bento, Section 05 Material Library, and Closing Statement (Before vs. After)
-4. `.tmp/quality-002b/contact-sheet-4-full-page-rhythm.png` — Full-page editorial narrative rhythm comparing old (`05 Studio → 06 Materials`) vs. new (`05 Materials → 06 Studio`)
+3. `.tmp/quality-002b/contact-sheet-3-editorial-bento-materials-closing.png` — Engineering Bento (including manifest-derived `02.3` 81-key + rotary dial schematic), Section 05 Material Library, and Closing Statement (Before vs. After)
+4. `.tmp/quality-002b/contact-sheet-4-full-page-rhythm.png` — Full-page editorial narrative rhythm comparing old (`05 Studio → 06 Materials`) vs. new (`05 Materials → 06 Studio`) including simplified `8/12` Mechanical Anatomy
 
 ---
 
-## 6. Known Limitations & Handoff to `KF-QUALITY-002C`
+## 6. Deferred Explorations, Limitations & Handoff
 
+- **Conditional automatic 3D activation (separate architecture investigation):** Explicit WebGL activation is preserved unchanged in this checkpoint. Exploring conditional auto-activation when Build Studio enters view requires revisiting the static-first loading contract, single-renderer lease preemption (so scrolling past Build Studio doesn't unexpectedly tear down an active Anatomy/Switch Lab session), `Save-Data` / low-memory / `prefers-reduced-motion` gating, and `verify:browser` / `verify:runtime` invariants.
+- **Hero & Closing photography art direction (separate future exploration):** Production photography bytes remain frozen in this checkpoint. The current Closing Statement `A08` image displays a visible rectangular background boundary against `--kf-studio-void`; a future dedicated art-direction pass should explore seamless, full-bleed cinematic Hero and Closing compositions.
 - **Open release gates (KF-007):** Desktop mobile emulation does not substitute for physical phone testing; Node 22.x lock parity, clean RTX 4060 GPU timing, physical mobile validation, and integrated-GPU laptop checks remain open for `KF-007`.
 - **Handoff to `KF-QUALITY-002C` (Motion Craftsmanship):** Next milestone owns subtle real-time orbit damping (preserving zero continuous idle frames once settled), frame-rate-independent explode transitions, restrained editorial scroll/panel choreography, and strict `prefers-reduced-motion` parity.

@@ -3,6 +3,7 @@ import type { StudioOption } from '../../data/kf01Data';
 
 interface SwatchSelectorProps<TId extends string = string> {
   label: string;
+  ariaLabel?: string;
   options: readonly StudioOption<TId>[];
   value: TId;
   onChange: (id: TId) => void;
@@ -10,6 +11,7 @@ interface SwatchSelectorProps<TId extends string = string> {
 
 export function SwatchSelector<TId extends string = string>({
   label,
+  ariaLabel,
   options,
   value,
   onChange,
@@ -22,7 +24,7 @@ export function SwatchSelector<TId extends string = string>({
         <span className="kf-control-group__label">{label}</span>
         {selected && <span className="kf-control-group__selected">{selected.name}</span>}
       </div>
-      <div className="kf-swatch-grid" role="radiogroup" aria-label={label}>
+      <div className="kf-swatch-grid" role="radiogroup" aria-label={ariaLabel ?? label}>
         {options.map((option) => {
           const isSelected = option.id === value;
           const swatchStyle: React.CSSProperties = option.secondaryHex

@@ -170,32 +170,17 @@ export const MechanicalAnatomy: React.FC = () => {
           <div className="kf-anatomy__list-col">
             <div className="kf-anatomy__active-card" aria-live="polite">
               <div className="kf-anatomy__card-meta">
-                <span className="kf-label" style={{ color: 'var(--kf-forest)', fontWeight: 600 }}>
-                  Layer <span className="kf-code">{activeLayer.index}</span> of 09
+                <span className="kf-label kf-anatomy__layer-count">
+                  Layer <span className="kf-code">{activeLayer.index}</span> / 09
                 </span>
                 <span className="kf-label">{activeLayer.shortRole}</span>
               </div>
 
-              <h3 className="kf-h2" style={{ marginBottom: '12px' }}>
-                {activeLayer.title}
-              </h3>
+              <h3 className="kf-h2 kf-anatomy__title">{activeLayer.title}</h3>
 
-              <p className="kf-body" style={{ marginBottom: '20px', color: 'var(--kf-ink)' }}>
-                {activeLayer.purpose}
-              </p>
+              <p className="kf-body kf-anatomy__purpose">{activeLayer.purpose}</p>
 
-              <dl className="kf-anatomy__story-dl">
-                <div>
-                  <dt>Material</dt>
-                  <dd>{activeLayer.material}</dd>
-                </div>
-                <div>
-                  <dt>How it fits</dt>
-                  <dd>{activeLayer.assemblyRelation}</dd>
-                </div>
-              </dl>
-
-              {/* Progressive disclosure for CAD / implementation metadata */}
+              {/* Progressive disclosure for material, fit & CAD engineering metadata */}
               <div className="kf-anatomy__tech">
                 <button
                   type="button"
@@ -204,11 +189,19 @@ export const MechanicalAnatomy: React.FC = () => {
                   aria-controls="kf-anatomy-tech-panel"
                   onClick={() => setTechExpanded((prev) => !prev)}
                 >
-                  <span>Technical specifications &amp; CAD reference</span>
+                  <span>Layer specifications &amp; fit</span>
                   <span aria-hidden="true">{techExpanded ? '−' : '+'}</span>
                 </button>
                 {techExpanded && (
                   <dl id="kf-anatomy-tech-panel" className="kf-anatomy__tech-dl">
+                    <div>
+                      <dt>Material</dt>
+                      <dd>{activeLayer.material}</dd>
+                    </div>
+                    <div>
+                      <dt>How it fits</dt>
+                      <dd>{activeLayer.assemblyRelation}</dd>
+                    </div>
                     <div>
                       <dt>Assembly group</dt>
                       <dd className="kf-code">{activeLayer.groupName}</dd>
@@ -233,7 +226,7 @@ export const MechanicalAnatomy: React.FC = () => {
                 <Button variant="secondary" compact onClick={handlePrev}>
                   ← Previous
                 </Button>
-                <span className="kf-code" style={{ color: 'var(--env-muted)', whiteSpace: 'nowrap' }}>
+                <span className="kf-code kf-anatomy__pager">
                   {activeLayer.index} / 09
                 </span>
                 <Button variant="secondary" compact onClick={handleNext}>
