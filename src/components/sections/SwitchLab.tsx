@@ -1,7 +1,6 @@
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { KF003B_ASSETS } from '../../assets/kf003bManifest';
 import { SWITCH_PROFILES, type SwitchProfile } from '../../data/kf01Data';
-import { useReveal } from '../../motion/useReveal';
 import { ViewportHost } from '../../runtime/ViewportHost';
 import type {
   HeroSwitchActuationPhase,
@@ -36,7 +35,7 @@ export const SwitchLab: React.FC<SwitchLabProps> = ({
   const [presentation, setPresentation] = useState<HeroSwitchPresentation>('cutaway');
   const [isPressed, setIsPressed] = useState(false);
   const [controlsReady, setControlsReady] = useState(false);
-  const { ref, revealed } = useReveal<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement | null>(null);
   const controllerRef = useRef<SwitchTravelController | null>(null);
   const curveDomRef = useRef<SwitchCurveDomRefs>({ line: null, dot: null, readout: null });
 
@@ -138,7 +137,7 @@ export const SwitchLab: React.FC<SwitchLabProps> = ({
           />
         </div>
 
-        <div ref={ref} className={`kf-switch-lab kf-reveal ${revealed ? 'kf-reveal--visible' : ''}`}>
+        <div ref={ref} className="kf-switch-lab">
           <div className="kf-switch-lab__visual">
             <figure className="kf-switch-specimen">
               <div className="kf-switch-specimen__plate kf-switch-specimen__plate--seamless">

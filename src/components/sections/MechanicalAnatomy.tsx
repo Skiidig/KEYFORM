@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { KF003B_ASSETS } from '../../assets/kf003bManifest';
 import { ANATOMY_LAYERS } from '../../data/kf01Data';
-import { useReveal } from '../../motion/useReveal';
 import { ViewportHost } from '../../runtime/ViewportHost';
 import type { AnatomyViewportState, AssemblyGroupId, StaticFallbackDescriptor, ViewportMode } from '../../runtime/types';
 import { Button } from '../ui/Button';
@@ -19,7 +18,6 @@ export const MechanicalAnatomy: React.FC = () => {
   const [mode, setMode] = useState<ViewportMode>('static-fallback');
   const [activeIndex, setActiveIndex] = useState(0);
   const [techExpanded, setTechExpanded] = useState(false);
-  const { ref, revealed } = useReveal<HTMLDivElement>();
 
   const activeLayer = ANATOMY_LAYERS[activeIndex];
   const interactive = mode === 'interactive-3d';
@@ -101,10 +99,7 @@ export const MechanicalAnatomy: React.FC = () => {
           </div>
         </header>
 
-        <div
-          ref={ref}
-          className={`kf-anatomy kf-reveal ${revealed ? 'kf-reveal--visible' : ''}`}
-        >
+        <div className="kf-anatomy">
           <div className="kf-anatomy__visual-col">
             <div className="kf-anatomy__stage">
               <ViewportHost

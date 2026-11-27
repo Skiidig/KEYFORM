@@ -288,29 +288,46 @@ export function applyCameraPreset(
   orbitTarget?.copy(pose.target);
 }
 
+/** Monotonic cubic ease-in-out without overshoot. */
+function easeInOutCubic(u: number): number {
+  return u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+}
+
+const MIN_TRANSITION_POLAR = 0.06;
+const MAX_TRANSITION_POLAR = Math.PI * 0.49;
+
 /**
  * Interruptible, reduced-motion-compatible camera transition helper.
  * Driven strictly by the on-demand frame loop; returns false once settled so idle stays at 0 frames.
+ * Uses spherical arc interpolation around the interpolated target so large transitions
+ * (such as Studio 3/4 <-> Rear) sweep smoothly around the keyboard without clipping geometry.
  */
 export class CameraTransitionController {
   private active = false;
-  private startMs = 0;
-  private durationMs = 420;
+  private startMs: number | null = null;
+  private durationMs = 340;
   private fromPos = new THREE.Vector3();
   private toPos = new THREE.Vector3();
   private fromTarget = new THREE.Vector3();
   private toTarget = new THREE.Vector3();
+  private fromSpherical = new THREE.Spherical();
+  private toSpherical = new THREE.Spherical();
+  private deltaTheta = 0;
   private fromFov = 28;
   private toFov = 28;
+  private fromNear = 0.005;
   private toNear = 0.005;
   private toFar = 5.0;
+  private scratchTarget = new THREE.Vector3();
+  private scratchOffset = new THREE.Vector3();
+  private scratchSpherical = new THREE.Spherical();
 
   start(
     camera: THREE.PerspectiveCamera,
     orbitTarget: THREE.Vector3 | undefined,
     preset: CameraPreset,
     aspect: number,
-    options: { instant?: boolean; durationMs?: number } = {},
+    options: { instant?: boolean; durationMs?: number; now?: number } = {},
   ): boolean {
     const prefersReduced =
       typeof window !== 'undefined' &&
@@ -318,6 +335,7 @@ export class CameraTransitionController {
 
     if (options.instant || prefersReduced) {
       this.active = false;
+      this.startMs = null;
       applyCameraPreset(camera, preset, aspect, orbitTarget);
       return false;
     }
@@ -329,41 +347,111 @@ export class CameraTransitionController {
     this.toTarget.copy(pose.target);
     this.fromFov = camera.fov;
     this.toFov = pose.fov;
+    this.fromNear = camera.near;
     this.toNear = pose.near;
     this.toFar = pose.far;
-    this.durationMs = options.durationMs ?? 420;
-    this.startMs = performance.now();
+
+    // Skip animation when already at an effectively identical pose.
+    const posDelta = this.fromPos.distanceTo(this.toPos);
+    const targetDelta = this.fromTarget.distanceTo(this.toTarget);
+    if (
+      posDelta < 1e-4 &&
+      targetDelta < 1e-4 &&
+      Math.abs(this.fromFov - this.toFov) < 1e-3 &&
+      Math.abs(this.fromNear - this.toNear) < 1e-6 &&
+      Math.abs(camera.far - this.toFar) < 1e-4
+    ) {
+      this.active = false;
+      this.startMs = null;
+      applyCameraPreset(camera, preset, aspect, orbitTarget);
+      return false;
+    }
+
+    const fromOffset = this.scratchOffset.copy(this.fromPos).sub(this.fromTarget);
+    const toOffset = new THREE.Vector3().copy(this.toPos).sub(this.toTarget);
+    this.fromSpherical.setFromVector3(fromOffset);
+    this.toSpherical.setFromVector3(toOffset);
+
+    let dTheta = Math.atan2(
+      Math.sin(this.toSpherical.theta - this.fromSpherical.theta),
+      Math.cos(this.toSpherical.theta - this.fromSpherical.theta),
+    );
+    // Deterministic front-right sweep when nearly 180 deg apart.
+    if (Math.abs(Math.abs(dTheta) - Math.PI) < 1e-3) dTheta = Math.PI;
+    this.deltaTheta = dTheta;
+
+    if (options.durationMs !== undefined) {
+      this.durationMs = Math.max(1, options.durationMs);
+    } else {
+      const lenFrom = Math.max(1e-4, this.fromSpherical.radius);
+      const lenTo = Math.max(1e-4, this.toSpherical.radius);
+      const dot = THREE.MathUtils.clamp(fromOffset.normalize().dot(toOffset.normalize()), -1, 1);
+      const angleRad = Math.acos(dot);
+      const distDelta = Math.abs(lenTo - lenFrom) / Math.max(lenFrom, lenTo);
+      const relTarget = targetDelta / lenTo;
+      // Nearby presets and small orbit resets settle in 320-360 ms; larger transitions take 420 ms.
+      this.durationMs =
+        angleRad > 1.15 || distDelta > 0.35 || relTarget > 0.2
+          ? 420
+          : Math.round(THREE.MathUtils.lerp(320, 360, Math.min(1, angleRad / 1.15)));
+    }
+
+    this.startMs = options.now ?? null;
     this.active = true;
     return true;
   }
 
   cancel(): void {
     this.active = false;
+    this.startMs = null;
   }
 
   isActive(): boolean {
     return this.active;
   }
 
+  getDurationMs(): number {
+    return this.durationMs;
+  }
+
   update(now: number, camera: THREE.PerspectiveCamera, orbitTarget?: THREE.Vector3): boolean {
     if (!this.active) return false;
+    if (this.startMs === null) this.startMs = now;
     const raw = Math.min(1, Math.max(0, (now - this.startMs) / Math.max(1, this.durationMs)));
-    // Cubic ease-out
-    const t = 1 - Math.pow(1 - raw, 3);
-    camera.position.lerpVectors(this.fromPos, this.toPos, t);
-    const curTarget = new THREE.Vector3().lerpVectors(this.fromTarget, this.toTarget, t);
-    camera.fov = THREE.MathUtils.lerp(this.fromFov, this.toFov, t);
-    camera.near = this.toNear;
-    camera.far = this.toFar;
-    camera.lookAt(curTarget);
-    camera.updateProjectionMatrix();
-    camera.updateMatrixWorld(true);
-    orbitTarget?.copy(curTarget);
-
-    if (raw >= 1) {
+    if (raw >= 1 - 1e-6) {
+      camera.position.copy(this.toPos);
+      camera.fov = this.toFov;
+      camera.near = this.toNear;
+      camera.far = this.toFar;
+      camera.lookAt(this.toTarget);
+      camera.updateProjectionMatrix();
+      camera.updateMatrixWorld(true);
+      orbitTarget?.copy(this.toTarget);
       this.active = false;
+      this.startMs = null;
       return false;
     }
+
+    const t = easeInOutCubic(raw);
+    this.scratchTarget.lerpVectors(this.fromTarget, this.toTarget, t);
+    const radius = THREE.MathUtils.lerp(this.fromSpherical.radius, this.toSpherical.radius, t);
+    const phi = THREE.MathUtils.clamp(
+      THREE.MathUtils.lerp(this.fromSpherical.phi, this.toSpherical.phi, t),
+      MIN_TRANSITION_POLAR,
+      MAX_TRANSITION_POLAR,
+    );
+    const theta = this.fromSpherical.theta + this.deltaTheta * t;
+    this.scratchSpherical.set(radius, phi, theta);
+    this.scratchOffset.setFromSpherical(this.scratchSpherical);
+
+    camera.position.copy(this.scratchTarget).add(this.scratchOffset);
+    camera.fov = THREE.MathUtils.lerp(this.fromFov, this.toFov, t);
+    camera.near = Math.min(this.fromNear, this.toNear);
+    camera.far = this.toFar;
+    camera.lookAt(this.scratchTarget);
+    camera.updateProjectionMatrix();
+    camera.updateMatrixWorld(true);
+    orbitTarget?.copy(this.scratchTarget);
     return true;
   }
 }

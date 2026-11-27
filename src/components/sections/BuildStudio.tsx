@@ -13,7 +13,6 @@ import {
   type BuildConfig,
   type SwitchProfile,
 } from '../../data/kf01Data';
-import { useReveal } from '../../motion/useReveal';
 import { ViewportHost } from '../../runtime/ViewportHost';
 import type {
   BuildStudioViewportState,
@@ -39,7 +38,6 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
   const interactive = mode === 'interactive-3d';
   const [activeCategory, setActiveCategory] = useState<StudioCategory>('exterior');
   const [copyFeedback, setCopyFeedback] = useState<string>('');
-  const { ref, revealed } = useReveal<HTMLDivElement>();
 
   const selectedEnclosure =
     ENCLOSURE_FINISHES.find((o) => o.id === config.enclosure) ?? ENCLOSURE_FINISHES[0];
@@ -173,10 +171,7 @@ export const BuildStudio: React.FC<BuildStudioProps> = ({ config, onChangeConfig
         </header>
 
         {/* Viewport-First Atelier Layout: 8 columns viewport, 4 columns poised grouped controls */}
-        <div
-          ref={ref}
-          className={`kf-studio kf-reveal ${revealed ? 'kf-reveal--visible' : ''}`}
-        >
+        <div className="kf-studio">
           <div className="kf-studio__viewport-col">
             <div className="kf-viewport">
               <div style={{ position: 'relative' }}>

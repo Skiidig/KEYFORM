@@ -6,11 +6,11 @@
 :root {
   /* --- Canonical Motion Duration Tokens --- */
   --kf-dur-instant: 80ms;
-  --kf-dur-fast: 150ms;
-  --kf-dur-standard: 240ms;
-  --kf-dur-panel: 360ms;
-  --kf-dur-camera: 800ms; /* Reserved for future WebGL camera preset transitions */
-  --kf-dur-cinematic: 1200ms; /* Hard upper bound across KEYFORM */
+  --kf-dur-fast: 140ms;
+  --kf-dur-standard: 220ms;
+  --kf-dur-panel: 260ms;
+  --kf-dur-camera: 420ms;
+  --kf-dur-cinematic: 500ms;
 
   /* --- Canonical Motion Easing Tokens (No bounce/elastic) --- */
   --kf-ease-precision: cubic-bezier(0.2, 0.75, 0.25, 1);
@@ -22,16 +22,16 @@
   --kf-ease-mech: var(--kf-ease-precision);
   --kf-dur-button: var(--kf-dur-fast);
   --kf-dur-material: var(--kf-dur-standard);
-  --kf-dur-reveal: var(--kf-dur-panel);
+  --kf-dur-reveal: var(--kf-dur-standard);
 }
 
-/* --- Restrained Below-the-Fold Content Reveal (Never applied to Hero LCP) --- */
+/* --- Restrained Below-the-Fold Editorial Grid Settle (Never on Hero LCP or interactive workspaces) --- */
 .kf-reveal {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(6px);
   transition:
-    opacity var(--kf-dur-panel) var(--kf-ease-precision),
-    transform var(--kf-dur-panel) var(--kf-ease-precision);
+    opacity var(--kf-dur-reveal) var(--kf-ease-precision),
+    transform var(--kf-dur-reveal) var(--kf-ease-precision);
 }
 
 .kf-reveal--visible {

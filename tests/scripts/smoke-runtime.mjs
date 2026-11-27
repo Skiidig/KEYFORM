@@ -227,6 +227,33 @@ try {
   assert.equal((await stats()).raf, 0);
   passed('camera reset restores framing and settles to zero idle frames');
 
+  // KF-QUALITY-002C: Live motion lifecycle — pointer/touch/wheel damping, live reduced-motion snap, and 2s idle settle
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
+  const canvasBox = await evaluate(() => {
+    const el = document.querySelector('#build-studio .kf-runtime-canvas');
+    el.scrollIntoView({ block: 'center', behavior: 'instant' });
+    const r = el.getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  });
+  const drawsBeforeDrag = (await stats()).draws;
+  await send('Input.dispatchMouseEvent', { type: 'mousePressed', button: 'left', x: canvasBox.x, y: canvasBox.y, clickCount: 1 });
+  await send('Input.dispatchMouseEvent', { type: 'mouseMoved', button: 'left', x: canvasBox.x + 64, y: canvasBox.y - 18, buttons: 1 });
+  await send('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'left', x: canvasBox.x + 64, y: canvasBox.y - 18, clickCount: 1 });
+  await send('Input.dispatchMouseEvent', { type: 'mouseWheel', x: canvasBox.x, y: canvasBox.y, deltaX: 0, deltaY: -80 });
+  await until(async () => (await stats()).draws > drawsBeforeDrag && (await stats()).raf === 0, 'orbit damping and wheel settle');
+  const settledOrbitDraws = (await stats()).draws;
+  await delay(2050);
+  assert.equal((await stats()).draws, settledOrbitDraws);
+  assert.equal((await stats()).raf, 0);
+  // Start a Reset transition back from the dragged angle and toggle prefers-reduced-motion live mid-flight
+  await evaluate(() => {
+    document.querySelector('[data-kf-viewport="build-studio"] [aria-label="Reset camera view"]')?.click();
+  });
+  await delay(40);
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+  await until(async () => (await stats()).raf === 0, 'live reduced-motion snap');
+  passed('pointer orbit damping, wheel zoom, 2s zero-idle settle, and live reduced-motion snap');
+
   requests.clear();
   await toggle(stations.anatomy);
   await expectMode(stations.anatomy, 'interactive-3d');
@@ -336,6 +363,20 @@ try {
     const expected = Math.round(canvas.clientWidth * Math.min(window.devicePixelRatio || 1, 1.25));
     return Math.abs(canvas.width - expected) <= 1;
   }));
+  // Touch drag orbit damping & zero-idle settle on mobile viewport
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
+  const touchBox = await evaluate(() => {
+    const el = document.querySelector('#build-studio .kf-runtime-canvas');
+    el.scrollIntoView({ block: 'center', behavior: 'instant' });
+    const r = el.getBoundingClientRect();
+    return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) };
+  });
+  const drawsBeforeTouch = (await stats()).draws;
+  await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: touchBox.x, y: touchBox.y, id: 1 }] });
+  await send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: touchBox.x + 48, y: touchBox.y - 12, id: 1 }] });
+  await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await until(async () => (await stats()).draws > drawsBeforeTouch && (await stats()).raf === 0, 'touch orbit damping settle');
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   await capture(stations.studio, 'studio-mobile-active.png');
   await toggle(stations.studio);
   await expectMode(stations.studio, 'static-fallback');

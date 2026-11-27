@@ -8,13 +8,13 @@
 
 export const MOTION_DURATION_MS = {
   instant: 80,
-  fast: 150,
-  standard: 240,
-  panel: 360,
-  /** Reserved for future Three.js camera preset transitions */
-  camera: 800,
-  /** Maximum permitted transition duration across KEYFORM */
-  cinematic: 1200,
+  fast: 140,
+  standard: 220,
+  panel: 260,
+  /** WebGL camera preset transition ceiling (nearby presets 320-360ms, large moves 420ms) */
+  camera: 420,
+  /** Full assembly explode duration */
+  cinematic: 500,
 } as const;
 
 export const MOTION_EASING = {

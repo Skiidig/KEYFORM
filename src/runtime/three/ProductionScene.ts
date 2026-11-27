@@ -180,6 +180,11 @@ interface KeyRuntime {
 
 const KEYPRESS_DOWN_MS = 45;
 const KEYPRESS_UP_MS = 90;
+const EXPLODE_DURATION_MS = 500;
+
+function easeInOutCubic(u: number): number {
+  return u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+}
 
 /**
  * Validated standalone Hero Switch (HERO_MX_Root) mechanical geometry datums (m, glTF +Y up).
@@ -369,7 +374,10 @@ export class ProductionScene {
   private currentMode: ViewMode = 'exterior';
   private explodeCurrent = 0;
   private explodeTarget = 0;
-  private explodeInstant = false;
+  private explodeStartVal = 0;
+  private explodeStartMs: number | null = null;
+  private explodeDurationMs = EXPLODE_DURATION_MS;
+  private explodeAnimating = false;
 
   // Decorative selection helper — strictly excluded from raycast picking!
   private outlineHelper: THREE.Box3Helper;
@@ -1059,17 +1067,46 @@ export class ProductionScene {
     }
   }
 
-  setExplodeTarget(progress: number, instant = false) {
-    this.explodeTarget = Math.max(0, Math.min(1, progress));
-    this.explodeInstant = instant;
+  setExplodeTarget(progress: number, instant = false, now?: number) {
+    const nextTarget = Math.max(0, Math.min(1, progress));
     if (instant) {
-      this.explodeCurrent = this.explodeTarget;
-      this.applyExplodePose(this.explodeCurrent);
+      this.explodeTarget = nextTarget;
+      this.explodeStartVal = nextTarget;
+      this.explodeStartMs = null;
+      this.explodeDurationMs = 0;
+      this.explodeAnimating = false;
+      this.applyExplodeTransform(nextTarget);
+      return;
     }
+    if (this.explodeAnimating && Math.abs(nextTarget - this.explodeTarget) <= 1e-6) {
+      return;
+    }
+    const distance = Math.abs(nextTarget - this.explodeCurrent);
+    if (distance <= 1e-6) {
+      this.explodeTarget = nextTarget;
+      this.explodeAnimating = false;
+      this.explodeStartMs = null;
+      this.applyExplodeTransform(nextTarget);
+      return;
+    }
+    // Rebase cleanly from displayed pose and scale reversal duration proportionally to remaining distance.
+    this.explodeStartVal = this.explodeCurrent;
+    this.explodeTarget = nextTarget;
+    this.explodeDurationMs = Math.max(1, Math.round(EXPLODE_DURATION_MS * distance));
+    this.explodeStartMs = now ?? null;
+    this.explodeAnimating = true;
   }
 
   getExplodeProgress(): number {
     return this.explodeCurrent;
+  }
+
+  getExplodeTarget(): number {
+    return this.explodeTarget;
+  }
+
+  isExplodeAnimating(): boolean {
+    return this.explodeAnimating;
   }
 
   /**
@@ -1077,6 +1114,15 @@ export class ProductionScene {
    * Matches Blender R3 frames 1..101 (`frame = 1 + 100 * progress`).
    */
   applyExplodePose(progress: number) {
+    const clamped = Math.max(0, Math.min(1, progress));
+    this.explodeTarget = clamped;
+    this.explodeStartVal = clamped;
+    this.explodeStartMs = null;
+    this.explodeAnimating = false;
+    this.applyExplodeTransform(clamped);
+  }
+
+  private applyExplodeTransform(progress: number) {
     this.explodeCurrent = Math.max(0, Math.min(1, progress));
     for (const entry of this.groupNodes.values()) {
       const offset = evalPiecewiseKeyframes(entry.spec.motion_keyframes, this.explodeCurrent);
@@ -1651,12 +1697,19 @@ export class ProductionScene {
   update(now: number): boolean {
     let active = false;
 
-    if (!this.explodeInstant && Math.abs(this.explodeCurrent - this.explodeTarget) > 0.0005) {
-      const diff = this.explodeTarget - this.explodeCurrent;
-      const step = diff * 0.18;
-      const next = Math.abs(diff) < 0.002 ? this.explodeTarget : this.explodeCurrent + step;
-      this.applyExplodePose(next);
-      active = Math.abs(this.explodeCurrent - this.explodeTarget) > 0.0005;
+    if (this.explodeAnimating) {
+      if (this.explodeStartMs === null) this.explodeStartMs = now;
+      const u = Math.min(1, Math.max(0, (now - this.explodeStartMs) / Math.max(1, this.explodeDurationMs)));
+      if (u >= 1 - 1e-6) {
+        this.explodeAnimating = false;
+        this.explodeStartMs = null;
+        this.applyExplodeTransform(this.explodeTarget);
+      } else {
+        const eased = easeInOutCubic(u);
+        const next = this.explodeStartVal + (this.explodeTarget - this.explodeStartVal) * eased;
+        this.applyExplodeTransform(next);
+        active = true;
+      }
     }
 
     for (const kr of this.keys.values()) {

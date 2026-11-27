@@ -294,11 +294,251 @@ async function core() {
     && Object.values(CAMERA_PRESETS).every(({fov,near,far}) => fov > 0 && near > 0 && far > near));
   stage.setView('exterior', 'atelier', 'top', true);
   stage.present();
-  return { renderer, initialFrameMs, exterior, exploded, desktopGlyph, mobileGlyph, restoredGlyph, maskedMotion, transmission };
+
+  // ---- KF-QUALITY-002C: Motion craftsmanship, synthetic 30/60/120 Hz timing & invariants ----
+  stage.setReducedMotion(false);
+  stage.setView('combined', 'atelier', 'threeQuarter', true);
+  stage.present();
+
+  const motionTiming: Record<string, unknown> = {};
+
+  // 1. Time-based explode at synthetic 30, 60, and 120 Hz
+  const explodeDurations: Record<number, number> = {};
+  let explodeMonotonic = true;
+  let explodeEndpointsExact = true;
+  let explodeMidpointsAligned = true;
+  for (const hz of [30, 60, 120]) {
+    const dt = 1000 / hz;
+    model.setExplodeTarget(0, true);
+    stage.step(0);
+    model.setExplodeTarget(1, false, 0);
+    let t = 0;
+    let prev = 0;
+    let midVal = 0;
+    let midT = 0;
+    let steps = 0;
+    while (steps < 200) {
+      const active = stage.step(t);
+      const cur = model.getExplodeProgress();
+      if (cur < prev - 1e-9) explodeMonotonic = false;
+      if (Math.abs(t - 250) <= dt * 0.6) {
+        midVal = cur;
+        midT = t;
+      }
+      prev = cur;
+      if (!active) break;
+      t += dt;
+      steps++;
+    }
+    explodeDurations[hz] = Number(t.toFixed(1));
+    const uMid = midT / 500;
+    const expectedMid = uMid < 0.5 ? 4 * uMid * uMid * uMid : 1 - Math.pow(-2 * uMid + 2, 3) / 2;
+    if (model.getExplodeProgress() !== 1) explodeEndpointsExact = false;
+    if (Math.abs(midVal - expectedMid) > 1e-4) explodeMidpointsAligned = false;
+  }
+  const explodeConsistent =
+    Object.entries(explodeDurations).every(([hz, ms]) => ms >= 499 && ms <= 500 + 1000 / Number(hz) + 1) &&
+    explodeMonotonic &&
+    explodeEndpointsExact &&
+    explodeMidpointsAligned;
+  check('explode 30/60/120Hz consistent 500ms monotonic with exact endpoints', explodeConsistent);
+  motionTiming.explodeDurationsMs = explodeDurations;
+
+  // 2. Rapid explode reversal scales remaining duration & coalesces cached shadow to <= 1 bake at rest
+  model.setExplodeTarget(0, true);
+  stage.step(0);
+  const bakesBeforeExplode = stage.ground.getTelemetry().bakeCount;
+  model.setExplodeTarget(1, false, 0);
+  stage.step(0);
+  stage.step(200);
+  const midProgress = model.getExplodeProgress();
+  const bakesMidFlight = stage.ground.getTelemetry().bakeCount;
+  model.setExplodeTarget(0, false, 200);
+  const afterReversalStart = model.getExplodeProgress();
+  let revT = 200;
+  let revSteps = 0;
+  while (revSteps < 100) {
+    const active = stage.step(revT);
+    if (!active) break;
+    revT += 16.6667;
+    revSteps++;
+  }
+  const revElapsed = revT - 200;
+  const expectedRevMs = Math.round(500 * midProgress);
+  const bakesAfterSettle = stage.ground.getTelemetry().bakeCount;
+  check(
+    'explode mid-flight reversal rebases, scales duration, restores 0, <=1 shadow bake at rest',
+    midProgress > 0.15 &&
+      midProgress < 0.45 &&
+      Math.abs(afterReversalStart - midProgress) < 1e-9 &&
+      bakesMidFlight === bakesBeforeExplode &&
+      revElapsed >= expectedRevMs - 1 &&
+      revElapsed <= expectedRevMs + 25 &&
+      model.getExplodeProgress() === 0 &&
+      JSON.stringify(model.getGroupWorldOffsets()) === JSON.stringify(assembled) &&
+      bakesAfterSettle - bakesBeforeExplode <= 1,
+  );
+  motionTiming.explodeReversal = {
+    midProgress: Number(midProgress.toFixed(4)),
+    revElapsedMs: Number(revElapsed.toFixed(1)),
+    expectedRevMs,
+    bakesDelta: bakesAfterSettle - bakesBeforeExplode,
+  };
+
+  // 3. Camera transitions: identical pose skip, nearby (320-360ms), large arc (420ms) at 30/60/120Hz without clipping
+  stage.setCamera('threeQuarter', true);
+  stage.step(0);
+  stage.setCamera('threeQuarter', false, 0);
+  const identicalSkipped = !stage.isMotionActive();
+
+  stage.setCamera('exploded', false, 0);
+  const nearbyDuration = stage.getTransitionDurationMs();
+  stage.setCamera('threeQuarter', true);
+  stage.step(0);
+
+  const cameraDurations: Record<number, number> = {};
+  let arcNoClipping = true;
+  let cameraExactEnd = true;
+  for (const hz of [30, 60, 120]) {
+    const dt = 1000 / hz;
+    stage.setCamera('threeQuarter', true);
+    stage.step(0);
+    stage.setCamera('rearUsbc', false, 0);
+    let t = 0;
+    let steps = 0;
+    while (steps < 200) {
+      const active = stage.step(t);
+      const dist = stage.camera.position.length();
+      if (stage.camera.position.y < 0.04 || dist < 0.28) arcNoClipping = false;
+      if (!active) break;
+      t += dt;
+      steps++;
+    }
+    cameraDurations[hz] = Number(t.toFixed(1));
+    if (stage.camera.position.z > -0.25) cameraExactEnd = false;
+  }
+  const largeDuration = stage.getTransitionDurationMs();
+  check(
+    'camera skips identical pose, nearby 320-360ms, large 420ms consistent 30/60/120Hz no clipping',
+    identicalSkipped &&
+      nearbyDuration >= 320 &&
+      nearbyDuration <= 360 &&
+      largeDuration === 420 &&
+      Object.entries(cameraDurations).every(([hz, ms]) => ms >= 419 && ms <= 420 + 1000 / Number(hz) + 1) &&
+      arcNoClipping &&
+      cameraExactEnd,
+  );
+  motionTiming.camera = { nearbyDuration, largeDuration, rearDurationsMs: cameraDurations };
+
+  // 4. User interruption mid-preset rebases from displayed pose with zero jump
+  stage.setCamera('threeQuarter', true);
+  stage.step(0);
+  stage.setCamera('rearUsbc', false, 0);
+  stage.step(0);
+  stage.step(180);
+  const displayedBeforeInterrupt = stage.camera.position.clone();
+  stage.controls.dispatchEvent({ type: 'start' } as never);
+  const interruptRebasedCleanly =
+    !stage.isMotionActive() && stage.camera.position.distanceTo(displayedBeforeInterrupt) < 1e-6;
+  check('preset interruption rebases seamlessly from displayed pose', interruptRebasedCleanly);
+
+  // 5. Orbit damping (45ms half-life, <=250ms tail, direct zoom, 0 shadow rebakes, 2s idle zero draws)
+  stage.setCamera('threeQuarter', true);
+  stage.step(0);
+  const bakesBeforeOrbit = stage.ground.getTelemetry().bakeCount;
+
+  // Direct wheel zoom: radius changes immediately with zero lingering damping tail
+  const radiusBeforeZoom = stage.camera.position.length();
+  stage.renderer.domElement.dispatchEvent(
+    new WheelEvent('wheel', { deltaY: -120, deltaMode: 0, bubbles: true, cancelable: true }),
+  );
+  const zoomActiveAfterInput = stage.isMotionActive();
+  stage.step(16);
+  const radiusAfterZoom = stage.camera.position.length();
+  check(
+    'wheel zoom is direct with zero damping tail and zero shadow bakes',
+    !zoomActiveAfterInput &&
+      Math.abs(radiusAfterZoom - radiusBeforeZoom) > 1e-4 &&
+      stage.ground.getTelemetry().bakeCount === bakesBeforeOrbit,
+  );
+
+  // Keyboard Shift+Arrow orbit smoothing: smooth half-life progression, bounded <=250ms settle, 0 shadow bakes
+  stage.setCamera('threeQuarter', true);
+  stage.step(0);
+  const startOrbitPos = stage.camera.position.clone();
+  stage.renderer.domElement.focus();
+  stage.renderer.domElement.dispatchEvent(
+    new KeyboardEvent('keydown', { key: 'ArrowRight', code: 'ArrowRight', shiftKey: true, bubbles: true, cancelable: true }),
+  );
+  const orbitStarted = stage.isMotionActive();
+  let orbitT = 0;
+  let halfWayMoved = false;
+  let orbitSteps = 0;
+  while (orbitSteps < 80) {
+    const active = stage.step(orbitT);
+    if (orbitT >= 45 && orbitT <= 70 && stage.camera.position.distanceTo(startOrbitPos) > 1e-4) {
+      halfWayMoved = true;
+    }
+    if (!active) break;
+    orbitT += 16.6667;
+    orbitSteps++;
+  }
+  const bakesAfterOrbit = stage.ground.getTelemetry().bakeCount;
+  const drawsAfterOrbitSettle = passes.main;
+  await wait(2050);
+  const idleZeroAfterOrbit = passes.main === drawsAfterOrbitSettle;
+  check(
+    'orbit damping smooths keyboard input, settles <=250ms, 0 shadow bakes, 0 draws over 2s idle',
+    orbitStarted &&
+      halfWayMoved &&
+      orbitT <= 270 &&
+      !stage.isMotionActive() &&
+      stage.camera.position.distanceTo(startOrbitPos) > 1e-4 &&
+      bakesAfterOrbit === bakesBeforeOrbit &&
+      idleZeroAfterOrbit,
+  );
+  motionTiming.orbitSettleMs = Number(orbitT.toFixed(1));
+
+  // 6. Live reduced-motion snaps active explode + camera + HUD inset refits cleanly
+  stage.setCamera('exploded', true);
+  stage.setBottomInset(72);
+  const hudOffsetActive = stage.camera.view?.enabled === true && stage.camera.view.offsetY === 36;
+  const withHudDist = stage.camera.position.length();
+  stage.setBottomInset(0);
+  const hudOffsetCleared = !stage.camera.view || stage.camera.view.enabled === false;
+  const withoutHudDist = stage.camera.position.length();
+  stage.setCamera('threeQuarter', true);
+  model.setExplodeTarget(0, true);
+  stage.step(0);
+  stage.setCamera('rearUsbc', false, 0);
+  model.setExplodeTarget(1, false, 0);
+  stage.step(0);
+  stage.step(120);
+  stage.setReducedMotion(true);
+  check(
+    'live reduced-motion snaps active animations and HUD inset refits cleanly',
+    !stage.isMotionActive() &&
+      model.getExplodeProgress() === 1 &&
+      stage.camera.position.z < -0.25 &&
+      hudOffsetActive &&
+      hudOffsetCleared &&
+      withHudDist > withoutHudDist + 1e-3,
+  );
+  model.setExplodeTarget(0, true);
+  stage.setView('exterior', 'atelier', 'top', true);
+  stage.present();
+
+  return { renderer, initialFrameMs, exterior, exploded, desktopGlyph, mobileGlyph, restoredGlyph, maskedMotion, transmission, motionTiming };
 }
 
 async function remounts() {
+  // Verify zero post-disposal draws when disposed mid-animation
+  stage.setReducedMotion(false);
+  stage.setCamera('rearUsbc', false);
+  const drawsBeforeDispose = passes.main;
   unmount();
+  await wait(120);
+  check('zero post-disposal draws during active animation', passes.main === drawsBeforeDispose);
   const cycles: number[][] = [];
   for (let i = 0; i < 4; i++) {
     await mount();
