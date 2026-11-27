@@ -82,14 +82,14 @@ const GROUND_FRAGMENT_SHADER = /* glsl */ `
     if (uShadowEnabled > 0.5) {
       if (uUseCachedMap > 0.5) {
         // Dual-lobe cached contact shadow:
-        //   1. Tight contact AO directly under chassis / switch base
-        //   2. Broad directional softbox penumbra offset slightly away from key light
+        //   1. Crisp tight contact AO crease directly under chassis feet / switch base
+        //   2. Controlled directional softbox penumbra with gentle falloff (no muddy halo)
         vec2 mapUv = (vUv - 0.5) / 0.58 + 0.5;
         float tightRaw = sampleBaked(mapUv);
-        float tight = pow(clamp(tightRaw, 0.0, 1.0), 0.68);
+        float tight = pow(clamp(tightRaw, 0.0, 1.0), 0.88);
 
-        vec2 dirOff = uIsHero > 0.5 ? vec2(-0.024, -0.022) : vec2(-0.018, -0.018);
-        float spread = uIsHero > 0.5 ? 0.045 : (0.036 + 0.028 * uExplode);
+        vec2 dirOff = uIsHero > 0.5 ? vec2(-0.020, -0.018) : vec2(-0.014, -0.014);
+        float spread = uIsHero > 0.5 ? 0.038 : (0.026 + 0.020 * uExplode);
         float penumbra = 0.0;
         penumbra += sampleBaked(mapUv + dirOff + vec2( spread,  0.0));
         penumbra += sampleBaked(mapUv + dirOff + vec2(-spread,  0.0));
@@ -101,16 +101,16 @@ const GROUND_FRAGMENT_SHADER = /* glsl */ `
         penumbra += sampleBaked(mapUv + dirOff + vec2(-spread * 0.7,  spread * 0.7));
         penumbra *= 0.125;
 
-        shadow = clamp(tight * 0.82 + pow(penumbra, 0.85) * 0.46, 0.0, 1.0);
+        shadow = clamp(tight * 0.88 + pow(penumbra, 1.05) * 0.28, 0.0, 1.0);
       } else {
-        // Balanced tier: analytical multi-lobe soft contact shadow (0 extra passes)
-        vec2 offset = uIsHero > 0.5 ? vec2(0.016, 0.014) : vec2(0.012, 0.012);
-        float dContact = sdRoundedBox(p - offset * 0.18, uHalfExtents, uCornerRadius);
-        float dPenumbra = sdRoundedBox(p - offset, uHalfExtents * (1.03 + 0.07 * uExplode), uCornerRadius * 1.45);
+        // Balanced tier: tight analytical dual-lobe contact shadow (0 extra passes, no edge smudge)
+        vec2 offset = uIsHero > 0.5 ? vec2(0.014, 0.012) : vec2(0.010, 0.010);
+        float dContact = sdRoundedBox(p - offset * 0.15, uHalfExtents, uCornerRadius);
+        float dPenumbra = sdRoundedBox(p - offset, uHalfExtents * (1.01 + 0.05 * uExplode), uCornerRadius * 1.35);
 
-        float tight = 1.0 - smoothstep(-0.004, 0.024 + 0.014 * uExplode, dContact);
-        float soft = 1.0 - smoothstep(-0.008, 0.095 + 0.045 * uExplode, dPenumbra);
-        shadow = clamp(tight * 0.84 + soft * 0.44, 0.0, 1.0);
+        float tight = 1.0 - smoothstep(-0.002, 0.016 + 0.012 * uExplode, dContact);
+        float soft = 1.0 - smoothstep(-0.004, 0.052 + 0.030 * uExplode, dPenumbra);
+        shadow = clamp(tight * 0.84 + soft * 0.26, 0.0, 1.0);
       }
     }
 
@@ -303,8 +303,8 @@ export class StudioGroundSystem {
       this.floorY = Math.min(0, opts.bottomOffsetY) - 0.0004;
       this.plane.position.set(0, this.floorY, 0);
       this.plane.scale.set(0.92, 0.72, 1);
-      this.planeMat.uniforms.uHalfExtents.value.set(0.178, 0.096);
-      this.planeMat.uniforms.uCornerRadius.value = 0.014;
+      this.planeMat.uniforms.uHalfExtents.value.set(0.172, 0.088);
+      this.planeMat.uniforms.uCornerRadius.value = 0.012;
     }
   }
 

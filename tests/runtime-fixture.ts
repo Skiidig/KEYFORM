@@ -158,7 +158,7 @@ async function core() {
   await stage.setQuality('balanced');
   const mobileGlyph = sampleGlyphMask();
   check('mobile tier binds new atlas pixels', mobileGlyph.count === 80 && mobileGlyph.space === 0 && mobileGlyph.sizes.includes(1024));
-  check('balanced policy', stage.ground.getTelemetry().mode === 'procedural' && stage.renderer.getPixelRatio() <= 1);
+  check('balanced policy', stage.ground.getTelemetry().mode === 'procedural' && stage.renderer.getPixelRatio() <= 1.25);
   await stage.setQuality('standard');
   const restoredGlyph = sampleGlyphMask();
   check('tier restores atlas pixels', restoredGlyph.count === desktopGlyph.count && restoredGlyph.sizes.includes(2048)

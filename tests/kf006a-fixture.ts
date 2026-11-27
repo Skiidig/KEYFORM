@@ -151,7 +151,7 @@ async function runRuntimeChecks() {
 
     // 4 & 5 & 6. Porcelain PBT and Two-Tone Slate semantic grouping + Spacebar + legend contrast
     const alphaColorPorcelain = norm('#ECE9DF');
-    const modColorPorcelain = norm('#D8D4C7');
+    const modColorPorcelain = norm('#C2BEB2');
     applier.apply(stage.model, { ...DEFAULT_BUILD_CONFIG, keycaps: 'porcelain-pbt', accent: 'matched' });
     stage.present();
     const porcAudit = stage.model.getBuildConfigMaterialAudit();

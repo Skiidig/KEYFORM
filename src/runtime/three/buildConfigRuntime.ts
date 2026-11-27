@@ -36,8 +36,8 @@ import type {
   ProductionScene,
 } from './ProductionScene';
 
-/** Canonical dark charcoal legend tint (linear sRGB of #202524) for light/mid keycaps. */
-export const DARK_LEGEND_LINEAR: readonly [number, number, number] = [0.014444, 0.018500, 0.017642];
+/** Canonical dark charcoal legend tint (linear sRGB of #171B1A) for light/mid keycaps. */
+export const DARK_LEGEND_LINEAR: readonly [number, number, number] = [0.008023, 0.010817, 0.010187];
 
 /** Relative luminance threshold separating dark caps (light legend) from light/mid caps (dark legend). */
 export const LEGEND_CONTRAST_LUMINANCE_THRESHOLD = 0.18;
@@ -61,7 +61,7 @@ export const KEYCAP_SET_PALETTES: Record<KeycapSetId, KeycapSetPalette> = {
     id: 'porcelain-pbt',
     uniform: false,
     alphaHex: '#ECE9DF',
-    modifierHex: '#D8D4C7',
+    modifierHex: '#C2BEB2',
   },
   'two-tone-slate': {
     id: 'two-tone-slate',

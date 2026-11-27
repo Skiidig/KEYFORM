@@ -135,7 +135,9 @@ export class NativeStage {
 
   async setQuality(tier: 'balanced' | 'standard') {
     this.tier = tier;
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, tier === 'balanced' ? 1 : 1.5));
+    // Balanced mobile tier caps DPR at 1.25 (1.56x pixels vs 1.0, avoiding 2.25x DPR 1.5
+    // active-orbit fill cost while eliminating blurry 1x upscaling on 2x/3x phones).
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, tier === 'balanced' ? 1.25 : 1.5));
     this.ground.setMode(tier === 'balanced' ? 'procedural' : 'cached');
     this.shadowDirty = true;
     await this.model.setQualityTier(tier);
@@ -152,7 +154,7 @@ export class NativeStage {
       const hero = mode === 'hero_switch';
       this.scene.environment = this.model.ensureEnvironment(this.renderer, profile);
       this.scene.environmentIntensity = hero ? spec.heroEnvIntensity : spec.envIntensity;
-      this.scene.background = new THREE.Color(spec.backgroundHex);
+      this.scene.background = this.model.ensureBackdrop(profile);
       this.renderer.toneMappingExposure = effectiveExposure(spec, 'agx');
       this.lights.applyProfile(profile, hero);
       this.ground.applyProfile(profile);

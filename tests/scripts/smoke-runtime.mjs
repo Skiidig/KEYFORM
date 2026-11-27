@@ -333,14 +333,15 @@ try {
   assert.ok(!narrow.some(({url}) => url.includes('legend-2048.json')));
   assert.ok(await evaluate(() => {
     const canvas = document.querySelector('.kf-runtime-canvas');
-    return canvas.clientWidth === canvas.width;
+    const expected = Math.round(canvas.clientWidth * Math.min(window.devicePixelRatio || 1, 1.25));
+    return Math.abs(canvas.width - expected) <= 1;
   }));
   await capture(stations.studio, 'studio-mobile-active.png');
   await toggle(stations.studio);
   await expectMode(stations.studio, 'static-fallback');
   assert.equal((await stats()).active, 0);
   assert.equal((await stats()).mediaListeners, 0);
-  passed('narrow viewport uses 1024 atlas and DPR 1 after route remount');
+  passed('narrow viewport uses 1024 atlas and balanced DPR <= 1.25 after route remount');
   const evidence = { strict, tests, renderer: ready.renderer, viewport: [1440,900], dpr: 1, studio, anatomy, switches, remount, disposed, narrow, errors };
   await writeFile(new URL(strict ? 'lifecycle-strict.json' : 'lifecycle.json', output), JSON.stringify(evidence, null, 2) + '\n');
 } finally {

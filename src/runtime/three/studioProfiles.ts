@@ -72,25 +72,25 @@ export const STUDIO_PROFILES: Record<StudioProfileId, StudioProfileSpec> = {
     destination: 'Build Studio',
     envFamily: 'neutralStudio',
     backgroundHex: '#ECE9E1',
-    floorCenterHex: '#F6F4EE',
-    floorEdgeHex: '#ECE9E1',
-    shadowColorHex: '#23221D',
-    shadowOpacity: 0.56,
-    envIntensity: 1.14,
-    heroEnvIntensity: 1.18,
+    floorCenterHex: '#F4F2EC',
+    floorEdgeHex: '#DCD9D0',
+    shadowColorHex: '#201F1B',
+    shadowOpacity: 0.40,
+    envIntensity: 1.28,
+    heroEnvIntensity: 1.22,
     exposure: 1.04,
     toneMappingExposureScale: { agx: 1.0, neutral: 0.96, aces: 0.95 },
-    hemi: { skyHex: '#FDFBF6', groundHex: '#D6D2C7', intensity: 0.64 },
+    hemi: { skyHex: '#FDFBF6', groundHex: '#C5C0B4', intensity: 0.36 },
     lights: {
-      key: { color: '#FFFDF8', intensity: 2.05, position: [-0.26, 0.58, 0.30] },
-      fill: { color: '#F3F7FB', intensity: 0.78, position: [0.44, 0.34, 0.24] },
-      rim: { color: '#FFF5E8', intensity: 1.12, position: [0.06, 0.34, -0.44] },
+      key: { color: '#FFFDF8', intensity: 2.38, position: [-0.28, 0.56, 0.30] },
+      fill: { color: '#F0F5FA', intensity: 0.60, position: [0.44, 0.32, 0.26] },
+      rim: { color: '#FFF3E2', intensity: 1.44, position: [0.08, 0.34, -0.44] },
     },
     heroLights: {
-      key: { color: '#FFFDF8', intensity: 2.05, position: [-0.04, 0.06, 0.045] },
-      fill: { color: '#F0F5FA', intensity: 0.78, position: [0.045, 0.032, 0.032] },
-      rim: { color: '#FFF2E0', intensity: 1.18, position: [-0.02, 0.038, -0.045] },
-      hemiIntensity: 0.68,
+      key: { color: '#FFFDF8', intensity: 2.15, position: [-0.04, 0.06, 0.045] },
+      fill: { color: '#F0F5FA', intensity: 0.72, position: [0.045, 0.032, 0.032] },
+      rim: { color: '#FFF2E0', intensity: 1.26, position: [-0.02, 0.038, -0.045] },
+      hemiIntensity: 0.54,
     },
   },
   formFunction: {
@@ -99,25 +99,25 @@ export const STUDIO_PROFILES: Record<StudioProfileId, StudioProfileSpec> = {
     destination: 'Mechanical Anatomy',
     envFamily: 'neutralStudio',
     backgroundHex: '#F1F1EC',
-    floorCenterHex: '#F8F8F4',
-    floorEdgeHex: '#F1F1EC',
-    shadowColorHex: '#262A27',
-    shadowOpacity: 0.44,
-    envIntensity: 1.20,
-    heroEnvIntensity: 1.22,
-    exposure: 1.06,
+    floorCenterHex: '#F6F6F2',
+    floorEdgeHex: '#E0E1DB',
+    shadowColorHex: '#222624',
+    shadowOpacity: 0.34,
+    envIntensity: 1.32,
+    heroEnvIntensity: 1.24,
+    exposure: 1.05,
     toneMappingExposureScale: { agx: 1.0, neutral: 0.96, aces: 0.95 },
-    hemi: { skyHex: '#FFFFFF', groundHex: '#DCDED7', intensity: 0.84 },
+    hemi: { skyHex: '#FFFFFF', groundHex: '#CFD2CA', intensity: 0.44 },
     lights: {
-      key: { color: '#FAFDFF', intensity: 1.88, position: [-0.24, 0.64, 0.30] },
-      fill: { color: '#FAF9F4', intensity: 0.96, position: [0.46, 0.36, 0.26] },
-      rim: { color: '#FFF8EE', intensity: 1.10, position: [0.04, 0.36, -0.44] },
+      key: { color: '#FAFDFF', intensity: 2.22, position: [-0.26, 0.62, 0.30] },
+      fill: { color: '#FAF8F2', intensity: 0.72, position: [0.46, 0.34, 0.26] },
+      rim: { color: '#FFF6E8', intensity: 1.38, position: [0.06, 0.36, -0.44] },
     },
     heroLights: {
-      key: { color: '#FAFDFF', intensity: 2.0, position: [-0.042, 0.064, 0.042] },
-      fill: { color: '#FAF9F4', intensity: 0.92, position: [0.048, 0.036, 0.030] },
-      rim: { color: '#FFF6EA', intensity: 1.12, position: [-0.018, 0.040, -0.046] },
-      hemiIntensity: 0.82,
+      key: { color: '#FAFDFF', intensity: 2.08, position: [-0.042, 0.064, 0.042] },
+      fill: { color: '#FAF9F4', intensity: 0.84, position: [0.048, 0.036, 0.030] },
+      rim: { color: '#FFF6EA', intensity: 1.20, position: [-0.018, 0.040, -0.046] },
+      hemiIntensity: 0.64,
     },
   },
   afterHours: {
@@ -253,9 +253,10 @@ function buildStudioEnvironmentScene(family: EnvironmentFamilyId): {
   const materials: THREE.Material[] = [];
 
   if (family === 'neutralStudio') {
-    // Warm architectural neutral studio cyclorama enclosing the dome
+    // Controlled architectural neutral studio dome: dark enough to sculpt anodized chamfers,
+    // Titanium sidewalls, Brass weight, and knurled encoder without pulling Titanium too dark.
     const roomMat = new THREE.MeshBasicMaterial({
-      color: new THREE.Color('#D4D2CA'),
+      color: new THREE.Color('#727774'),
       side: THREE.BackSide,
       toneMapped: false,
     });
@@ -264,9 +265,9 @@ function buildStudioEnvironmentScene(family: EnvironmentFamilyId): {
     room.position.set(0, 2.5, 0);
     scene.add(room);
 
-    // Bright neutral studio tabletop bounce in the lower hemisphere so metals never reflect black underneath
+    // Balanced tabletop bounce in the lower hemisphere keeps undersides sculptural and bright silver on Titanium.
     const floorMat = new THREE.MeshBasicMaterial({
-      color: new THREE.Color('#E6E3DA'),
+      color: new THREE.Color('#B5B2A9'),
       side: THREE.DoubleSide,
       toneMapped: false,
     });
@@ -276,37 +277,47 @@ function buildStudioEnvironmentScene(family: EnvironmentFamilyId): {
     floor.position.set(0, -3.2, 0);
     scene.add(floor);
 
-    // Controlled negative-fill flags give anodized aluminium & titanium crisp sculptural metallic contrast
+    // Deliberate negative-fill studio flags placed at grazing reflection angles for
+    // anodized bevels, Titanium sidewalls, and the rear USB-C wall.
     const negFlagMat = new THREE.MeshBasicMaterial({
-      color: new THREE.Color('#5A605D'),
+      color: new THREE.Color('#262B28'),
       side: THREE.DoubleSide,
       toneMapped: false,
     });
     materials.push(negFlagMat);
     const negLeft = new THREE.Mesh(planeGeom, negFlagMat);
-    negLeft.position.set(-7.8, 1.3, 4.2);
-    negLeft.scale.set(4.8, 3.6, 1);
+    negLeft.position.set(-7.6, 1.4, 3.8);
+    negLeft.scale.set(5.8, 4.2, 1);
     negLeft.lookAt(0, 0, 0);
     scene.add(negLeft);
 
     const negFront = new THREE.Mesh(planeGeom, negFlagMat);
-    negFront.position.set(1.6, 0.6, 8.4);
-    negFront.scale.set(5.4, 2.2, 1);
+    negFront.position.set(2.4, 0.7, 8.4);
+    negFront.scale.set(5.8, 2.4, 1);
     negFront.lookAt(0, 0, 0);
     scene.add(negFront);
 
-    // Photographic softbox bank (matched to Form/Function + Atelier Cycles light layout)
+    const negRearLeft = new THREE.Mesh(planeGeom, negFlagMat);
+    negRearLeft.position.set(-6.4, 1.2, -5.8);
+    negRearLeft.scale.set(5.2, 3.8, 1);
+    negRearLeft.lookAt(0, 0, 0);
+    scene.add(negRearLeft);
+
+    // Deliberate photographic linear softbox bank (narrower ribbons, stronger contrast
+    // matching Cycles A03 / B03 / A07b metal reflection gradients)
     const cards: LightCardSpec[] = [
-      // Primary broad overhead silk softbox (luminous satin sweep across bezel, Titanium & brass weight)
-      { position: [-1.4, 6.0, 1.4], lookAt: [0, 0, 0], scale: [10.6, 5.8], color: '#FAFDFF', intensity: 5.4 },
-      // Wide warm rear grazing strip (sculpts top chamfer, encoder crown, rear edge)
-      { position: [0.4, 3.8, -6.2], lookAt: [0, 0, 0], scale: [11.2, 3.4], color: '#FFF7EB', intensity: 4.3 },
-      // Tall right vertical fill panel (illuminates encoder knurling & right side bevel)
-      { position: [6.6, 2.9, 1.2], lookAt: [0, 0, 0], scale: [5.2, 6.4], color: '#F4F9FE', intensity: 3.4 },
-      // Warm broad front bounce card (keeps Charcoal PBT and front seam tactile and readable)
-      { position: [-0.8, 2.4, 6.8], lookAt: [0, 0, 0], scale: [8.8, 3.0], color: '#FFFBF4', intensity: 2.1 },
-      // Soft left upper bounce
-      { position: [-6.4, 4.4, -1.8], lookAt: [0, 0, 0], scale: [6.0, 4.6], color: '#F6FAF8', intensity: 2.4 },
+      // Primary overhead linear silk softbox (luminous satin sweep across bezel, Titanium & brass weight)
+      { position: [-1.4, 6.2, 1.4], lookAt: [0, 0, 0], scale: [11.4, 4.2], color: '#FAFDFF', intensity: 8.2 },
+      // Crisp warm rear grazing strip (ignites 1.2 mm perimeter chamfer, rear edge & brass weight)
+      { position: [0.6, 3.5, -6.4], lookAt: [0, 0, 0], scale: [12.0, 2.4], color: '#FFF5E6', intensity: 6.6 },
+      // Focused right vertical specular strip (rakes across 48-tooth knurled encoder & right chamfer)
+      { position: [6.4, 2.8, 1.0], lookAt: [0, 0, 0], scale: [3.4, 6.4], color: '#EEF6FF', intensity: 5.8 },
+      // Front-right grazing kicker (catches visible front-right diamond knurl facets on the rotary dial)
+      { position: [5.0, 1.9, 4.8], lookAt: [0, 0, 0], scale: [2.4, 3.4], color: '#F5F9FD', intensity: 4.4 },
+      // Controlled warm front-left fill card (keeps Titanium bright-silver and dark finishes sculptural)
+      { position: [-1.6, 2.5, 6.8], lookAt: [0, 0, 0], scale: [7.8, 2.8], color: '#FFFBF2', intensity: 3.6 },
+      // Cool left-upper accent panel (sculpts left bevel & exploded switch plate strata)
+      { position: [-6.4, 4.8, -1.2], lookAt: [0, 0, 0], scale: [4.6, 3.6], color: '#F2F7FA', intensity: 3.6 },
     ];
     for (const card of cards) addSoftboxCard(scene, planeGeom, softboxTex, materials, card);
   } else {
@@ -369,11 +380,56 @@ export interface EnvironmentTelemetry {
 }
 
 /**
- * Owns procedural studio PMREM generation, caching, and deterministic GPU disposal.
- * Never generates PMREM textures per frame; lazily bakes each family at most once per mount.
+ * Build a subtle, seamless photographic studio cyclorama sweep texture for light studios.
+ * Mirrors Cycles A03 / B03 / A05 infinity-paper tonal roll-off (gentle upper studio shadow
+ * transitioning into a luminous neutral tabletop pool) with zero horizon line or glow.
+ */
+function createStudioCycloramaTexture(profile: StudioProfileSpec): THREE.CanvasTexture {
+  const w = 256;
+  const h = 256;
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d')!;
+
+  const topCol = profile.id === 'formFunction' ? '#C7CAC4' : '#C9C7BE';
+  const upperMid = profile.id === 'formFunction' ? '#E4E5DF' : '#E3E0D7';
+  const centerPool = profile.floorCenterHex;
+  const lowerEdge = profile.floorEdgeHex;
+
+  // Gentle vertical infinity-paper studio falloff
+  const vGrad = ctx.createLinearGradient(0, 0, 0, h);
+  vGrad.addColorStop(0.0, topCol);
+  vGrad.addColorStop(0.28, upperMid);
+  vGrad.addColorStop(0.62, centerPool);
+  vGrad.addColorStop(1.0, lowerEdge);
+  ctx.fillStyle = vGrad;
+  ctx.fillRect(0, 0, w, h);
+
+  // Subtle off-center overhead softbox pool behind the product silhouette
+  const rGrad = ctx.createRadialGradient(w * 0.52, h * 0.56, w * 0.04, w * 0.52, h * 0.56, w * 0.68);
+  rGrad.addColorStop(0.0, 'rgba(255, 254, 250, 0.36)');
+  rGrad.addColorStop(0.55, 'rgba(255, 254, 250, 0.08)');
+  rGrad.addColorStop(1.0, 'rgba(32, 34, 31, 0.06)');
+  ctx.fillStyle = rGrad;
+  ctx.fillRect(0, 0, w, h);
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.minFilter = THREE.LinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+  tex.generateMipmaps = false;
+  tex.needsUpdate = true;
+  return tex;
+}
+
+/**
+ * Owns procedural studio PMREM generation, light-studio cyclorama backdrops, caching,
+ * and deterministic GPU disposal. Never generates textures per frame.
  */
 export class StudioEnvironmentManager {
   private targets = new Map<EnvironmentFamilyId, THREE.WebGLRenderTarget>();
+  private backdrops = new Map<StudioProfileId, THREE.CanvasTexture>();
   private activeFamily: EnvironmentFamilyId | null = null;
   private bakeCount = 0;
   private bakeTimingsMs: Partial<Record<EnvironmentFamilyId, number>> = {};
@@ -392,8 +448,10 @@ export class StudioEnvironmentManager {
     const pmrem = new THREE.PMREMGenerator(renderer);
     pmrem.compileEquirectangularShader();
     const built = buildStudioEnvironmentScene(family);
-    // Low blur sigma preserves crisp softbox gradients while keeping rough metals smooth
-    const target = pmrem.fromScene(built.scene, 0.032);
+    // Tighter blur sigma on neutralStudio keeps metallic reflection strips crisp on Titanium,
+    // Brass, and the knurled encoder while staying silky smooth on bead-blasted surfaces.
+    const sigma = family === 'neutralStudio' ? 0.018 : 0.032;
+    const target = pmrem.fromScene(built.scene, sigma);
     built.dispose();
     pmrem.dispose();
 
@@ -401,6 +459,21 @@ export class StudioEnvironmentManager {
     this.bakeCount += 1;
     this.bakeTimingsMs[family] = Number((performance.now() - t0).toFixed(2));
     return target.texture;
+  }
+
+  getBackdrop(profileId: StudioProfileId): THREE.Texture | THREE.Color {
+    if (this.disposed) {
+      throw new Error('StudioEnvironmentManager used after dispose');
+    }
+    const spec = STUDIO_PROFILES[profileId];
+    if (profileId === 'afterHours') {
+      return new THREE.Color(spec.backgroundHex);
+    }
+    const cached = this.backdrops.get(profileId);
+    if (cached) return cached;
+    const tex = createStudioCycloramaTexture(spec);
+    this.backdrops.set(profileId, tex);
+    return tex;
   }
 
   getTelemetry(): EnvironmentTelemetry {
@@ -419,6 +492,10 @@ export class StudioEnvironmentManager {
       target.dispose();
     }
     this.targets.clear();
+    for (const tex of this.backdrops.values()) {
+      tex.dispose();
+    }
+    this.backdrops.clear();
     this.activeFamily = null;
   }
 }

@@ -194,13 +194,30 @@ export function attachLegendMask(prod: LegendHost, inventory: Inventory, texture
         float kfMaxFootprint = exp2(kfLegendMaxMip);
         float kfGradientScale = min(1.0, kfMaxFootprint / max(kfFootprint, 0.001));
         float kfMask = 0.0;
+        float kfDarkMask = 0.0;
         if (vKfLegendRect.z > 0.0 && vKfLegendPosition.y > vKfLegendCrown.x
             && vKfLegendCrown.y > 0.4 && all(greaterThanEqual(vKfLegendLocal, vec2(0.0)))
             && all(lessThanEqual(vKfLegendLocal, vec2(1.0)))) {
-          kfMask = textureGrad(kfLegendMask, kfUv, kfDx * kfGradientScale, kfDy * kfGradientScale).r;
-          kfMask *= 1.0 - smoothstep(kfMaxFootprint, 2.0 * kfMaxFootprint, kfFootprint);
+          float kfRawMask = textureGrad(kfLegendMask, kfUv, kfDx * kfGradientScale, kfDy * kfGradientScale).r;
+          float kfDistFade = 1.0 - smoothstep(kfMaxFootprint, 2.0 * kfMaxFootprint, kfFootprint);
+          kfMask = kfRawMask * kfDistFade;
+          // Dark-on-light glyphs fade far faster perceptually under linear-space mixing and AgX:
+          // preserve subtle stroke coverage at overview distance without triggering atlas bleed.
+          float kfDarkFade = 1.0 - smoothstep(kfMaxFootprint * 1.15, 2.6 * kfMaxFootprint, kfFootprint);
+          kfDarkMask = kfRawMask * kfDarkFade;
         }
-        diffuseColor.rgb = mix(diffuseColor.rgb, vKfLegendTint, kfMask);
+        float kfCapLuma = dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+        float kfInkLuma = dot(vKfLegendTint, vec3(0.2126, 0.7152, 0.0722));
+        if (kfInkLuma < kfCapLuma) {
+          // Perceptual gamma-space compositing + gentle optical stroke compensation for dark legends
+          // on bright PBT caps (Porcelain, Two-Tone Slate alphas, Ivory/Brass Esc). Zero halo when mask == 0.
+          float kfPerceptualCoverage = clamp(pow(max(kfDarkMask, 0.0), 0.68) * 1.24, 0.0, 1.0);
+          vec3 kfCapPerceptual = pow(max(diffuseColor.rgb, vec3(0.0)), vec3(1.0 / 2.2));
+          vec3 kfInkPerceptual = pow(max(vKfLegendTint, vec3(0.0)), vec3(1.0 / 2.2));
+          diffuseColor.rgb = pow(mix(kfCapPerceptual, kfInkPerceptual, kfPerceptualCoverage), vec3(2.2));
+        } else {
+          diffuseColor.rgb = mix(diffuseColor.rgb, vKfLegendTint, kfMask);
+        }
       `).replace('#include <roughnessmap_fragment>', `
         #include <roughnessmap_fragment>
         roughnessFactor = mix(roughnessFactor, kfLegendPbr.x, kfMask);

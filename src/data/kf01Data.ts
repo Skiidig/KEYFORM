@@ -345,7 +345,7 @@ export const KEYCAP_SETS: StudioOption<KeycapSetId>[] = [
     code: 'PRC',
     name: 'Porcelain PBT',
     swatchHex: '#ECE9DF',
-    secondaryHex: '#D8D4C7',
+    secondaryHex: '#C2BEB2',
     finishNote: 'Warm porcelain alphas and spacebar paired with muted grey modifiers.',
   },
   {

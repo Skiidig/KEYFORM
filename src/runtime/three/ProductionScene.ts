@@ -434,6 +434,12 @@ export class ProductionScene {
     return this.envTexture;
   }
 
+  ensureBackdrop(profileId?: StudioProfileId): THREE.Texture | THREE.Color {
+    const targetProfile = profileId ?? this.studioProfile;
+    this.studioProfile = targetProfile;
+    return this.envManager.getBackdrop(targetProfile);
+  }
+
   getStudioProfile(): StudioProfileId {
     return this.studioProfile;
   }
@@ -960,8 +966,9 @@ export class ProductionScene {
   /**
    * Non-destructive Mechanical Anatomy layer emphasis.
    * Keeps the focused assembly group in its 100% calibrated B3 materials while
-   * swapping non-focused groups onto a dedicated translucent ghost material so
-   * shared materials (MAT_Case_Anodized, MAT_Silicone, MAT_Keycap_PBT) are never mutated.
+   * swapping non-focused groups onto a dedicated architectural context material
+   * (single-pass Z-buffered ghost neutralizing per-instance keycap colors so no
+   * internal triangle pile-up or dark instanced-mount specks appear).
    */
   setFocusedAssemblyGroup(groupId: string | null) {
     this.restoreFocusMaterials();
@@ -971,15 +978,26 @@ export class ProductionScene {
     }
     this.focusedGroupId = groupId;
     if (!this.focusGhostMaterial) {
-      this.focusGhostMaterial = new THREE.MeshStandardMaterial({
+      const ghost = new THREE.MeshStandardMaterial({
         name: 'KF01_AnatomyFocusGhost',
-        color: new THREE.Color('#B5B8B2'),
-        roughness: 0.78,
-        metalness: 0.04,
+        color: new THREE.Color('#CFD2CB'),
+        roughness: 0.90,
+        metalness: 0.0,
+        envMapIntensity: 0.35,
         transparent: true,
-        opacity: 0.2,
-        depthWrite: false,
+        opacity: 0.28,
+        depthWrite: true,
       });
+      ghost.customProgramCacheKey = () => 'kf01-anatomy-focus-ghost-v2';
+      ghost.onBeforeCompile = (shader) => {
+        // Ignore mesh.instanceColor (e.g., Charcoal #1A1F1E on MAT_Keycap_PBT batches) so
+        // instanced 1u caps, mounts, and single-instance modifiers ghost uniformly.
+        shader.fragmentShader = shader.fragmentShader.replace(
+          '#include <color_fragment>',
+          'diffuseColor.rgb = diffuse;',
+        );
+      };
+      this.focusGhostMaterial = ghost;
     }
     for (const [id, entry] of this.groupNodes.entries()) {
       if (id === groupId) continue;
